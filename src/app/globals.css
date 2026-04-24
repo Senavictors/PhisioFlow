@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta principal */
+  --color-background:             oklch(0.985 0.008 85);
+  --color-foreground:             oklch(0.27 0.02 160);
+  --color-primary:                oklch(0.52 0.05 160);
+  --color-primary-hover:          oklch(0.46 0.05 160);
+  --color-primary-foreground:     oklch(0.985 0.008 85);
+  --color-accent:                 oklch(0.72 0.09 45);
+  --color-accent-hover:           oklch(0.66 0.1 45);
+  --color-accent-foreground:      oklch(0.99 0.005 85);
+  --color-card:                   oklch(1 0 0);
+  --color-card-foreground:        oklch(0.27 0.02 160);
+  --color-border:                 oklch(0.9 0.012 85);
+  --color-input:                  oklch(0.94 0.01 85);
+  --color-muted:                  oklch(0.95 0.01 85);
+  --color-muted-foreground:       oklch(0.5 0.015 160);
+  --color-ring:                   oklch(0.52 0.05 160 / 0.35);
+
+  /* Superfícies tintadas */
+  --color-primary-soft:           oklch(0.92 0.028 160);
+  --color-primary-soft-fg:        oklch(0.42 0.05 160);
+  --color-accent-soft:            oklch(0.93 0.035 45);
+  --color-accent-soft-fg:         oklch(0.55 0.09 45);
+
+  /* Semânticos */
+  --color-success:                oklch(0.62 0.09 160);
+  --color-success-soft:           oklch(0.93 0.03 160);
+  --color-warning:                oklch(0.72 0.09 45);
+  --color-warning-soft:           oklch(0.94 0.035 45);
+  --color-danger:                 oklch(0.58 0.16 25);
+  --color-danger-soft:            oklch(0.94 0.04 25);
+
+  /* Compatibilidade shadcn/ui */
+  --color-secondary:              oklch(0.92 0.015 160);
+  --color-secondary-foreground:   oklch(0.27 0.02 160);
+  --color-popover:                oklch(1 0 0);
+  --color-popover-foreground:     oklch(0.27 0.02 160);
+  --color-destructive:            oklch(0.58 0.16 25);
+  --color-destructive-foreground: oklch(0.99 0.005 85);
+
+  /* Tipografia — variáveis CSS injetadas via next/font em layout.tsx */
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-body:    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+
+  /* Escala tipográfica extra */
+  --text-label: 10.5px;
+  --text-kpi:   68px;
+
+  /* Raios */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+  --radius:      12px;
+
+  /* Sombras */
+  --shadow-xs:          0 1px 1px oklch(0 0 0 / 0.03);
+  --shadow-sm:          0 1px 2px oklch(0 0 0 / 0.03), 0 1px 3px oklch(0 0 0 / 0.04);
+  --shadow-md:          0 4px 10px -4px oklch(0 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.04);
+  --shadow-lg:          0 12px 28px -12px oklch(0 0 0 / 0.10);
+  --shadow-glow:        0 10px 24px -10px oklch(0.52 0.05 160 / 0.45), 0 2px 6px oklch(0.52 0.05 160 / 0.15);
+  --shadow-accent-glow: 0 10px 24px -10px oklch(0.72 0.09 45 / 0.45);
+
+  /* Motion */
+  --ease-out:      cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration:      180ms;
+  --duration-slow: 280ms;
+}
+
+@layer base {
+  html,
+  body {
+    background-color: theme(--color-background);
+    color: theme(--color-foreground);
+    font-family: theme(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'ss01', 'cv11';
+    text-rendering: optimizeLegibility;
+  }
+
+  .dark {
+    --color-background:             oklch(0.14 0.012 160);
+    --color-foreground:             oklch(0.93 0.01 85);
+    --color-primary:                oklch(0.62 0.05 160);
+    --color-primary-hover:          oklch(0.68 0.05 160);
+    --color-primary-foreground:     oklch(0.14 0.012 160);
+    --color-card:                   oklch(0.18 0.012 160);
+    --color-card-foreground:        oklch(0.93 0.01 85);
+    --color-border:                 oklch(0.25 0.01 160);
+    --color-input:                  oklch(0.22 0.01 160);
+    --color-muted:                  oklch(0.22 0.01 160);
+    --color-muted-foreground:       oklch(0.62 0.015 160);
+    --color-ring:                   oklch(0.62 0.05 160 / 0.4);
+    --color-primary-soft:           oklch(0.22 0.025 160);
+    --color-primary-soft-fg:        oklch(0.72 0.04 160);
+    --color-accent-soft:            oklch(0.22 0.025 45);
+    --color-accent-soft-fg:         oklch(0.78 0.08 45);
+    --color-success:                oklch(0.68 0.09 160);
+    --color-success-soft:           oklch(0.22 0.025 160);
+    --color-danger:                 oklch(0.65 0.16 25);
+    --color-danger-soft:            oklch(0.22 0.025 25);
+    --color-secondary:              oklch(0.22 0.015 160);
+    --color-secondary-foreground:   oklch(0.93 0.01 85);
+    --color-popover:                oklch(0.18 0.012 160);
+    --color-popover-foreground:     oklch(0.93 0.01 85);
+    --color-destructive:            oklch(0.65 0.16 25);
+    --color-destructive-foreground: oklch(0.99 0.005 85);
+  }
+}
