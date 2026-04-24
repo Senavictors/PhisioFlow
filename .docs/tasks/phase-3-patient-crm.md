@@ -105,11 +105,150 @@ DELETE /api/patients/:id
 Response 200: {} (soft delete: isActive = false)
 ```
 
+## Testes
+
+Criar testes unitários para cada Use Case do módulo patients:
+
+```
+src/server/modules/patients/application/
+  create-patient.test.ts   → valida criação, rejeita dados inválidos
+  list-patients.test.ts    → filtra por userId, aplica filtros de area/classification
+  get-patient.test.ts      → retorna 404 se não pertencer ao userId
+```
+
+Coberturas mínimas esperadas:
+- `createPatient`: dados válidos, email duplicado, dados inválidos (Zod)
+- `listPatients`: filtro por userId correto (multi-tenant)
+- `getPatient`: paciente do userId correto, paciente de outro userId (deve lançar erro)
+
+---
+
+## Seed — Usuário Demo + Pacientes
+
+Criar `prisma/seed.ts` com dados suficientes para testar o fluxo completo no browser.
+As sessões serão adicionadas ao seed na Phase 4.
+
+### Adicionar ao `package.json`
+
+```json
+"prisma": {
+  "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+}
+```
+
+### `prisma/seed.ts`
+
+```typescript
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcrypt'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  // Limpa dados anteriores do demo (ordem importa por FK)
+  await prisma.session.deleteMany({ where: { user: { email: 'demo@phisioflow.com' } } })
+  await prisma.clinicalRecord.deleteMany({ where: { patient: { user: { email: 'demo@phisioflow.com' } } } })
+  await prisma.patient.deleteMany({ where: { user: { email: 'demo@phisioflow.com' } } })
+  await prisma.user.deleteMany({ where: { email: 'demo@phisioflow.com' } })
+
+  // Usuário demo
+  const user = await prisma.user.create({
+    data: {
+      name: 'Dra. Ana Lima',
+      email: 'demo@phisioflow.com',
+      password: await bcrypt.hash('demo1234', 10),
+    },
+  })
+
+  // Paciente 1 — Pilates, idosa
+  const gervasio = await prisma.patient.create({
+    data: {
+      userId: user.id,
+      name: 'Gervasio Mendes',
+      birthDate: new Date('1948-03-12'),
+      phone: '(11) 99999-0001',
+      classification: 'ELDERLY',
+      area: 'PILATES',
+      isActive: true,
+      clinicalRecord: {
+        create: {
+          mainComplaint: 'Dor lombar crônica com irradiação para MMII.',
+          medicalHistory: 'Hipertensão controlada. Sem cirurgias anteriores.',
+          medications: 'Losartana 50mg/dia.',
+          allergies: 'Sem alergias conhecidas.',
+        },
+      },
+    },
+  })
+
+  // Paciente 2 — Estética, domiciliar
+  const carla = await prisma.patient.create({
+    data: {
+      userId: user.id,
+      name: 'Carla Souza',
+      birthDate: new Date('1985-07-22'),
+      phone: '(11) 99999-0002',
+      classification: 'STANDARD',
+      area: 'AESTHETIC',
+      isActive: true,
+      clinicalRecord: {
+        create: {
+          mainComplaint: 'Fibromialgia com pontos de dor difusos.',
+          medicalHistory: 'Diagnóstico de fibromialgia há 3 anos.',
+          medications: 'Amitriptilina 25mg.',
+          allergies: 'Dipirona.',
+        },
+      },
+    },
+  })
+
+  // Paciente 3 — Fisioterapia motora, PCD, sem retorno recente
+  const rafael = await prisma.patient.create({
+    data: {
+      userId: user.id,
+      name: 'Rafael Teixeira',
+      birthDate: new Date('1972-11-05'),
+      phone: '(11) 99999-0003',
+      classification: 'PCD',
+      area: 'MOTOR',
+      isActive: true,
+      clinicalRecord: {
+        create: {
+          mainComplaint: 'Limitação de ADM em joelho direito pós-cirurgia de LCA.',
+          medicalHistory: 'Reconstrução do LCA há 6 meses.',
+          medications: 'Sem medicação contínua.',
+          allergies: 'Sem alergias.',
+        },
+      },
+    },
+  })
+
+  console.log(`✅ Seed concluído`)
+  console.log(`   Usuário demo: demo@phisioflow.com / demo1234`)
+  console.log(`   Pacientes: ${gervasio.name}, ${carla.name}, ${rafael.name}`)
+}
+
+main()
+  .catch((e) => { console.error(e); process.exit(1) })
+  .finally(() => prisma.$disconnect())
+```
+
+### Como executar
+
+```bash
+npx prisma db seed
+```
+
+---
+
 ## Checklist Final
 - [ ] CRUD funciona via API (testar com curl ou Postman)
 - [ ] Listagem com filtros renderiza no browser
 - [ ] Ficha clínica abre com prontuário correto
 - [ ] Pacientes isolados por `userId` (multi-tenant verificado)
+- [ ] `npm test` passa com todos os testes de patients
+- [ ] `npx prisma db seed` popula o banco sem erros
+- [ ] Login com `demo@phisioflow.com` / `demo1234` funciona e mostra os 3 pacientes
 - [ ] `.docs/CONTEXT.md` atualizado
 - [ ] `README.md` atualizado (Phase 3 marcada como ✅)
 - [ ] `CHANGELOG.md` atualizado

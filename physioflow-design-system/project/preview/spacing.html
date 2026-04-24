@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;padding:0;background:var(--background);}
+  .card{padding:24px 28px;box-sizing:border-box;min-height:100vh;display:flex;flex-direction:column;gap:10px;justify-content:center;}
+  .row{display:flex;align-items:center;gap:16px;}
+  .sp{background:var(--primary);height:18px;border-radius:4px;}
+  .lbl{font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground);width:70px;}
+  .name{font-family:var(--font-body);font-size:13px;color:var(--foreground);font-weight:600;width:90px;}
+</style></head>
+<body><div class="card">
+  <div class="row"><span class="name">--space-2</span><div class="sp" style="width:8px"></div><span class="lbl">8px</span></div>
+  <div class="row"><span class="name">--space-4</span><div class="sp" style="width:16px"></div><span class="lbl">16px</span></div>
+  <div class="row"><span class="name">--space-6</span><div class="sp" style="width:24px"></div><span class="lbl">24px · p-6</span></div>
+  <div class="row"><span class="name">--space-8</span><div class="sp" style="width:32px"></div><span class="lbl">32px · gap-8</span></div>
+  <div class="row"><span class="name">--space-10</span><div class="sp" style="width:40px"></div><span class="lbl">40px · p-10</span></div>
+  <div class="row"><span class="name">--space-12</span><div class="sp" style="width:48px"></div><span class="lbl">48px</span></div>
+</div></body></html>

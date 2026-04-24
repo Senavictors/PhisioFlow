@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;padding:0;background:var(--background);}
+  .card{padding:24px 28px;box-sizing:border-box;min-height:100vh;display:flex;flex-direction:column;gap:12px;justify-content:center;}
+  .in{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 16px;font-family:var(--font-body);font-size:14px;color:var(--muted-foreground);}
+  .sel{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 16px;font-family:var(--font-body);font-size:14px;color:var(--foreground);}
+  svg{color:var(--muted-foreground);}
+</style></head>
+<body><div class="card">
+  <div class="in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg> Buscar paciente por nome...</div>
+  <div class="sel">Todas as classificações <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="sel">Cadastro recente <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>
+</div></body></html>

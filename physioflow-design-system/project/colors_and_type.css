@@ -1,0 +1,346 @@
+/* ==========================================================================
+   PhisioFlow — Portal Restaurativo
+   "O ecossistema completo para o fisioterapeuta moderno."
+   Colors + Type foundations. Import this file first.
+
+   INTEGRAÇÃO NEXT.JS (Tailwind v4)
+   ─────────────────────────────────
+   Em src/app/globals.css:
+
+     @import "tailwindcss";
+
+     @theme {
+       --color-background:           oklch(0.985 0.008 85);
+       --color-foreground:           oklch(0.27 0.02 160);
+       --color-primary:              oklch(0.52 0.05 160);
+       --color-primary-hover:        oklch(0.46 0.05 160);
+       --color-primary-foreground:   oklch(0.985 0.008 85);
+       --color-accent:               oklch(0.72 0.09 45);
+       --color-accent-hover:         oklch(0.66 0.1 45);
+       --color-accent-foreground:    oklch(0.99 0.005 85);
+       --color-card:                 oklch(1 0 0);
+       --color-card-foreground:      oklch(0.27 0.02 160);
+       --color-border:               oklch(0.9 0.012 85);
+       --color-input:                oklch(0.94 0.01 85);
+       --color-muted:                oklch(0.95 0.01 85);
+       --color-muted-foreground:     oklch(0.5 0.015 160);
+       --color-ring:                 oklch(0.52 0.05 160 / 0.35);
+       --color-primary-soft:         oklch(0.92 0.028 160);
+       --color-primary-soft-fg:      oklch(0.42 0.05 160);
+       --color-accent-soft:          oklch(0.93 0.035 45);
+       --color-accent-soft-fg:       oklch(0.55 0.09 45);
+       --color-success:              oklch(0.62 0.09 160);
+       --color-success-soft:         oklch(0.93 0.03 160);
+       --color-warning:              oklch(0.72 0.09 45);
+       --color-warning-soft:         oklch(0.94 0.035 45);
+       --color-danger:               oklch(0.58 0.16 25);
+       --color-danger-soft:          oklch(0.94 0.04 25);
+       --color-secondary:            oklch(0.92 0.015 160);
+       --color-secondary-foreground: oklch(0.27 0.02 160);
+       --color-popover:              oklch(1 0 0);
+       --color-popover-foreground:   oklch(0.27 0.02 160);
+       --color-destructive:          oklch(0.58 0.16 25);
+       --color-destructive-foreground: oklch(0.99 0.005 85);
+
+       --font-display: 'Fraunces', ui-serif, Georgia, serif;
+       --font-body:    'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+       --font-mono:    ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+
+       --radius-sm:   8px;
+       --radius-md:   12px;
+       --radius-lg:   18px;
+       --radius-xl:   24px;
+       --radius-full: 9999px;
+       --radius:      12px;   /* shadcn/ui canonical */
+
+       --shadow-xs:          0 1px 1px oklch(0 0 0 / 0.03);
+       --shadow-sm:          0 1px 2px oklch(0 0 0 / 0.03), 0 1px 3px oklch(0 0 0 / 0.04);
+       --shadow-md:          0 4px 10px -4px oklch(0 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.04);
+       --shadow-lg:          0 12px 28px -12px oklch(0 0 0 / 0.10);
+       --shadow-glow:        0 10px 24px -10px oklch(0.52 0.05 160 / 0.45), 0 2px 6px oklch(0.52 0.05 160 / 0.15);
+       --shadow-accent-glow: 0 10px 24px -10px oklch(0.72 0.09 45 / 0.45);
+
+       --ease-out:    cubic-bezier(0.2, 0.7, 0.2, 1);
+       --duration-fast: 120ms;
+       --duration:      180ms;
+       --duration-slow: 280ms;
+     }
+
+     @layer base {
+       html, body {
+         background: theme(--color-background);
+         color:      theme(--color-foreground);
+         /* fontes via next/font — NÃO usar @import do Google Fonts aqui */
+       }
+
+       .dark { /* tokens de dark mode abaixo */ }
+     }
+
+   FONTES em Next.js
+   ─────────────────
+   Nunca usar @import do Google Fonts em globals.css.
+   Use next/font/google em src/app/layout.tsx:
+
+     import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google'
+     const display = Fraunces({ subsets: ['latin'], weight: ['700','800'], variable: '--font-display' })
+     const body    = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-body' })
+
+   ÍCONES
+   ──────
+   import { Users, Calendar, ... } from 'lucide-react'
+   Nunca inline SVG nos componentes Next.js — usar o pacote lucide-react.
+
+   FLUXO PADRÃO (feature/fix)
+   ───────────────────────────
+   1. Cor → sempre Tailwind utility (bg-primary, text-muted-foreground).
+              Nunca valor OKLCH raw no className.
+   2. Tipografia → font-display (Fraunces) ou font-body (Jakarta). Nada mais.
+   3. Espaçamento → gap-*, p-*, espaçamentos do Tailwind. Não usar px hardcoded.
+   4. Raio → rounded-sm (8px) | rounded-xl (12px) | rounded-2xl (18px) | rounded-full.
+   5. Sombra → shadow-sm | shadow-md | shadow-glow | shadow-accent-glow.
+   6. Dark mode → sobrescreva apenas variáveis no bloco .dark de globals.css.
+                  Nunca usar dark:bg-[oklch(...)].
+   7. Componente novo → copiar padrão do kit.css, adaptar com cn() + variantes cva().
+   ========================================================================== */
+
+/* ---------- Fonts (Google Fonts; swap for local TTFs in /fonts when provided) */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+  /* ---- Core palette (from brief) -------------------------------------- */
+  --background:       oklch(0.985 0.008 85);   /* warm bege canvas */
+  --foreground:       oklch(0.27 0.02 160);    /* deep sage for text */
+  --primary:          oklch(0.52 0.05 160);    /* sage green */
+  --primary-hover:    oklch(0.46 0.05 160);
+  --primary-foreground: oklch(0.985 0.008 85);
+  --accent:           oklch(0.72 0.09 45);     /* terracotta */
+  --accent-hover:     oklch(0.66 0.1 45);
+  --accent-foreground: oklch(0.99 0.005 85);
+  --card:             oklch(1 0 0);            /* pure white — elevation */
+  --card-foreground:  oklch(0.27 0.02 160);
+  --border:           oklch(0.9 0.012 85);     /* bege-tinted borders */
+  --input:            oklch(0.94 0.01 85);
+
+  /* ---- Derived / extended --------------------------------------------- */
+  --muted:            oklch(0.95 0.01 85);
+  --muted-foreground: oklch(0.5 0.015 160);
+  --ring:             oklch(0.52 0.05 160 / 0.35);
+
+  /* Tinted surfaces (behind tinted-square icons) */
+  --primary-soft:     oklch(0.92 0.028 160);   /* sage tint */
+  --primary-soft-fg:  oklch(0.42 0.05 160);
+  --accent-soft:      oklch(0.93 0.035 45);    /* terracotta tint */
+  --accent-soft-fg:   oklch(0.55 0.09 45);
+
+  /* Semantic */
+  --success:          oklch(0.62 0.09 160);
+  --success-soft:     oklch(0.93 0.03 160);
+  --warning:          oklch(0.72 0.09 45);
+  --warning-soft:     oklch(0.94 0.035 45);
+  --danger:           oklch(0.58 0.16 25);
+  --danger-soft:      oklch(0.94 0.04 25);
+
+  /* ---- Type families -------------------------------------------------- */
+  --font-display: 'Fraunces', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-body:    'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+
+  /* ---- Type scale ----------------------------------------------------- */
+  --text-xs:    12px;
+  --text-sm:    13.5px;
+  --text-base:  15px;
+  --text-lg:    17px;
+  --text-xl:    20px;
+  --text-2xl:   24px;
+  --text-3xl:   30px;
+  --text-4xl:   36px;
+  --text-5xl:   48px;
+  --text-6xl:   60px;
+  --text-label: 10.5px;   /* the editorial label */
+
+  /* ---- Radii ---------------------------------------------------------- */
+  --radius-sm:  8px;
+  --radius-md:  12px;   /* rounded-xl — buttons, inputs */
+  --radius-lg:  18px;   /* rounded-2xl — cards (brand signature) */
+  --radius-xl:  24px;
+  --radius-full: 9999px;
+
+  /* ---- Spacing (reference — use tailwind-style utilities if desired) -- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;   /* p-6, gap-6 — minimum comfortable */
+  --space-8: 32px;   /* gap-8 */
+  --space-10: 40px;  /* p-10 */
+  --space-12: 48px;
+
+  /* ---- Shadows -------------------------------------------------------- */
+  --shadow-xs:   0 1px 1px oklch(0 0 0 / 0.03);
+  --shadow-sm:   0 1px 2px oklch(0 0 0 / 0.03), 0 1px 3px oklch(0 0 0 / 0.04);
+  --shadow-md:   0 4px 10px -4px oklch(0 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.04);
+  --shadow-lg:   0 12px 28px -12px oklch(0 0 0 / 0.10);
+  /* shadow-glow: the sage pill under nav active / hero states */
+  --shadow-glow: 0 10px 24px -10px oklch(0.52 0.05 160 / 0.45),
+                 0 2px 6px oklch(0.52 0.05 160 / 0.15);
+  --shadow-accent-glow: 0 10px 24px -10px oklch(0.72 0.09 45 / 0.45);
+
+  /* ---- Motion --------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur:      180ms;
+  --dur-slow: 280ms;
+
+  /* ---- Tokens extras (shadcn/ui compatibility) ------------------------ */
+  --secondary:              oklch(0.92 0.015 160);  /* sage bem claro */
+  --secondary-foreground:   oklch(0.27 0.02 160);
+  --popover:                oklch(1 0 0);           /* igual card */
+  --popover-foreground:     oklch(0.27 0.02 160);
+  --destructive:            oklch(0.58 0.16 25);    /* alias de danger */
+  --destructive-foreground: oklch(0.99 0.005 85);
+  --radius:                 12px;                   /* canonical single value */
+
+  /* ---- KPI numeral size (usado no kit.css como 68px) ----------------- */
+  --text-kpi: 68px;
+}
+
+/* ---------- Dark mode --------------------------------------------------- */
+.dark {
+  --background:             oklch(0.14 0.012 160);
+  --foreground:             oklch(0.93 0.01 85);
+  --primary:                oklch(0.62 0.05 160);
+  --primary-hover:          oklch(0.68 0.05 160);
+  --primary-foreground:     oklch(0.14 0.012 160);
+  --accent:                 oklch(0.72 0.09 45);
+  --accent-hover:           oklch(0.66 0.1 45);
+  --accent-foreground:      oklch(0.14 0.012 160);
+  --card:                   oklch(0.18 0.012 160);
+  --card-foreground:        oklch(0.93 0.01 85);
+  --border:                 oklch(0.25 0.01 160);
+  --input:                  oklch(0.22 0.01 160);
+  --muted:                  oklch(0.22 0.01 160);
+  --muted-foreground:       oklch(0.62 0.015 160);
+  --ring:                   oklch(0.62 0.05 160 / 0.4);
+  --primary-soft:           oklch(0.22 0.025 160);
+  --primary-soft-fg:        oklch(0.72 0.04 160);
+  --accent-soft:            oklch(0.22 0.025 45);
+  --accent-soft-fg:         oklch(0.78 0.08 45);
+  --success:                oklch(0.68 0.09 160);
+  --success-soft:           oklch(0.22 0.025 160);
+  --warning:                oklch(0.72 0.09 45);
+  --warning-soft:           oklch(0.22 0.025 45);
+  --danger:                 oklch(0.65 0.16 25);
+  --danger-soft:            oklch(0.22 0.025 25);
+  --secondary:              oklch(0.22 0.015 160);
+  --secondary-foreground:   oklch(0.93 0.01 85);
+  --popover:                oklch(0.18 0.012 160);
+  --popover-foreground:     oklch(0.93 0.01 85);
+  --destructive:            oklch(0.65 0.16 25);
+  --destructive-foreground: oklch(0.99 0.005 85);
+}
+
+/* ---------- Base -------------------------------------------------------- */
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Semantic type roles ---------------------------------------- */
+.t-display,
+.h1,
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-4xl);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--foreground);
+  font-variation-settings: 'opsz' 96;
+}
+
+.h2, h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-3xl);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+.h3, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-2xl);
+  line-height: 1.2;
+  color: var(--foreground);
+}
+
+.h4, h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-lg);
+  line-height: 1.3;
+  color: var(--foreground);
+}
+
+/* The KPI numeral — the brand's strongest signature */
+.t-kpi {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-6xl);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  font-variation-settings: 'opsz' 144;
+}
+
+.t-kpi-sm {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-5xl);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+/* Body */
+.t-body, p {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--foreground);
+}
+
+.t-muted {
+  color: var(--muted-foreground);
+}
+
+/* The editorial label — sidebar nav, table headers, eyebrows, tags */
+.t-label {
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted-foreground);
+}
+
+.t-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted-foreground);
+}
+
+code, .t-mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}

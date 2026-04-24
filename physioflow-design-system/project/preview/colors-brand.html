@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;padding:0;background:var(--background);}
+  .card{padding:24px 28px;box-sizing:border-box;display:flex;align-items:center;min-height:100vh;}
+  .row{display:flex;gap:16px;flex-wrap:wrap;width:100%;}
+  .sw{display:flex;flex-direction:column;gap:8px;flex:1;min-width:130px;}
+  .chip{height:68px;border-radius:14px;}
+  .lbl{font-family:var(--font-body);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--muted-foreground);}
+  .val{font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground);}
+  .name{font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--foreground);}
+</style></head>
+<body><div class="card"><div class="row">
+  <div class="sw"><div class="chip" style="background:var(--primary)"></div><div class="name" style="color:var(--primary)">Verde Sálvia · primary</div><div class="lbl">--primary</div><div class="val">oklch(0.52 0.05 160)</div></div>
+  <div class="sw"><div class="chip" style="background:var(--primary-soft)"></div><div class="name">Sage soft</div><div class="lbl">--primary-soft</div><div class="val">tinted surface</div></div>
+  <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="name" style="color:var(--accent-soft-fg)">Terracota · accent</div><div class="lbl">--accent</div><div class="val">oklch(0.72 0.09 45)</div></div>
+  <div class="sw"><div class="chip" style="background:var(--accent-soft)"></div><div class="name">Terracota soft</div><div class="lbl">--accent-soft</div><div class="val">tinted surface</div></div>
+</div></div></body></html>

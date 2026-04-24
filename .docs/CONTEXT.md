@@ -7,14 +7,18 @@
 Documentação inicial criada. Nenhum código implementado ainda.
 
 ## Próximo Passo Planejado
-**Phase 1 — Foundation**
-Inicializar repositório Next.js 15, configurar Tailwind v4 com tokens OKLCH (Sálvia + Terracota), instalar shadcn/ui, configurar fontes Fraunces + Plus Jakarta Sans, criar layout base com sidebar de navegação.
+**Phase 1 — Foundation** — ver task completa em `.docs/tasks/phase-1-foundation.md`
+Inicializar Next.js 15, configurar Tailwind v4 com `@theme` completo do design system,
+instalar shadcn/ui + lucide-react, configurar fontes via next/font, criar Sidebar + Topbar
+fiéis ao design system, Prisma com modelo User.
 
 ## O Que Existe
 
 ### Infraestrutura
 - Documentação inicial (README, CONTEXT, vision, ADRs fundacionais)
-- Nenhuma feature implementada
+- Design system completo em `physioflow-design-system/project/` (tokens, componentes, 5 telas)
+- 5 tasks criadas e prontas para execução (Phases 1–5)
+- Nenhuma feature implementada ainda
 
 ### Features
 - (nenhuma)
