@@ -32,6 +32,12 @@ enum SessionType {
   HOME_CARE
 }
 
+enum DocumentType {
+  LAUDO_FISIOTERAPEUTICO
+  RELATORIO_PROGRESSO
+  DECLARACAO_COMPARECIMENTO
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -40,8 +46,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  patients Patient[]
-  sessions Session[]
+  patients  Patient[]
+  sessions  Session[]
+  documents Document[]
 }
 
 model Patient {
@@ -61,6 +68,7 @@ model Patient {
   user           User            @relation(fields: [userId], references: [id])
   clinicalRecord ClinicalRecord?
   sessions       Session[]
+  documents      Document[]
 
   @@unique([userId, email])
   @@index([userId])
@@ -104,4 +112,24 @@ model Session {
   @@index([userId, date])
   @@index([userId, status])
   @@index([userId, isActive])
+}
+
+model Document {
+  id          String       @id @default(cuid())
+  userId      String
+  patientId   String
+  type        DocumentType
+  title       String
+  period      String?
+  storagePath String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([userId])
+  @@index([userId, patientId])
+  @@index([userId, type])
 }

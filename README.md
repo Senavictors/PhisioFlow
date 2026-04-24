@@ -156,12 +156,12 @@ Após o seed:
 - Phase 5 — Dashboard & KPIs
 - Phase 6 — Timeline de Evolução
 
+- Phase 7 — Central de Documentos (geração PDF)
+
 ### 📋 Backlog
 
-- [ ] Phase 7 — Central de Documentos (geração PDF)
-- [ ] Phase 7 — Central de Documentos (geração PDF)
 - [ ] Phase 8 — Logística Domiciliar
 
 ### ➡️ Próximo Passo
 
-**Phase 7 — Central de Documentos**: geração de laudos, relatórios de progresso e declarações de comparecimento em PDF — ver `.docs/tasks/phase-7-documents.md`.
+**Phase 8 — Logística Domiciliar**: campos e telas dedicados para atendimentos HOME_CARE — ver `.docs/tasks/phase-8-logistics.md`.

@@ -9,6 +9,18 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 7 — Central de Documentos**
+  - Enum `DocumentType` + modelo `Document` no Prisma (migration `phase7_documents`)
+  - `POST /api/documents` — cria registro e retorna metadados
+  - `GET /api/documents` — listagem com filtro por tipo e paciente
+  - `GET /api/documents/:id/download` — gera PDF on-demand via `@react-pdf/renderer` e faz stream
+  - `DELETE /api/documents/:id` — soft delete
+  - Módulo `server/modules/documents/` com camadas application, domain, http e infra
+  - Templates PDF: `LaudoTemplate`, `RelatorioTemplate`, `DeclaracaoTemplate`
+  - Módulo `src/lib/pdf/` com estilos base e função `renderDocumentPDF`
+  - Componentes `DocumentCard`, `DocumentFilters`, `NovoDocumentoModal`
+  - Página `/documentos` com header, filtros, lista de cards e modal de geração
+  - Download automático do PDF ao criar o documento
 - **Phase 6 — Timeline de Evolução**
   - `GET /api/patients/:id/sessions` com validação de ownership e paginação
   - Página `/pacientes/:id/evolucao` com timeline cronológica reversa

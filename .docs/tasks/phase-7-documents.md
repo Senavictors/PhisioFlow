@@ -1,9 +1,9 @@
 # Task: Phase 7 — Central de Documentos
 
 ## Status
-- [ ] Todo
-- [ ] In Progress
-- [ ] Done
+- [x] Todo
+- [x] In Progress
+- [x] Done
 
 ## Contexto
 Com pacientes, sessões e evolução registrados, o fisioterapeuta precisa emitir documentos
