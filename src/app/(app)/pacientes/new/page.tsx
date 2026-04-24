@@ -4,7 +4,7 @@ import { PatientForm } from '@/components/patients/PatientForm'
 
 export default function NovoPacientePage() {
   return (
-    <div className="space-y-7 max-w-[720px]">
+    <div className="max-w-[1040px] space-y-6 sm:space-y-8">
       <div>
         <Link
           href="/pacientes"
@@ -13,10 +13,10 @@ export default function NovoPacientePage() {
           <ChevronLeft className="w-3.5 h-3.5" />
           Voltar para Pacientes
         </Link>
-        <h1 className="font-display font-bold text-[32px] text-foreground leading-tight">
+        <h1 className="font-display text-[30px] font-bold leading-tight text-foreground sm:text-[36px]">
           Novo Paciente
         </h1>
-        <p className="font-body text-[13px] text-muted-foreground mt-0.5">
+        <p className="mt-1 font-body text-[14px] text-muted-foreground">
           Preencha os dados para cadastrar um novo paciente.
         </p>
       </div>

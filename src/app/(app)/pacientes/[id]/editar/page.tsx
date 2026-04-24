@@ -31,7 +31,7 @@ export default async function EditarPacientePage({ params }: { params: Promise<{
   }
 
   return (
-    <div className="space-y-7 max-w-[720px]">
+    <div className="max-w-[1040px] space-y-6 sm:space-y-8">
       <div>
         <Link
           href={`/pacientes/${id}`}
@@ -40,10 +40,10 @@ export default async function EditarPacientePage({ params }: { params: Promise<{
           <ChevronLeft className="w-3.5 h-3.5" />
           Voltar para ficha clínica
         </Link>
-        <h1 className="font-display font-bold text-[32px] text-foreground leading-tight">
+        <h1 className="font-display text-[30px] font-bold leading-tight text-foreground sm:text-[36px]">
           Editar Paciente
         </h1>
-        <p className="font-body text-[13px] text-muted-foreground mt-0.5">
+        <p className="mt-1 font-body text-[14px] text-muted-foreground">
           Atualize os dados cadastrais e o prontuário base.
         </p>
       </div>

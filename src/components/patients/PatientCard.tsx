@@ -42,53 +42,58 @@ export function PatientCard({ patient }: { patient: Patient }) {
     <Link
       href={`/pacientes/${patient.id}`}
       className={cn(
-        'group flex items-center justify-between gap-4',
-        'bg-card border border-border rounded-[14px] px-5 py-4',
+        'group block rounded-[18px] border border-border bg-card px-4 py-4 sm:px-5 sm:py-5',
         'hover:border-primary/40 hover:shadow-md transition-all duration-[180ms]'
       )}
     >
-      <div className="flex items-center gap-4 min-w-0">
-        <div className="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center shrink-0">
-          <span className="font-display font-bold text-[15px] text-primary">
-            {patient.name.charAt(0).toUpperCase()}
-          </span>
-        </div>
-        <div className="min-w-0">
-          <p className="font-body font-semibold text-[14px] text-foreground truncate">
-            {patient.name}
-          </p>
-          <div className="flex items-center gap-3 mt-1">
-            {birthDate && (
-              <span className="flex items-center gap-1 font-body text-[12px] text-muted-foreground">
-                <Calendar className="w-3 h-3" />
-                {birthDate}
-              </span>
-            )}
-            {patient.phone && (
-              <span className="flex items-center gap-1 font-body text-[12px] text-muted-foreground">
-                <Phone className="w-3 h-3" />
-                {patient.phone}
-              </span>
-            )}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex min-w-0 items-start gap-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-soft">
+            <span className="font-display text-[15px] font-bold text-primary">
+              {patient.name.charAt(0).toUpperCase()}
+            </span>
+          </div>
+
+          <div className="min-w-0">
+            <p className="truncate font-body text-[15px] font-semibold text-foreground">
+              {patient.name}
+            </p>
+            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              {birthDate && (
+                <span className="flex items-center gap-1 font-body text-[12px] text-muted-foreground">
+                  <Calendar className="h-3 w-3" />
+                  {birthDate}
+                </span>
+              )}
+              {patient.phone && (
+                <span className="flex items-center gap-1 font-body text-[12px] text-muted-foreground">
+                  <Phone className="h-3 w-3" />
+                  {patient.phone}
+                </span>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-2 shrink-0">
-        <span
-          className={cn(
-            'px-2.5 py-1 rounded-full font-body text-[11px] font-semibold',
-            AREA_COLORS[patient.area] ?? 'bg-muted text-muted-foreground'
-          )}
-        >
-          {AREA_LABELS[patient.area] ?? patient.area}
-        </span>
-        {patient.classification !== 'STANDARD' && (
-          <span className="px-2.5 py-1 rounded-full bg-danger-soft text-danger font-body text-[11px] font-semibold">
-            {CLASSIFICATION_LABELS[patient.classification] ?? patient.classification}
+        <div className="flex w-full flex-wrap items-center gap-2 lg:w-auto lg:justify-end">
+          <span
+            className={cn(
+              'rounded-full px-2.5 py-1 font-body text-[11px] font-semibold',
+              AREA_COLORS[patient.area] ?? 'bg-muted text-muted-foreground'
+            )}
+          >
+            {AREA_LABELS[patient.area] ?? patient.area}
           </span>
-        )}
-        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          {patient.classification !== 'STANDARD' && (
+            <span className="rounded-full bg-danger-soft px-2.5 py-1 font-body text-[11px] font-semibold text-danger">
+              {CLASSIFICATION_LABELS[patient.classification] ?? patient.classification}
+            </span>
+          )}
+
+          <span className="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-[180ms] group-hover:bg-primary-soft group-hover:text-primary lg:ml-0">
+            <ChevronRight className="h-4 w-4" />
+          </span>
+        </div>
       </div>
     </Link>
   )

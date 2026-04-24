@@ -138,11 +138,11 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
         </div>
       )}
 
-      <section className="bg-card border border-border rounded-[18px] p-6 space-y-5">
+      <section className="space-y-5 rounded-[18px] border border-border bg-card p-5 sm:p-6">
         <h2 className="font-display font-bold text-[16px] text-foreground">Dados Pessoais</h2>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="md:col-span-2">
             <Field label="Nome completo *" error={errors.name}>
               <input
                 className={inputClass}
@@ -171,7 +171,7 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
             />
           </Field>
 
-          <div className="col-span-2">
+          <div className="md:col-span-2">
             <Field label="E-mail" error={errors.email}>
               <input
                 type="email"
@@ -185,12 +185,12 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
         </div>
       </section>
 
-      <section className="bg-card border border-border rounded-[18px] p-6 space-y-5">
+      <section className="space-y-5 rounded-[18px] border border-border bg-card p-5 sm:p-6">
         <h2 className="font-display font-bold text-[16px] text-foreground">
           Classificação Clínica
         </h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Field label="Área terapêutica *" error={errors.area}>
             <select
               className={inputClass}
@@ -231,7 +231,7 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
         </Field>
       </section>
 
-      <section className="bg-card border border-border rounded-[18px] p-6 space-y-5">
+      <section className="space-y-5 rounded-[18px] border border-border bg-card p-5 sm:p-6">
         <h2 className="font-display font-bold text-[16px] text-foreground">Prontuário</h2>
 
         <Field label="Queixa principal" error={errors.mainComplaint}>
@@ -252,7 +252,7 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
           />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Field label="Medicamentos em uso" error={errors.medications}>
             <textarea
               className={cn(inputClass, 'min-h-[72px] resize-y')}
@@ -273,24 +273,24 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
         </div>
       </section>
 
-      <div className="flex items-center justify-end gap-3 pt-2">
+      <div className="pt-1">
         <div className="flex w-full flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             {isEditing && patientId ? <ArchivePatientButton patientId={patientId} /> : null}
           </div>
 
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-5 py-2.5 rounded-xl font-body text-[13px] font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-[180ms]"
+              className="w-full rounded-xl px-5 py-2.5 font-body text-[13px] font-semibold text-muted-foreground transition-colors duration-[180ms] hover:bg-muted hover:text-foreground sm:w-auto"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-body text-[13px] font-semibold hover:bg-primary-hover disabled:opacity-50 transition-colors duration-[180ms] shadow-glow"
+              className="w-full rounded-xl bg-primary px-6 py-2.5 font-body text-[13px] font-semibold text-primary-foreground shadow-glow transition-colors duration-[180ms] hover:bg-primary-hover disabled:opacity-50 sm:w-auto"
             >
               {isLoading ? 'Salvando...' : isEditing ? 'Salvar alterações' : 'Cadastrar paciente'}
             </button>

@@ -154,11 +154,11 @@ Após o seed:
 
 ### 🔄 Em Andamento
 
-- [ ] Phase 3 — CRM de Pacientes (CRUD, prontuário base, seed demo, validação integrada)
+- [ ] Phase 4 — Registro SOAP (CRUD de sessões, agenda, histórico e formulário por paciente)
+- [ ] Refinos responsivos do shell clínico e da área de pacientes
 
 ### 📋 Backlog
 
-- [ ] Phase 4 — Registro de Sessão SOAP
 - [ ] Phase 5 — Timeline de Evolução
 - [ ] Phase 6 — Dashboard & KPIs
 - [ ] Phase 7 — Central de Documentos (geração PDF)
@@ -166,4 +166,4 @@ Após o seed:
 
 ### ➡️ Próximo Passo
 
-**Fechar a validação integrada da Phase 3**: rodar migration e seed no banco real, testar o login demo no browser e então iniciar a Phase 4 com registro SOAP por paciente.
+**Validar a base da Phase 4 em ambiente local/real**: aplicar a migration `phase4_sessions`, rodar o seed, reiniciar o dev server local e testar `/pacientes`, `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova` com o usuário demo.

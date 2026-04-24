@@ -28,36 +28,40 @@ async function PatientList({ searchParams }: { searchParams: SearchParams }) {
 
   if (patients.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="w-16 h-16 rounded-full bg-primary-soft flex items-center justify-center">
-          <Users className="w-8 h-8 text-primary" />
+      <div className="flex min-h-[360px] items-center justify-center rounded-[24px] border border-dashed border-border bg-card/75 px-6 py-12 sm:px-10 sm:py-16">
+        <div className="flex max-w-[420px] flex-col items-center gap-4 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-soft">
+            <Users className="h-8 w-8 text-primary" />
+          </div>
+          <div>
+            <p className="font-display text-[22px] font-bold text-foreground">
+              Nenhum paciente encontrado
+            </p>
+            <p className="mt-1 font-body text-[14px] text-muted-foreground">
+              Cadastre o primeiro paciente para começar ou ajuste os filtros da busca.
+            </p>
+          </div>
+          <Link
+            href="/pacientes/new"
+            className="w-full rounded-xl bg-primary px-5 py-2.5 text-center font-body text-[13px] font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary-hover sm:w-auto"
+          >
+            Novo paciente
+          </Link>
         </div>
-        <div className="text-center">
-          <p className="font-display font-bold text-[18px] text-foreground">
-            Nenhum paciente encontrado
-          </p>
-          <p className="font-body text-[13px] text-muted-foreground mt-1">
-            Cadastre o primeiro paciente para começar.
-          </p>
-        </div>
-        <Link
-          href="/pacientes/new"
-          className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-body text-[13px] font-semibold hover:bg-primary-hover transition-colors shadow-glow"
-        >
-          Novo paciente
-        </Link>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <p className="font-body text-[12px] text-muted-foreground mb-1">
+    <div className="space-y-3">
+      <p className="px-1 font-body text-[12px] text-muted-foreground">
         {patients.length} {patients.length === 1 ? 'paciente' : 'pacientes'}
       </p>
-      {patients.map((patient) => (
-        <PatientCard key={patient.id} patient={patient} />
-      ))}
+      <div className="space-y-3">
+        {patients.map((patient) => (
+          <PatientCard key={patient.id} patient={patient} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -70,21 +74,24 @@ export default async function PacientesPage({
   const params = await searchParams
 
   return (
-    <div className="space-y-7">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="font-display font-bold text-[32px] text-foreground leading-tight">
+          <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            CRM Clínico
+          </p>
+          <h1 className="font-display text-[30px] font-bold leading-tight text-foreground sm:text-[36px]">
             Pacientes
           </h1>
-          <p className="font-body text-[13px] text-muted-foreground mt-0.5">
+          <p className="mt-1 font-body text-[14px] text-muted-foreground">
             Gerencie os cadastros e prontuários
           </p>
         </div>
         <Link
           href="/pacientes/new"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-body text-[13px] font-semibold hover:bg-primary-hover transition-colors shadow-glow"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-body text-[13px] font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary-hover sm:w-auto"
         >
-          <UserPlus className="w-4 h-4" />
+          <UserPlus className="h-4 w-4" />
           Novo paciente
         </Link>
       </div>
@@ -97,7 +104,7 @@ export default async function PacientesPage({
         fallback={
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-[72px] rounded-[14px] bg-muted animate-pulse" />
+              <div key={i} className="h-[88px] animate-pulse rounded-[18px] bg-muted" />
             ))}
           </div>
         }

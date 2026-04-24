@@ -21,6 +21,17 @@ enum TherapyArea {
   HOME_CARE
 }
 
+enum SessionStatus {
+  AGENDADO
+  REALIZADO
+  CANCELADO
+}
+
+enum SessionType {
+  PRESENTIAL
+  HOME_CARE
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -30,6 +41,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   patients Patient[]
+  sessions Session[]
 }
 
 model Patient {
@@ -48,6 +60,7 @@ model Patient {
 
   user           User            @relation(fields: [userId], references: [id])
   clinicalRecord ClinicalRecord?
+  sessions       Session[]
 
   @@unique([userId, email])
   @@index([userId])
@@ -65,4 +78,30 @@ model ClinicalRecord {
   updatedAt      DateTime @updatedAt
 
   patient Patient @relation(fields: [patientId], references: [id])
+}
+
+model Session {
+  id          String        @id @default(cuid())
+  userId      String
+  patientId   String
+  date        DateTime
+  duration    Int
+  type        SessionType   @default(PRESENTIAL)
+  status      SessionStatus @default(AGENDADO)
+  isActive    Boolean       @default(true)
+  subjective  String?
+  objective   String?
+  assessment  String?
+  plan        String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user        User          @relation(fields: [userId], references: [id])
+  patient     Patient       @relation(fields: [patientId], references: [id])
+
+  @@index([userId])
+  @@index([userId, patientId])
+  @@index([userId, date])
+  @@index([userId, status])
+  @@index([userId, isActive])
 }
