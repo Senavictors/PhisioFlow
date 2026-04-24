@@ -51,3 +51,5 @@ coverage/
 
 # ─── Design system — screenshots pessoais (referência local apenas) ──────────
 physioflow-design-system/project/uploads/
+
+/src/generated/prisma
