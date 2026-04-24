@@ -8,6 +8,10 @@ const sessionInclude = {
       name: true,
       area: true,
       classification: true,
+      homeCarePriority: true,
+      address: true,
+      neighborhood: true,
+      city: true,
     },
   },
 } satisfies Prisma.SessionInclude

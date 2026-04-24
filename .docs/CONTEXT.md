@@ -4,12 +4,14 @@
 
 ## Fase Atual
 
-**Phase 7 — Central de Documentos concluída**
-Geração de PDFs clínicos on-demand: Laudo Fisioterapêutico, Relatório de Progresso e Declaração de Comparecimento. Modelo `Document` no banco, endpoints REST completos, templates `@react-pdf/renderer`, componentes de UI e página `/documentos` com modal de criação + download automático.
+**Phase 8 — Logística Domiciliar concluída**
+Campos de endereço e prioridade no modelo `Patient`, seção de logística na ficha e no formulário de edição, badge de prioridade no `SessionCard`, e visão domiciliar na agenda (`/agenda?domiciliar=1`) com ordenação por prioridade. Migration `phase8_homecare_logistics` aplicada.
+
+**PhysioFlow v1 completo**: Cadastro → Atendimento SOAP → Evolução → Documentação → Logística Domiciliar.
 
 ## Próximo Passo Planejado
 
-**Phase 8 — Logística Domiciliar**: campos e telas dedicados para atendimentos HOME_CARE — ver task em `.docs/tasks/phase-8-logistics.md`.
+Próximo ciclo: melhorias de UX, notificações, multi-usuário por clínica (multi-tenant expandido) e integração com calendários externos (Google Calendar).
 
 ## O Que Existe
 
@@ -60,6 +62,12 @@ Geração de PDFs clínicos on-demand: Laudo Fisioterapêutico, Relatório de Pr
   - Componentes `SessionCard`, `StatusBadge` e `SessionForm`
   - Seed demo com histórico, agendamentos e atendimento domiciliar
   - Testes unitários cobrindo create/list/update do módulo
+- **Logística Domiciliar (Phase 8)**:
+  - Enum `HomeCarePriority` + campos `address`, `neighborhood`, `city`, `homeCareNotes`, `homeCarePriority` no modelo `Patient` (migration `phase8_homecare_logistics`)
+  - `PUT /api/patients/:id` aceita os novos campos via DTO Zod atualizado
+  - Seção "Logística Domiciliar" no `PatientForm` e na ficha do paciente (apenas HOME_CARE)
+  - Badge de prioridade no `SessionCard` (URGENTE terracota, PRIORITÁRIO amarelo)
+  - Componente `DomiciliarToggle` + visão `/agenda?domiciliar=1` com filtro HOME_CARE e sort por prioridade
 - **Central de Documentos (Phase 7)**:
   - Modelo `Document` + enum `DocumentType` no Prisma + migration `phase7_documents`
   - `POST /api/documents`, `GET /api/documents`, `GET /api/documents/:id/download`, `DELETE /api/documents/:id`
@@ -88,7 +96,7 @@ Geração de PDFs clínicos on-demand: Laudo Fisioterapêutico, Relatório de Pr
 ## Modelos de Banco
 
 - `User` — id, email, name, password, createdAt, updatedAt
-- `Patient` — cadastro clínico base, classificação, área terapêutica, observações, `isActive`
+- `Patient` — cadastro clínico base, classificação, área terapêutica, observações, endereço (address, neighborhood, city), homeCareNotes, homeCarePriority, `isActive`
 - `ClinicalRecord` — prontuário inicial vinculado 1:1 ao paciente
 - `Session` — atendimento clínico com data, duração, tipo, status e campos SOAP
 - `Document` — metadados do documento gerado (tipo, título, período, patientId, userId), `isActive`

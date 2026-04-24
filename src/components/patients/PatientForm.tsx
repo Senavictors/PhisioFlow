@@ -17,12 +17,23 @@ interface PatientFormData {
   medicalHistory: string
   medications: string
   allergies: string
+  address: string
+  neighborhood: string
+  city: string
+  homeCareNotes: string
+  homeCarePriority: string
 }
 
 interface PatientFormProps {
   initialData?: Partial<PatientFormData>
   patientId?: string
 }
+
+const HOME_CARE_PRIORITIES = [
+  { value: 'NORMAL', label: 'Normal' },
+  { value: 'HIGH', label: 'Prioritário' },
+  { value: 'URGENT', label: 'Urgente' },
+]
 
 const AREAS = [
   { value: 'PILATES', label: 'Pilates' },
@@ -81,6 +92,11 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
     medicalHistory: initialData?.medicalHistory ?? '',
     medications: initialData?.medications ?? '',
     allergies: initialData?.allergies ?? '',
+    address: initialData?.address ?? '',
+    neighborhood: initialData?.neighborhood ?? '',
+    city: initialData?.city ?? '',
+    homeCareNotes: initialData?.homeCareNotes ?? '',
+    homeCarePriority: initialData?.homeCarePriority ?? 'NORMAL',
   })
 
   const [errors, setErrors] = useState<Partial<Record<keyof PatientFormData, string>>>({})
@@ -271,6 +287,73 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
             />
           </Field>
         </div>
+      </section>
+
+      <section className="space-y-5 rounded-[18px] border border-border bg-card p-5 sm:p-6">
+        <div className="flex items-center gap-2">
+          <h2 className="font-display font-bold text-[16px] text-foreground">
+            Logística Domiciliar
+          </h2>
+          {form.area === 'HOME_CARE' && (
+            <span className="rounded-full bg-warning-soft px-2.5 py-1 font-body text-[11px] font-semibold text-warning">
+              HOME CARE
+            </span>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <Field label="Endereço" error={errors.address}>
+              <input
+                className={inputClass}
+                value={form.address}
+                onChange={(e) => set('address', e.target.value)}
+                placeholder="Logradouro e número"
+              />
+            </Field>
+          </div>
+
+          <Field label="Bairro" error={errors.neighborhood}>
+            <input
+              className={inputClass}
+              value={form.neighborhood}
+              onChange={(e) => set('neighborhood', e.target.value)}
+              placeholder="Bairro"
+            />
+          </Field>
+
+          <Field label="Cidade" error={errors.city}>
+            <input
+              className={inputClass}
+              value={form.city}
+              onChange={(e) => set('city', e.target.value)}
+              placeholder="Cidade"
+            />
+          </Field>
+        </div>
+
+        <Field label="Instruções de acesso" error={errors.homeCareNotes}>
+          <textarea
+            className={cn(inputClass, 'min-h-[80px] resize-y')}
+            value={form.homeCareNotes}
+            onChange={(e) => set('homeCareNotes', e.target.value)}
+            placeholder="Portaria, interfone, ponto de referência..."
+          />
+        </Field>
+
+        <Field label="Prioridade" error={errors.homeCarePriority}>
+          <select
+            className={inputClass}
+            value={form.homeCarePriority}
+            onChange={(e) => set('homeCarePriority', e.target.value)}
+          >
+            {HOME_CARE_PRIORITIES.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </Field>
       </section>
 
       <div className="pt-1">

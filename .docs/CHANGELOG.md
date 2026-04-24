@@ -9,6 +9,17 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 8 — Logística Domiciliar**
+  - Enum `HomeCarePriority` (NORMAL / HIGH / URGENT) + migration `phase8_homecare_logistics`
+  - Campos novos no modelo `Patient`: `address`, `neighborhood`, `city`, `homeCareNotes`, `homeCarePriority`
+  - `PUT /api/patients/:id` aceita e persiste os novos campos de logística
+  - Seção "Logística Domiciliar" no formulário de edição/criação de paciente com endereço, bairro, cidade, instruções de acesso e prioridade
+  - Seção "Logística Domiciliar" na ficha do paciente (`/pacientes/:id`), visível apenas para `area = HOME_CARE`, com badge de prioridade e instruções de acesso
+  - Badge de prioridade no `SessionCard`: Urgente (terracota) e Prioritário (amarelo) para sessões HOME_CARE
+  - Exibição opcional de endereço nos cards de sessão domiciliar (prop `showAddress`)
+  - Componente `DomiciliarToggle` na agenda — alterna entre visão geral e visão domiciliar
+  - Visão domiciliar (`/agenda?domiciliar=1`): filtra sessões HOME_CARE, ordena por prioridade (URGENT → HIGH → NORMAL) depois por horário
+
 - **Phase 7 — Central de Documentos**
   - Enum `DocumentType` + modelo `Document` no Prisma (migration `phase7_documents`)
   - `POST /api/documents` — cria registro e retorna metadados

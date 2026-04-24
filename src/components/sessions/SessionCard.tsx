@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
-import { CalendarDays, Check, Clock3, Home, UserRound, X } from 'lucide-react'
+import { CalendarDays, Check, Clock3, Home, MapPin, UserRound, X } from 'lucide-react'
 import type { SessionStatus, SessionType } from '@/generated/prisma/client'
 import { formatDateLongPtBr, formatTimePtBr } from '@/lib/date'
 import { cn } from '@/lib/utils'
@@ -25,10 +25,15 @@ interface SessionCardProps {
       id: string
       name: string
       area?: string
+      homeCarePriority?: string | null
+      address?: string | null
+      neighborhood?: string | null
+      city?: string | null
     }
   }
   showDate?: boolean
   allowStatusActions?: boolean
+  showAddress?: boolean
 }
 
 function getSessionSummary(session: SessionCardProps['session']) {
@@ -41,6 +46,7 @@ export function SessionCard({
   session,
   showDate = false,
   allowStatusActions = true,
+  showAddress = false,
 }: SessionCardProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -95,6 +101,17 @@ export function SessionCard({
                   Domiciliar
                 </span>
               ) : null}
+              {session.type === 'HOME_CARE' &&
+              session.patient.homeCarePriority === 'URGENT' ? (
+                <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-1 font-body text-[11px] font-semibold uppercase tracking-wide text-white">
+                  Urgente
+                </span>
+              ) : session.type === 'HOME_CARE' &&
+                session.patient.homeCarePriority === 'HIGH' ? (
+                <span className="rounded-full bg-warning-soft px-2.5 py-1 font-body text-[11px] font-semibold text-warning">
+                  Prioritário
+                </span>
+              ) : null}
               <StatusBadge status={session.status} />
             </div>
 
@@ -117,6 +134,14 @@ export function SessionCard({
                 )}
                 {session.type === 'HOME_CARE' ? 'Visita clínica' : 'Sessão em clínica'}
               </span>
+              {showAddress && session.patient.address ? (
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5" />
+                  {[session.patient.address, session.patient.neighborhood, session.patient.city]
+                    .filter(Boolean)
+                    .join(', ')}
+                </span>
+              ) : null}
             </div>
 
             {summary ? (

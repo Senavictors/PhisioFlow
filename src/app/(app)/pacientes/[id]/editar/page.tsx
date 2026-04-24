@@ -62,6 +62,11 @@ export default async function EditarPacientePage({ params }: { params: Promise<{
           medicalHistory: patient.clinicalRecord?.medicalHistory ?? '',
           medications: patient.clinicalRecord?.medications ?? '',
           allergies: patient.clinicalRecord?.allergies ?? '',
+          address: patient.address ?? '',
+          neighborhood: patient.neighborhood ?? '',
+          city: patient.city ?? '',
+          homeCareNotes: patient.homeCareNotes ?? '',
+          homeCarePriority: patient.homeCarePriority ?? 'NORMAL',
         }}
       />
     </div>

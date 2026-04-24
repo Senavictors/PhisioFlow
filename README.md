@@ -155,13 +155,9 @@ Após o seed:
 - Phase 4 — Registro SOAP (sessões, agenda, formulário SOAP)
 - Phase 5 — Dashboard & KPIs
 - Phase 6 — Timeline de Evolução
-
 - Phase 7 — Central de Documentos (geração PDF)
-
-### 📋 Backlog
-
-- [ ] Phase 8 — Logística Domiciliar
+- Phase 8 — Logística Domiciliar (endereço, prioridade, agenda domiciliar)
 
 ### ➡️ Próximo Passo
 
-**Phase 8 — Logística Domiciliar**: campos e telas dedicados para atendimentos HOME_CARE — ver `.docs/tasks/phase-8-logistics.md`.
+**PhysioFlow v1 completo.** Próximo ciclo: melhorias de UX, notificações, multi-usuário por clínica e integração com calendários externos (Google Calendar).

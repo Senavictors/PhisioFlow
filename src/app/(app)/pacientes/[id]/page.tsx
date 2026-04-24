@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, ChevronLeft, Edit, FilePlus2, Mail, Phone, TrendingUp } from 'lucide-react'
+import { Calendar, ChevronLeft, Edit, FilePlus2, Mail, MapPin, Phone, TrendingUp } from 'lucide-react'
 import { getSession } from '@/lib/session'
 import { formatDateOnlyPtBr } from '@/lib/date'
 import {
@@ -20,6 +20,18 @@ const CLASSIFICATION_LABELS: Record<string, string> = {
   PCD: 'PCD',
   POST_ACCIDENT: 'Pós-acidente',
   STANDARD: 'Padrão',
+}
+
+const PRIORITY_LABELS: Record<string, string> = {
+  NORMAL: 'Normal',
+  HIGH: 'Prioritário',
+  URGENT: 'Urgente',
+}
+
+const PRIORITY_COLORS: Record<string, string> = {
+  NORMAL: 'bg-muted text-muted-foreground',
+  HIGH: 'bg-warning-soft text-warning',
+  URGENT: 'bg-[var(--color-accent)] text-white',
 }
 
 const AREA_COLORS: Record<string, string> = {
@@ -185,6 +197,54 @@ export default async function FichaClinicaPage({ params }: { params: Promise<{ i
           </div>
         </section>
       </div>
+
+      {patient.area === 'HOME_CARE' && (
+        <section className="space-y-4 rounded-[18px] border border-border bg-card p-5 sm:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="font-display font-bold text-[15px] text-foreground">
+              Logística Domiciliar
+            </h2>
+            <span
+              className={`rounded-full px-2.5 py-1 font-body text-[11px] font-semibold ${
+                PRIORITY_COLORS[patient.homeCarePriority] ?? PRIORITY_COLORS.NORMAL
+              }`}
+            >
+              {PRIORITY_LABELS[patient.homeCarePriority] ?? 'Normal'}
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            <InfoRow
+              icon={MapPin}
+              label="Endereço"
+              value={
+                [patient.address, patient.neighborhood, patient.city].filter(Boolean).join(', ') ||
+                null
+              }
+            />
+          </div>
+
+          {patient.homeCareNotes && (
+            <div className="border-t border-border pt-3">
+              <p className="font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground mb-1.5">
+                Instruções de acesso
+              </p>
+              <p className="font-body text-[13px] text-foreground leading-relaxed">
+                {patient.homeCareNotes}
+              </p>
+            </div>
+          )}
+
+          <div className="border-t border-border pt-3">
+            <Link
+              href={`/pacientes/${id}/editar`}
+              className="font-body text-[13px] font-semibold text-primary hover:underline"
+            >
+              Editar informações →
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   )
 }

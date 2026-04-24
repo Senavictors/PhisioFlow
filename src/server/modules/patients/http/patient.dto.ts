@@ -12,6 +12,8 @@ const optionalEmail = z
 
 const optionalText = z.string().trim().optional()
 
+const homeCarePriorityEnum = z.enum(['NORMAL', 'HIGH', 'URGENT'])
+
 export const createPatientDTO = z.object({
   name: z.string().trim().min(2, 'Nome deve ter ao menos 2 caracteres'),
   birthDate: optionalDateString,
@@ -24,6 +26,11 @@ export const createPatientDTO = z.object({
   medicalHistory: optionalText,
   medications: optionalText,
   allergies: optionalText,
+  address: optionalText,
+  neighborhood: optionalText,
+  city: optionalText,
+  homeCareNotes: optionalText,
+  homeCarePriority: homeCarePriorityEnum.optional(),
 })
 
 export const updatePatientDTO = z.object({
@@ -38,6 +45,11 @@ export const updatePatientDTO = z.object({
   medicalHistory: optionalText,
   medications: optionalText,
   allergies: optionalText,
+  address: optionalText,
+  neighborhood: optionalText,
+  city: optionalText,
+  homeCareNotes: optionalText,
+  homeCarePriority: homeCarePriorityEnum.optional(),
 })
 
 export const listPatientsDTO = z.object({
