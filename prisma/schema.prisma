@@ -7,6 +7,20 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PatientClassification {
+  ELDERLY
+  PCD
+  POST_ACCIDENT
+  STANDARD
+}
+
+enum TherapyArea {
+  PILATES
+  MOTOR
+  AESTHETIC
+  HOME_CARE
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -14,4 +28,41 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  patients Patient[]
+}
+
+model Patient {
+  id             String                @id @default(cuid())
+  userId         String
+  name           String
+  birthDate      DateTime?
+  phone          String?
+  email          String?
+  classification PatientClassification @default(STANDARD)
+  area           TherapyArea
+  notes          String?
+  isActive       Boolean               @default(true)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  user           User            @relation(fields: [userId], references: [id])
+  clinicalRecord ClinicalRecord?
+
+  @@unique([userId, email])
+  @@index([userId])
+  @@index([userId, isActive])
+}
+
+model ClinicalRecord {
+  id             String   @id @default(cuid())
+  patientId      String   @unique
+  mainComplaint  String?
+  medicalHistory String?
+  medications    String?
+  allergies      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id])
 }

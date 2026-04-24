@@ -1,32 +1,37 @@
 # Task: Phase 3 — CRM de Pacientes
 
 ## Status
+
 - [ ] Todo
-- [ ] In Progress
+- [x] In Progress
 - [ ] Done
 
 ## Contexto
+
 Core do produto. Todo o resto depende do cadastro de pacientes.
 Todo paciente pertence ao `userId` do fisioterapeuta autenticado (multi-tenant).
 
 ## Objetivo
+
 CRUD completo de pacientes com classificação, área terapêutica e prontuário base.
 
 ## Escopo
-- [ ] Modelos `Patient` + `ClinicalRecord` no Prisma
-- [ ] Migration
-- [ ] `GET /api/patients` — listar com filtros
-- [ ] `POST /api/patients` — criar
-- [ ] `GET /api/patients/:id` — buscar com prontuário
-- [ ] `PUT /api/patients/:id` — atualizar
-- [ ] `DELETE /api/patients/:id` — arquivar (soft delete via `isActive`)
-- [ ] Módulo: `server/modules/patients/` completo (application, domain, http, infra)
-- [ ] Página `/patients` — listagem com cards e filtros
-- [ ] Página `/patients/new` — formulário de cadastro
-- [ ] Página `/patients/:id` — ficha clínica
-- [ ] Validação Zod em todos os endpoints
+
+- [x] Modelos `Patient` + `ClinicalRecord` no Prisma
+- [x] Migration
+- [x] `GET /api/patients` — listar com filtros
+- [x] `POST /api/patients` — criar
+- [x] `GET /api/patients/:id` — buscar com prontuário
+- [x] `PUT /api/patients/:id` — atualizar
+- [x] `DELETE /api/patients/:id` — arquivar (soft delete via `isActive`)
+- [x] Módulo: `server/modules/patients/` completo (application, domain, http, infra)
+- [x] Página `/patients` — listagem com cards e filtros
+- [x] Página `/patients/new` — formulário de cadastro
+- [x] Página `/patients/:id` — ficha clínica
+- [x] Validação Zod em todos os endpoints
 
 ## Fora de Escopo
+
 - Upload de exames (Phase futura)
 - Histórico de sessões na ficha (Phase 4)
 
@@ -117,6 +122,7 @@ src/server/modules/patients/application/
 ```
 
 Coberturas mínimas esperadas:
+
 - `createPatient`: dados válidos, email duplicado, dados inválidos (Zod)
 - `listPatients`: filtro por userId correto (multi-tenant)
 - `getPatient`: paciente do userId correto, paciente de outro userId (deve lançar erro)
@@ -132,7 +138,7 @@ As sessões serão adicionadas ao seed na Phase 4.
 
 ```json
 "prisma": {
-  "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  "seed": "node --experimental-strip-types --loader ./prisma/ts-loader.mjs prisma/seed.ts"
 }
 ```
 
@@ -147,7 +153,9 @@ const prisma = new PrismaClient()
 async function main() {
   // Limpa dados anteriores do demo (ordem importa por FK)
   await prisma.session.deleteMany({ where: { user: { email: 'demo@phisioflow.com' } } })
-  await prisma.clinicalRecord.deleteMany({ where: { patient: { user: { email: 'demo@phisioflow.com' } } } })
+  await prisma.clinicalRecord.deleteMany({
+    where: { patient: { user: { email: 'demo@phisioflow.com' } } },
+  })
   await prisma.patient.deleteMany({ where: { user: { email: 'demo@phisioflow.com' } } })
   await prisma.user.deleteMany({ where: { email: 'demo@phisioflow.com' } })
 
@@ -229,7 +237,10 @@ async function main() {
 }
 
 main()
-  .catch((e) => { console.error(e); process.exit(1) })
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
   .finally(() => prisma.$disconnect())
 ```
 
@@ -242,18 +253,25 @@ npx prisma db seed
 ---
 
 ## Checklist Final
+
 - [ ] CRUD funciona via API (testar com curl ou Postman)
 - [ ] Listagem com filtros renderiza no browser
 - [ ] Ficha clínica abre com prontuário correto
-- [ ] Pacientes isolados por `userId` (multi-tenant verificado)
-- [ ] `npm test` passa com todos os testes de patients
+- [x] Pacientes isolados por `userId` (multi-tenant verificado)
+- [x] `npm test` passa com todos os testes de patients
 - [ ] `npx prisma db seed` popula o banco sem erros
 - [ ] Login com `demo@phisioflow.com` / `demo1234` funciona e mostra os 3 pacientes
-- [ ] `.docs/CONTEXT.md` atualizado
+- [x] `.docs/CONTEXT.md` atualizado
 - [ ] `README.md` atualizado (Phase 3 marcada como ✅)
-- [ ] `CHANGELOG.md` atualizado
-- [ ] `.docs/domain/patients.md` criado
-- [ ] `.docs/api/patients.md` criado
+- [x] `CHANGELOG.md` atualizado
+- [x] `.docs/domain/patients.md` criado
+- [x] `.docs/api/patients.md` criado
+
+## Estado Atual
+
+- Implementação local da phase 3 está pronta no código e validada com `npm run lint`, `npm test -- --run src/server/modules/patients/application` e `npm run build`
+- Ainda falta validação integrada contra o banco real (`migrate` + `seed`) e teste manual no browser com o usuário demo
 
 ## Notas para Próxima Sessão
+
 Ao concluir, a Phase 4 (Registro SOAP) pode começar. O `patientId` será a chave estrangeira de todas as entidades clínicas.

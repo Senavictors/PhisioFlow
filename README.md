@@ -34,6 +34,7 @@ UI (React) → Route Handlers → Use Cases → Domain → Repositories → Post
 ```
 
 ### Princípios
+
 - Route Handlers são adaptadores HTTP finos (sem lógica de negócio)
 - Use Cases encapsulam toda regra clínica
 - Repository Pattern isola acesso ao banco
@@ -75,30 +76,30 @@ src/
 .docs/tasks/ → .docs/CONTEXT.md → README.md
 ```
 
-| Camada | Arquivo | Propósito |
-|--------|---------|-----------|
-| Visão | `.docs/vision.md` | Problema, personas, métricas |
-| Contexto | `.docs/CONTEXT.md` | Estado vivo do projeto |
-| Arquitetura | `.docs/architecture/README.md` | Camadas e princípios |
-| Domínio | `.docs/domain/*.md` | Regras de negócio clínicas |
-| API | `.docs/api/*.md` | Contratos de endpoints |
-| Dados | `.docs/data/data-dictionary.md` | Schema e enums |
-| Decisões | `.docs/decisions/ADR-*.md` | Registro de decisões arquiteturais |
-| Tasks | `.docs/tasks/phase-*.md` | Escopo de execução por fase |
+| Camada      | Arquivo                         | Propósito                          |
+| ----------- | ------------------------------- | ---------------------------------- |
+| Visão       | `.docs/vision.md`               | Problema, personas, métricas       |
+| Contexto    | `.docs/CONTEXT.md`              | Estado vivo do projeto             |
+| Arquitetura | `.docs/architecture/README.md`  | Camadas e princípios               |
+| Domínio     | `.docs/domain/*.md`             | Regras de negócio clínicas         |
+| API         | `.docs/api/*.md`                | Contratos de endpoints             |
+| Dados       | `.docs/data/data-dictionary.md` | Schema e enums                     |
+| Decisões    | `.docs/decisions/ADR-*.md`      | Registro de decisões arquiteturais |
+| Tasks       | `.docs/tasks/phase-*.md`        | Escopo de execução por fase        |
 
 ---
 
 ## Stack & Decisões
 
-| Tecnologia | Por quê |
-|-----------|---------|
-| Next.js 15 App Router | Full-stack com RSC, sem backend separado |
-| TypeScript | Segurança de tipos end-to-end |
-| Tailwind CSS v4 | Tokens OKLCH nativos, design system sólido |
-| shadcn/ui | Componentes acessíveis, headless, personalizáveis |
-| Prisma + PostgreSQL | ORM type-safe, migrations versionadas |
-| Zod | Validação com inferência de tipos |
-| Vercel + Neon | Deploy zero-config + Postgres serverless |
+| Tecnologia            | Por quê                                           |
+| --------------------- | ------------------------------------------------- |
+| Next.js 16 App Router | Full-stack com RSC, sem backend separado          |
+| TypeScript            | Segurança de tipos end-to-end                     |
+| Tailwind CSS v4       | Tokens OKLCH nativos, design system sólido        |
+| shadcn/ui             | Componentes acessíveis, headless, personalizáveis |
+| Prisma + PostgreSQL   | ORM type-safe, migrations versionadas             |
+| Zod                   | Validação com inferência de tipos                 |
+| Vercel + Neon         | Deploy zero-config + Postgres serverless          |
 
 ---
 
@@ -128,23 +129,35 @@ cp .env.example .env
 # 3. Migrations
 npx prisma migrate dev
 
-# 4. Dev server
+# 4. Seed demo
+npx prisma db seed
+
+# 5. Dev server
 npm run dev
 ```
+
+### Usuário demo
+
+Após o seed:
+
+- `demo@phisioflow.com`
+- `demo1234`
 
 ---
 
 ## Roadmap
 
 ### ✅ Concluído
-- (nenhuma fase concluída ainda)
+
+- Phase 1 — Foundation
+- Phase 2 — Auth
 
 ### 🔄 Em Andamento
-- [ ] Phase 1 — Foundation (setup, design tokens, layout base)
+
+- [ ] Phase 3 — CRM de Pacientes (CRUD, prontuário base, seed demo, validação integrada)
 
 ### 📋 Backlog
-- [ ] Phase 2 — Auth (login, registro, sessões server-side)
-- [ ] Phase 3 — CRM de Pacientes (cadastro, listagem, ficha clínica)
+
 - [ ] Phase 4 — Registro de Sessão SOAP
 - [ ] Phase 5 — Timeline de Evolução
 - [ ] Phase 6 — Dashboard & KPIs
@@ -152,4 +165,5 @@ npm run dev
 - [ ] Phase 8 — Logística Domiciliar
 
 ### ➡️ Próximo Passo
-**Phase 1 — Foundation**: inicializar projeto Next.js 15, configurar design tokens (Sálvia + Terracota), fontes Fraunces + Plus Jakarta Sans, layout base com sidebar.
+
+**Fechar a validação integrada da Phase 3**: rodar migration e seed no banco real, testar o login demo no browser e então iniciar a Phase 4 com registro SOAP por paciente.

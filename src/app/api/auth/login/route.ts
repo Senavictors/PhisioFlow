@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { getInfraErrorResponse, logRouteError } from '@/lib/http-errors'
 import { loginDTO } from '@/server/modules/auth/http/auth.dto'
 import { loginUser, InvalidCredentialsError } from '@/server/modules/auth/application/login'
 import { getSession } from '@/lib/session'
@@ -24,6 +25,14 @@ export async function POST(request: Request) {
     if (err instanceof InvalidCredentialsError) {
       return NextResponse.json({ message: err.message }, { status: 401 })
     }
+
+    logRouteError('api/auth/login', err)
+
+    const infraError = getInfraErrorResponse(err)
+    if (infraError) {
+      return NextResponse.json({ message: infraError.message }, { status: infraError.status })
+    }
+
     return NextResponse.json({ message: 'Erro interno' }, { status: 500 })
   }
 }
