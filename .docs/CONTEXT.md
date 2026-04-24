@@ -4,12 +4,12 @@
 
 ## Fase Atual
 
-**Phase 5 — Dashboard & KPIs concluída**
-Dashboard `/dashboard` implementado com Server Component: KPI cards em tempo real (pacientes ativos, atendimentos hoje, sem retorno 30+ dias), gráfico semanal SVG, ações rápidas, atendimentos recentes e alerta de atenção clínica. Endpoint `GET /api/dashboard/metrics` disponível. Sem migration nova — usa `Patient` e `Session` existentes.
+**Phase 6 — Timeline de Evolução concluída**
+Página `/pacientes/:id/evolucao` com timeline cronológica reversa das sessões SOAP do paciente. Componentes `TimelineEntry` (dot colorido por status + card) e `SoapAccordion` (colapsável, auto-abre em REALIZADO com conteúdo). Endpoint `GET /api/patients/:id/sessions` adicionado. Link "Ver evolução" inserido na ficha do paciente. Sem migration nova.
 
 ## Próximo Passo Planejado
 
-**Phase 6 — Timeline de Evolução**: histórico cronológico visual de sessões SOAP por paciente, em `/pacientes/:id/evolucao`.
+**Phase 7 — Central de Documentos**: geração de laudos e relatórios em PDF a partir dos dados do paciente — ver task em `.docs/tasks/phase-7-documents.md`.
 
 ## O Que Existe
 
@@ -41,6 +41,11 @@ Dashboard `/dashboard` implementado com Server Component: KPI cards em tempo rea
   - Páginas `/pacientes`, `/pacientes/new`, `/pacientes/:id` e `/pacientes/:id/editar`
   - Testes unitários cobrindo create/list/get/update do módulo
   - Shell e páginas de pacientes revisados para melhor responsividade em mobile e desktop
+- **Timeline de Evolução (Phase 6)**:
+  - Endpoint `GET /api/patients/:id/sessions` (valida ownership do paciente)
+  - Página `/pacientes/:id/evolucao` com timeline cronológica reversa e paginação
+  - Componentes `TimelineEntry` e `SoapAccordion` (colapsável, client component)
+  - Link "Ver evolução" na ficha do paciente
 - **Dashboard & KPIs (Phase 5)**:
   - Endpoint `GET /api/dashboard/metrics` com todos os KPIs
   - Módulo `server/modules/dashboard/application/get-metrics.ts`

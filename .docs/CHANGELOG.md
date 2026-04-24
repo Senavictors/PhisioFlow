@@ -9,6 +9,13 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 6 — Timeline de Evolução**
+  - `GET /api/patients/:id/sessions` com validação de ownership e paginação
+  - Página `/pacientes/:id/evolucao` com timeline cronológica reversa
+  - Componente `TimelineEntry` com dot colorido por status e linha vertical
+  - Componente `SoapAccordion` colapsável (auto-abre em sessões REALIZADO com conteúdo)
+  - Link "Ver evolução" inserido na ficha do paciente
+  - Paginação via search param `?page=N`
 - **Phase 5 — Dashboard & KPIs**
   - `GET /api/dashboard/metrics` com KPIs em tempo real (pacientes ativos, atendimentos hoje, sem retorno, sessões semanais, recentes)
   - Módulo `server/modules/dashboard/application/get-metrics.ts` (sem migration, consulta Patient + Session)

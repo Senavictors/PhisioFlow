@@ -1,9 +1,9 @@
 # Task: Phase 1 — Foundation
 
 ## Status
-- [ ] Todo
-- [ ] In Progress
-- [ ] Done
+- [x] Todo
+- [x] In Progress
+- [x] Done
 
 ## Contexto
 Ponto de partida absoluto. Nenhum código existe ainda.

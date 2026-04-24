@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, ChevronLeft, Edit, FilePlus2, Mail, Phone } from 'lucide-react'
+import { Calendar, ChevronLeft, Edit, FilePlus2, Mail, Phone, TrendingUp } from 'lucide-react'
 import { getSession } from '@/lib/session'
 import { formatDateOnlyPtBr } from '@/lib/date'
 import {
@@ -136,6 +136,13 @@ export default async function FichaClinicaPage({ params }: { params: Promise<{ i
             >
               <FilePlus2 className="h-4 w-4" />
               Registrar atendimento
+            </Link>
+            <Link
+              href={`/pacientes/${id}/evolucao`}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 font-body text-[13px] font-semibold text-foreground transition-all hover:border-primary/40 hover:bg-primary-soft sm:w-auto"
+            >
+              <TrendingUp className="h-4 w-4" />
+              Ver evolução
             </Link>
             <Link
               href={`/pacientes/${id}/editar`}

@@ -154,13 +154,14 @@ Após o seed:
 - Phase 3 — CRM de Pacientes
 - Phase 4 — Registro SOAP (sessões, agenda, formulário SOAP)
 - Phase 5 — Dashboard & KPIs
+- Phase 6 — Timeline de Evolução
 
 ### 📋 Backlog
 
-- [ ] Phase 6 — Timeline de Evolução
+- [ ] Phase 7 — Central de Documentos (geração PDF)
 - [ ] Phase 7 — Central de Documentos (geração PDF)
 - [ ] Phase 8 — Logística Domiciliar
 
 ### ➡️ Próximo Passo
 
-**Validar phases 4 e 5 em ambiente local/real**: aplicar a migration `phase4_sessions`, rodar o seed e testar o fluxo completo — `/dashboard`, `/pacientes`, `/atendimentos`, `/agenda` — com o usuário demo `demo@phisioflow.com`.
+**Phase 7 — Central de Documentos**: geração de laudos, relatórios de progresso e declarações de comparecimento em PDF — ver `.docs/tasks/phase-7-documents.md`.
