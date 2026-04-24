@@ -4,12 +4,12 @@
 
 ## Fase Atual
 
-**Phase 4 — Sessões SOAP em andamento**
-Implementação local do módulo `sessions` iniciada no código: schema Prisma, migration, seed demo, CRUD via API, páginas de `atendimentos`/`agenda`, formulário SOAP por paciente e ações rápidas de status. A validação integrada com banco real e browser ainda depende de aplicar a migration e reiniciar o dev server local após o `prisma generate`.
+**Phase 5 — Dashboard & KPIs concluída**
+Dashboard `/dashboard` implementado com Server Component: KPI cards em tempo real (pacientes ativos, atendimentos hoje, sem retorno 30+ dias), gráfico semanal SVG, ações rápidas, atendimentos recentes e alerta de atenção clínica. Endpoint `GET /api/dashboard/metrics` disponível. Sem migration nova — usa `Patient` e `Session` existentes.
 
 ## Próximo Passo Planejado
 
-**Aplicar a migration `phase4_sessions`, rodar seed e validar os fluxos de sessão no browser** — ver task em `.docs/tasks/phase-4-soap-sessions.md`
+**Phase 6 — Timeline de Evolução**: histórico cronológico visual de sessões SOAP por paciente, em `/pacientes/:id/evolucao`.
 
 ## O Que Existe
 
@@ -41,6 +41,11 @@ Implementação local do módulo `sessions` iniciada no código: schema Prisma, 
   - Páginas `/pacientes`, `/pacientes/new`, `/pacientes/:id` e `/pacientes/:id/editar`
   - Testes unitários cobrindo create/list/get/update do módulo
   - Shell e páginas de pacientes revisados para melhor responsividade em mobile e desktop
+- **Dashboard & KPIs (Phase 5)**:
+  - Endpoint `GET /api/dashboard/metrics` com todos os KPIs
+  - Módulo `server/modules/dashboard/application/get-metrics.ts`
+  - Página `/dashboard` com saudação, KPI cards, gráfico semanal SVG, ações rápidas, atendimentos recentes e alerta de atenção
+  - Componentes `KpiCard`, `WeeklyChart`, `QuickActions`, `RecentSessions`, `AttentionAlert`
 - **Sessões SOAP (Phase 4)**:
   - Modelo `Session` no Prisma + migration `phase4_sessions`
   - `GET/POST /api/sessions` e `GET/PUT/DELETE /api/sessions/:id`
@@ -83,9 +88,9 @@ Módulo `sessions` segue o mesmo padrão em `src/server/modules/sessions/`
 
 ## Pendências Conhecidas
 
-- Rodar `npx prisma migrate dev` e `npx prisma db seed` contra a base real
+- Rodar `npx prisma migrate dev` e `npx prisma db seed` contra a base real (phases 4 e 5 dependem disso para validação completa)
 - Reiniciar o `npm run dev` local após o `prisma generate` para carregar `prisma.session`
-- Validar no browser os fluxos `/pacientes`, `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova`
+- Validar no browser: `/dashboard`, `/pacientes`, `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova`
 - Confirmar o fluxo completo com o usuário demo `demo@phisioflow.com`
 
 ## Decisões Chave

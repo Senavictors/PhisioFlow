@@ -151,19 +151,16 @@ Após o seed:
 
 - Phase 1 — Foundation
 - Phase 2 — Auth
-
-### 🔄 Em Andamento
-
-- [ ] Phase 4 — Registro SOAP (CRUD de sessões, agenda, histórico e formulário por paciente)
-- [ ] Refinos responsivos do shell clínico e da área de pacientes
+- Phase 3 — CRM de Pacientes
+- Phase 4 — Registro SOAP (sessões, agenda, formulário SOAP)
+- Phase 5 — Dashboard & KPIs
 
 ### 📋 Backlog
 
-- [ ] Phase 5 — Timeline de Evolução
-- [ ] Phase 6 — Dashboard & KPIs
+- [ ] Phase 6 — Timeline de Evolução
 - [ ] Phase 7 — Central de Documentos (geração PDF)
 - [ ] Phase 8 — Logística Domiciliar
 
 ### ➡️ Próximo Passo
 
-**Validar a base da Phase 4 em ambiente local/real**: aplicar a migration `phase4_sessions`, rodar o seed, reiniciar o dev server local e testar `/pacientes`, `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova` com o usuário demo.
+**Validar phases 4 e 5 em ambiente local/real**: aplicar a migration `phase4_sessions`, rodar o seed e testar o fluxo completo — `/dashboard`, `/pacientes`, `/atendimentos`, `/agenda` — com o usuário demo `demo@phisioflow.com`.

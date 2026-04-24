@@ -1,9 +1,9 @@
 # Task: Phase 5 — Dashboard & KPIs
 
 ## Status
-- [ ] Todo
-- [ ] In Progress
-- [ ] Done
+- [x] Todo
+- [x] In Progress
+- [x] Done
 
 ## Contexto
 Com pacientes (Phase 3) e sessões (Phase 4) registrados, temos dados suficientes para

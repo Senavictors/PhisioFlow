@@ -9,6 +9,12 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 5 — Dashboard & KPIs**
+  - `GET /api/dashboard/metrics` com KPIs em tempo real (pacientes ativos, atendimentos hoje, sem retorno, sessões semanais, recentes)
+  - Módulo `server/modules/dashboard/application/get-metrics.ts` (sem migration, consulta Patient + Session)
+  - Página `/dashboard` com saudação, grid de 3 KPI cards, gráfico semanal SVG, ações rápidas e atendimentos recentes
+  - Componentes `KpiCard`, `WeeklyChart`, `QuickActions`, `RecentSessions`, `AttentionAlert`
+  - `AttentionAlert` exibe-se automaticamente quando há pacientes sem retorno há 30+ dias
 - Documentação inicial do projeto (README, CONTEXT, vision, ADRs fundacionais, templates)
 - CRM de pacientes com rotas `/api/patients` e `/api/patients/:id`
 - Páginas `/pacientes`, `/pacientes/new`, `/pacientes/:id` e `/pacientes/:id/editar`
