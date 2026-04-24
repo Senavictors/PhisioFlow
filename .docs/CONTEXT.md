@@ -3,52 +3,47 @@
 > Estado vivo do projeto. Ler antes de iniciar qualquer task. Atualizar ao concluir qualquer task.
 
 ## Fase Atual
-**Phase 0 — Pré-projeto**
-Documentação inicial criada. Nenhum código implementado ainda.
+**Phase 2 — Auth concluída**
+Login, registro e sessões server-side implementados. Rotas `(app)/*` protegidas via `src/proxy.ts`.
 
 ## Próximo Passo Planejado
-**Phase 1 — Foundation** — ver task completa em `.docs/tasks/phase-1-foundation.md`
-Inicializar Next.js 15, configurar Tailwind v4 com `@theme` completo do design system,
-instalar shadcn/ui + lucide-react, configurar fontes via next/font, criar Sidebar + Topbar
-fiéis ao design system, Prisma com modelo User.
+**Phase 3 — CRM de Pacientes** — ver task em `.docs/tasks/phase-3-patient-crm.md`
 
 ## O Que Existe
 
 ### Infraestrutura
-- Documentação inicial (README, CONTEXT, vision, ADRs fundacionais)
-- Design system completo em `physioflow-design-system/project/` (tokens, componentes, 5 telas)
-- 5 tasks criadas e prontas para execução (Phases 1–5)
-- Nenhuma feature implementada ainda
+- Next.js 16 + TypeScript + Tailwind v4 (design tokens OKLCH completos)
+- Fontes Fraunces + Plus Jakarta Sans via next/font
+- shadcn/ui + lucide-react + Vitest configurados
+- Prisma 7 com adapter `@prisma/adapter-pg` (engine nova)
+  - Cliente gerado em `src/generated/prisma/`
+  - Configuração de conexão em `prisma.config.ts`
+- ESLint + Prettier configurados
+- Design system completo em `physioflow-design-system/project/`
 
-### Features
-- (nenhuma)
+### Features implementadas
+- **Auth completa**: register, login, logout
+  - Sessões HTTP-only via iron-session
+  - Proteção de rotas via `src/proxy.ts` (Next.js 16)
+  - Hash de senha com bcryptjs
+  - Validação Zod nos endpoints
+- **Layout base**: Sidebar fiel ao design system, Topbar com nome do usuário e logout
+- **Páginas stub**: dashboard, pacientes, atendimentos, agenda, documentos, login, register
+
+### Notas técnicas importantes
+- **Prisma 7** usa engine `prisma-client` (novo) + adapter PG — não usa `prisma-client-js`
+- **Middleware** renomeado para `proxy` (Next.js 16 convention): `src/proxy.ts`
+- **Cliente Prisma** importado de `@/generated/prisma/client` (não de `@prisma/client`)
+- Modelo `User` criado. Migrations pendentes até ter DATABASE_URL real (Neon)
 
 ## Modelos de Banco
-(nenhum criado)
+- `User` — id, email, name, password, createdAt, updatedAt
 
 ## Realidade Arquitetural Atual
-Projeto ainda não inicializado. O alvo é Clean Architecture com camadas:
-`UI → Route Handlers → Use Cases → Domain → Repositories → DB`
-
-## Camadas de Documentação
-- Visão: `.docs/vision.md`
-- Arquitetura: `.docs/architecture/README.md`
-- Domínio: `.docs/domain/`
-- API: `.docs/api/`
-- Dados: `.docs/data/`
-- Decisões: `.docs/decisions/`
-- Tasks: `.docs/tasks/`
-- Changelog: `.docs/CHANGELOG.md`
-
-## Roadmap de Documentação
-1. Phase 1 — Foundation
-2. Phase 2 — Auth
-3. Phase 3 — CRM de Pacientes
-4. Phase 4 — Registro SOAP
-5. Phase 5 — Timeline de Evolução
-6. Phase 6 — Dashboard & KPIs
-7. Phase 7 — Central de Documentos
-8. Phase 8 — Logística Domiciliar
+```
+UI → Route Handlers (API) → Use Cases → Domain → Repositories (Prisma) → DB
+```
+Módulo `auth` completo com camadas: application, domain, http, infra
 
 ## Decisões Chave
 - [ADR-001](decisions/ADR-001-tech-stack.md) — Tech Stack

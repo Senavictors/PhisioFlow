@@ -1,9 +1,9 @@
 # Task: Phase 2 — Auth
 
 ## Status
-- [ ] Todo
-- [ ] In Progress
-- [ ] Done
+- [x] Todo
+- [x] In Progress
+- [x] Done
 
 ## Contexto
 Com a fundação pronta (Phase 1), precisamos de autenticação antes de qualquer feature clínica.
