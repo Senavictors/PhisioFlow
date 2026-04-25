@@ -13,7 +13,7 @@ const sessionOptions = {
 }
 
 const PUBLIC_PATHS = ['/login', '/register']
-const APP_PATHS = ['/dashboard', '/pacientes', '/atendimentos', '/agenda', '/documentos']
+const APP_PATHS = ['/dashboard', '/pacientes', '/atendimentos', '/agenda', '/documentos', '/configuracoes']
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -38,5 +38,14 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/pacientes/:path*', '/atendimentos/:path*', '/agenda/:path*', '/documentos/:path*', '/login', '/register'],
+  matcher: [
+    '/dashboard/:path*',
+    '/pacientes/:path*',
+    '/atendimentos/:path*',
+    '/agenda/:path*',
+    '/documentos/:path*',
+    '/configuracoes/:path*',
+    '/login',
+    '/register',
+  ],
 }

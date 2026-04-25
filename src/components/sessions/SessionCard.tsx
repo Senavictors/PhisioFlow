@@ -9,6 +9,7 @@ import { formatDateLongPtBr, formatTimePtBr } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { SESSION_TYPE_LABELS } from '@/components/sessions/session-meta'
+import { SendSessionReminderButton } from '@/components/sessions/SendSessionReminderButton'
 
 interface SessionCardProps {
   session: {
@@ -29,6 +30,7 @@ interface SessionCardProps {
       address?: string | null
       neighborhood?: string | null
       city?: string | null
+      email?: string | null
     }
   }
   showDate?: boolean
@@ -181,6 +183,10 @@ export function SessionCard({
                 <X className="h-4 w-4" />
                 Cancelar
               </button>
+              <SendSessionReminderButton
+                sessionId={session.id}
+                patientHasEmail={Boolean(session.patient.email)}
+              />
             </>
           ) : null}
 

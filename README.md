@@ -163,15 +163,15 @@ Após o seed:
 - Phase 10 — Edição SOAP e Agenda em Calendário (rota `/atendimentos/[id]/editar`,
   `SessionForm` em modo create/edit, visão `/agenda?view=calendar` com calendário mensal
   e painel de sessões do dia)
+- Phase 11 — E-mails com Gmail App Password (configuração SMTP por usuário com
+  Senha de App criptografada, envio de documento por e-mail e aviso de atendimento)
 
 ### 🗺️ Planejado
 
-- Phase 11 — E-mails com Gmail App Password
 - Phase 12 — Integração com Google Calendar
 
 ### ➡️ Próximo Passo
 
-Executar **Phase 11 — E-mails com Gmail App Password**.
+Executar **Phase 12 — Integração com Google Calendar**.
 
-Tasks restantes em `.docs/tasks/phase-11-email-notifications.md` e
-`.docs/tasks/phase-12-google-calendar.md`.
+Task restante em `.docs/tasks/phase-12-google-calendar.md`.

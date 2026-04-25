@@ -4,6 +4,14 @@
 
 ## Fase Atual
 
+**Phase 11 — E-mails com Gmail App Password concluída**
+Migration `phase11_email_notifications` (modelos `EmailSettings`/`EmailMessage` +
+3 enums), helper `aes-256-gcm` em `src/lib/crypto.ts`, módulo `server/modules/email/`
+com use cases de salvar/teste/envio de documento/envio de lembrete e 5 endpoints REST.
+Página `/configuracoes/email` com formulário, guia de Senha de App e teste; modal de
+documento com checkbox de envio; `SessionCard` e `SessionForm` ganham opção de aviso.
+`.env.example` documenta `INTEGRATION_ENCRYPTION_KEY` (32 bytes em base64).
+
 **Phase 10 — Edição SOAP e Agenda em Calendário concluída**
 `SessionForm` em modo create/edit, rota `/atendimentos/[id]/editar` para revisar/atualizar
 campos SOAP e dados do atendimento, e nova visão `/agenda?view=calendar&month=YYYY-MM` com
@@ -27,8 +35,10 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 Seguir a ordem arquitetada:
 
-- **Phase 11** — E-mails com Gmail App Password
 - **Phase 12** — Integração com Google Calendar
+
+`INTEGRATION_ENCRYPTION_KEY` (gerada com `openssl rand -base64 32`) precisa estar
+configurada localmente e na Vercel antes de testar/usar as integrações externas.
 
 Decisão registrada: `ENCAMINHAMENTO` segue por enquanto apenas como card "em breve" em
 `/documentos`. Caso o usuário aprove gerar PDF, criar enum, migration, DTO e template

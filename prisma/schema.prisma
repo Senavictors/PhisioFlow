@@ -44,6 +44,21 @@ enum HomeCarePriority {
   URGENT
 }
 
+enum EmailProvider {
+  GMAIL_SMTP
+}
+
+enum EmailMessageType {
+  DOCUMENT
+  SESSION_REMINDER
+  TEST
+}
+
+enum EmailMessageStatus {
+  SENT
+  FAILED
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -52,9 +67,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  patients  Patient[]
-  sessions  Session[]
-  documents Document[]
+  patients      Patient[]
+  sessions      Session[]
+  documents     Document[]
+  emailSettings EmailSettings?
+  emailMessages EmailMessage[]
 }
 
 model Patient {
@@ -80,6 +97,7 @@ model Patient {
   clinicalRecord ClinicalRecord?
   sessions       Session[]
   documents      Document[]
+  emailMessages  EmailMessage[]
 
   @@unique([userId, email])
   @@index([userId])
@@ -115,8 +133,9 @@ model Session {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-  user        User          @relation(fields: [userId], references: [id])
-  patient     Patient       @relation(fields: [patientId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+  patient       Patient        @relation(fields: [patientId], references: [id])
+  emailMessages EmailMessage[]
 
   @@index([userId])
   @@index([userId, patientId])
@@ -137,10 +156,54 @@ model Document {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  user    User    @relation(fields: [userId], references: [id])
-  patient Patient @relation(fields: [patientId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+  patient       Patient        @relation(fields: [patientId], references: [id])
+  emailMessages EmailMessage[]
 
   @@index([userId])
   @@index([userId, patientId])
   @@index([userId, type])
+}
+
+model EmailSettings {
+  id                            String        @id @default(cuid())
+  userId                        String        @unique
+  provider                      EmailProvider @default(GMAIL_SMTP)
+  fromName                      String
+  smtpUser                      String
+  encryptedAppPassword          String
+  isEnabled                     Boolean       @default(false)
+  sendDocumentsByDefault        Boolean       @default(false)
+  sendSessionRemindersByDefault Boolean       @default(false)
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model EmailMessage {
+  id           String             @id @default(cuid())
+  userId       String
+  patientId    String?
+  documentId   String?
+  sessionId    String?
+  type         EmailMessageType
+  status       EmailMessageStatus
+  to           String
+  subject      String
+  providerId   String?
+  errorMessage String?
+  createdAt    DateTime           @default(now())
+
+  user     User      @relation(fields: [userId], references: [id])
+  patient  Patient?  @relation(fields: [patientId], references: [id])
+  document Document? @relation(fields: [documentId], references: [id])
+  session  Session?  @relation(fields: [sessionId], references: [id])
+
+  @@index([userId])
+  @@index([userId, patientId])
+  @@index([userId, documentId])
+  @@index([userId, sessionId])
 }
