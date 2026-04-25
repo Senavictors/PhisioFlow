@@ -74,6 +74,7 @@ export default async function NovaSessaoPage({ params }: { params: Promise<{ id:
           id: patient.id,
           name: patient.name,
           area: patient.area,
+          email: patient.email,
         }}
       />
     </div>

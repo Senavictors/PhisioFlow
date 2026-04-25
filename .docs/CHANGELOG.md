@@ -9,6 +9,30 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 11 — E-mails com Gmail App Password**
+  - Migration `phase11_email_notifications`: enums `EmailProvider`, `EmailMessageType`,
+    `EmailMessageStatus` e modelos `EmailSettings` (1:1 com User) + `EmailMessage`
+    (log de envios)
+  - Helper `src/lib/crypto.ts` com `aes-256-gcm` para criptografar a Senha de App
+    do Gmail antes de gravar; chave em `INTEGRATION_ENCRYPTION_KEY`
+  - Módulo `server/modules/email/` com domain (errors), http (DTOs), infra
+    (repository + transporter `nodemailer`) e use cases:
+    `saveEmailSettings`, `getEmailSettings`, `sendTestEmail`,
+    `sendDocumentEmail`, `sendSessionReminder`
+  - 5 endpoints REST autenticados com filtro por `userId`:
+    `GET/PUT /api/settings/email`, `POST /api/settings/email/test`,
+    `POST /api/documents/:id/email`, `POST /api/sessions/:id/email-reminder`
+  - Página `/configuracoes/email` com formulário (`EmailSettingsForm`),
+    passo a passo `GmailAppPasswordGuide` e botão de envio de teste; rota
+    protegida pelo `proxy.ts`
+  - Modal de gerar documento com checkbox "Enviar por e-mail ao paciente",
+    mensagem opcional e download do PDF mantido em paralelo ao envio
+  - Botão "Enviar aviso" no `SessionCard` para sessões `AGENDADO` (com cache
+    leve do status de configuração) e checkbox no `SessionForm` durante o
+    agendamento
+  - `.env.example` documenta `INTEGRATION_ENCRYPTION_KEY`
+  - Sidebar passa a apontar para `/configuracoes/email`
+
 - **Phase 9 — Polimento UX e Documentos v1.1**
   - Componente `DocumentTypeCards` com faixa de cards contextuais no topo de `/documentos`
     (Relatório de evolução, Laudo fisioterapêutico, Encaminhamento "em breve" e Declaração de horas)

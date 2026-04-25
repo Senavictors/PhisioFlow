@@ -96,9 +96,27 @@ function DocumentList() {
   )
 }
 
+interface EmailSettingsSummary {
+  isEnabled: boolean
+  hasAppPassword: boolean
+  sendDocumentsByDefault: boolean
+}
+
 export default function DocumentosPage() {
   const [showModal, setShowModal] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [emailSettings, setEmailSettings] = useState<EmailSettingsSummary | null>(null)
+
+  useEffect(() => {
+    fetch('/api/settings/email')
+      .then((r) => r.json())
+      .then((data) => setEmailSettings(data.settings))
+      .catch(() => setEmailSettings(null))
+  }, [])
+
+  const emailReady = Boolean(
+    emailSettings?.isEnabled && emailSettings?.hasAppPassword
+  )
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -146,6 +164,8 @@ export default function DocumentosPage() {
         <NovoDocumentoModal
           onClose={() => setShowModal(false)}
           onCreated={() => setRefreshKey((k) => k + 1)}
+          emailEnabled={emailReady}
+          sendByDefault={emailSettings?.sendDocumentsByDefault ?? false}
         />
       )}
     </div>

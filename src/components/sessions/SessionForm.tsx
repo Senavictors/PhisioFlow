@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Mail } from 'lucide-react'
 import { formatDateTimeLocalInputValue } from '@/lib/date'
 import { cn } from '@/lib/utils'
 
@@ -21,7 +22,14 @@ interface SessionFormProps {
     id: string
     name: string
     area: string
+    email?: string | null
   }
+}
+
+interface EmailSummary {
+  isEnabled: boolean
+  hasAppPassword: boolean
+  sendSessionRemindersByDefault: boolean
 }
 
 const sessionTypeOptions = [
@@ -109,6 +117,25 @@ export function SessionForm({ patient }: SessionFormProps) {
   const [errors, setErrors] = useState<Partial<Record<keyof SessionFormData, string>>>({})
   const [serverError, setServerError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [emailSummary, setEmailSummary] = useState<EmailSummary | null>(null)
+  const [sendReminder, setSendReminder] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/settings/email')
+      .then((r) => r.json())
+      .then((data) => {
+        const settings = data.settings as EmailSummary | null
+        setEmailSummary(settings)
+        if (settings?.isEnabled && settings.hasAppPassword && settings.sendSessionRemindersByDefault) {
+          setSendReminder(true)
+        }
+      })
+      .catch(() => setEmailSummary(null))
+  }, [])
+
+  const emailReady = Boolean(emailSummary?.isEnabled && emailSummary?.hasAppPassword)
+  const patientHasEmail = Boolean(patient.email)
+  const canSendReminder = emailReady && patientHasEmail
 
   function set<K extends keyof SessionFormData>(key: K, value: SessionFormData[K]) {
     setForm((previous) => ({ ...previous, [key]: value }))
@@ -148,6 +175,17 @@ export function SessionForm({ patient }: SessionFormProps) {
         }
 
         return
+      }
+
+      const createdSession = data.session ?? data
+      const newId = createdSession?.id
+
+      if (sendReminder && canSendReminder && newId && form.status === 'AGENDADO') {
+        await fetch(`/api/sessions/${newId}/email-reminder`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({}),
+        }).catch(() => undefined)
       }
 
       router.push('/atendimentos')
@@ -229,6 +267,31 @@ export function SessionForm({ patient }: SessionFormProps) {
             </select>
           </Field>
         </div>
+
+        {form.status === 'AGENDADO' ? (
+          <label className="flex cursor-pointer items-start gap-2.5 rounded-xl border border-border bg-background/60 p-3">
+            <input
+              type="checkbox"
+              checked={sendReminder}
+              onChange={(event) => setSendReminder(event.target.checked)}
+              disabled={!canSendReminder}
+              className="mt-1 h-4 w-4 accent-primary disabled:opacity-50"
+            />
+            <span className="flex-1">
+              <span className="flex items-center gap-1.5 font-body text-[13px] font-semibold text-foreground">
+                <Mail className="h-3.5 w-3.5" />
+                Enviar aviso por e-mail ao paciente
+              </span>
+              <span className="block font-body text-[12px] text-muted-foreground">
+                {!emailReady
+                  ? 'Configure seu Gmail em Configurações → E-mail.'
+                  : !patientHasEmail
+                    ? 'Paciente não tem e-mail cadastrado.'
+                    : `O lembrete será enviado para ${patient.email} após salvar.`}
+              </span>
+            </span>
+          </label>
+        ) : null}
       </section>
 
       <section className="space-y-5 rounded-[18px] border border-border bg-card p-5 sm:p-6">

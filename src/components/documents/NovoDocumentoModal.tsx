@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { X, FilePlus, Loader2 } from 'lucide-react'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { X, FilePlus, Loader2, Mail } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PeriodInfoTooltip } from '@/components/documents/PeriodInfoTooltip'
 
@@ -15,21 +15,32 @@ interface Patient {
   id: string
   name: string
   area: string
+  email?: string | null
 }
 
 interface NovoDocumentoModalProps {
   onClose: () => void
   onCreated: () => void
+  emailEnabled: boolean
+  sendByDefault: boolean
 }
 
-export function NovoDocumentoModal({ onClose, onCreated }: NovoDocumentoModalProps) {
+export function NovoDocumentoModal({
+  onClose,
+  onCreated,
+  emailEnabled,
+  sendByDefault,
+}: NovoDocumentoModalProps) {
   const [patients, setPatients] = useState<Patient[]>([])
   const [patientId, setPatientId] = useState('')
   const [type, setType] = useState('LAUDO_FISIOTERAPEUTICO')
   const [period, setPeriod] = useState('')
+  const [sendByEmail, setSendByEmail] = useState(emailEnabled && sendByDefault)
+  const [emailMessage, setEmailMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [loadingPatients, setLoadingPatients] = useState(true)
   const [error, setError] = useState('')
+  const [warning, setWarning] = useState('')
   const overlayRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -39,6 +50,15 @@ export function NovoDocumentoModal({ onClose, onCreated }: NovoDocumentoModalPro
       .finally(() => setLoadingPatients(false))
   }, [])
 
+  const selectedPatient = useMemo(
+    () => patients.find((p) => p.id === patientId) ?? null,
+    [patients, patientId]
+  )
+  const patientHasEmail = Boolean(selectedPatient?.email)
+  const canSendEmail = emailEnabled && patientHasEmail
+
+  const effectiveSendByEmail = canSendEmail && sendByEmail
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!patientId) {
@@ -46,6 +66,7 @@ export function NovoDocumentoModal({ onClose, onCreated }: NovoDocumentoModalPro
       return
     }
     setError('')
+    setWarning('')
     setLoading(true)
 
     try {
@@ -63,7 +84,6 @@ export function NovoDocumentoModal({ onClose, onCreated }: NovoDocumentoModalPro
 
       const { document: doc } = await res.json()
 
-      // Trigger download
       const dlRes = await fetch(`/api/documents/${doc.id}/download`)
       if (dlRes.ok) {
         const blob = await dlRes.blob()
@@ -75,6 +95,21 @@ export function NovoDocumentoModal({ onClose, onCreated }: NovoDocumentoModalPro
         a.click()
         window.document.body.removeChild(a)
         URL.revokeObjectURL(url)
+      }
+
+      if (effectiveSendByEmail) {
+        const emailRes = await fetch(`/api/documents/${doc.id}/email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: emailMessage || undefined }),
+        })
+        if (!emailRes.ok) {
+          const errData = await emailRes.json().catch(() => ({}))
+          setWarning(
+            `PDF gerado, mas o e-mail falhou: ${errData.message ?? 'erro desconhecido'}`
+          )
+          return
+        }
       }
 
       onCreated()
@@ -164,9 +199,59 @@ export function NovoDocumentoModal({ onClose, onCreated }: NovoDocumentoModalPro
             />
           </div>
 
+          <div className="space-y-2 rounded-xl border border-border bg-background/60 p-3">
+            <label className="flex cursor-pointer items-start gap-2.5">
+              <input
+                type="checkbox"
+                checked={effectiveSendByEmail}
+                onChange={(e) => setSendByEmail(e.target.checked)}
+                disabled={!canSendEmail}
+                className="mt-1 h-4 w-4 accent-primary disabled:opacity-50"
+              />
+              <span className="flex-1">
+                <span className="flex items-center gap-1.5 font-body text-[13px] font-semibold text-foreground">
+                  <Mail className="h-3.5 w-3.5" />
+                  Enviar por e-mail ao paciente
+                </span>
+                <span className="block font-body text-[11.5px] text-muted-foreground">
+                  {!emailEnabled ? (
+                    <>
+                      Configure seu Gmail em{' '}
+                      <a href="/configuracoes/email" className="text-primary hover:underline">
+                        Configurações
+                      </a>{' '}
+                      antes de enviar.
+                    </>
+                  ) : !patientId ? (
+                    'Selecione um paciente para verificar o e-mail.'
+                  ) : !patientHasEmail ? (
+                    'Este paciente não tem e-mail cadastrado.'
+                  ) : (
+                    `Será enviado para ${selectedPatient?.email}`
+                  )}
+                </span>
+              </span>
+            </label>
+
+            {effectiveSendByEmail ? (
+              <textarea
+                value={emailMessage}
+                onChange={(e) => setEmailMessage(e.target.value)}
+                placeholder="Mensagem opcional para o paciente"
+                rows={3}
+                className="w-full rounded-xl border border-border bg-background px-3 py-2 font-body text-[12.5px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            ) : null}
+          </div>
+
           {error && (
             <p className="rounded-xl bg-danger-soft px-3 py-2 font-body text-[12px] text-danger">
               {error}
+            </p>
+          )}
+          {warning && (
+            <p className="rounded-xl bg-warning-soft px-3 py-2 font-body text-[12px] text-warning">
+              {warning}
             </p>
           )}
 

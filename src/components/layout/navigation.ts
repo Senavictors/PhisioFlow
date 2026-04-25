@@ -24,7 +24,7 @@ export const primaryNavigation: NavigationItem[] = [
 ]
 
 export const secondaryNavigation: NavigationItem[] = [
-  { label: 'Configurações', href: '/configuracoes', icon: Settings },
+  { label: 'Configurações', href: '/configuracoes/email', icon: Settings },
   { label: 'Suporte', href: '/suporte', icon: HelpCircle },
 ]
 
@@ -34,6 +34,7 @@ export const pageTitles: Record<string, string> = {
   '/atendimentos': 'Atendimentos',
   '/agenda': 'Agenda',
   '/documentos': 'Documentos',
+  '/configuracoes': 'Configurações',
 }
 
 export function isPathActive(pathname: string, href: string) {

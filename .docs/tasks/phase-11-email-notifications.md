@@ -2,9 +2,9 @@
 
 ## Status
 
-- [x] Todo
+- [ ] Todo
 - [ ] In Progress
-- [ ] Done
+- [x] Done
 
 ## Contexto
 
