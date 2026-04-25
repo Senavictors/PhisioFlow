@@ -58,8 +58,9 @@ export function GmailAppPasswordGuide() {
       </ol>
 
       <p className="rounded-xl bg-warning-soft px-3 py-2 font-body text-[12px] leading-relaxed text-warning">
-        A Senha de App é equivalente à senha do Gmail para envios SMTP. Guarde a chave de
-        criptografia do PhysioFlow (`INTEGRATION_ENCRYPTION_KEY`) em segredo.
+        A Senha de App dá acesso a enviar e-mails pela sua conta. Guarde-a como
+        guardaria sua senha do Gmail — você pode revogá-la a qualquer momento na
+        sua conta Google sem afetar a senha principal.
       </p>
     </section>
   )
