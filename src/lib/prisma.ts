@@ -3,7 +3,17 @@ import { PrismaPg } from '@prisma/adapter-pg'
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
 
-const requiredDelegates = ['user', 'patient', 'clinicalRecord', 'session', 'document'] as const
+const requiredDelegates = [
+  'user',
+  'patient',
+  'clinicalRecord',
+  'session',
+  'document',
+  'emailSettings',
+  'emailMessage',
+  'calendarConnection',
+  'calendarEventLink',
+] as const
 
 function createPrismaClient() {
   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL ?? '' })

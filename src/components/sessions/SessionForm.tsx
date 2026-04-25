@@ -1,8 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Mail } from 'lucide-react'
+import { CalendarCheck2, Mail } from 'lucide-react'
 import { formatDateTimeLocalInputValue } from '@/lib/date'
 import { cn } from '@/lib/utils'
 
@@ -18,6 +19,7 @@ interface SessionFormData {
   objective: string
   assessment: string
   plan: string
+  syncWithGoogleCalendar: boolean
 }
 
 export interface SessionFormInitialValues {
@@ -30,6 +32,7 @@ export interface SessionFormInitialValues {
   objective?: string | null
   assessment?: string | null
   plan?: string | null
+  syncWithGoogleCalendar?: boolean
 }
 
 interface SessionFormProps {
@@ -112,6 +115,7 @@ function buildInitialFormData(
       objective: initialValues.objective ?? '',
       assessment: initialValues.assessment ?? '',
       plan: initialValues.plan ?? '',
+      syncWithGoogleCalendar: initialValues.syncWithGoogleCalendar ?? false,
     }
   }
 
@@ -124,6 +128,7 @@ function buildInitialFormData(
     objective: '',
     assessment: '',
     plan: '',
+    syncWithGoogleCalendar: false,
   }
 }
 
@@ -156,7 +161,7 @@ const inputClass = cn(
 
 export function SessionForm({ patient, mode = 'create', initialValues }: SessionFormProps) {
   const router = useRouter()
-  const isEdit = mode === 'edit' && initialValues
+  const isEdit = mode === 'edit' && Boolean(initialValues)
   const [form, setForm] = useState<SessionFormData>(() =>
     buildInitialFormData(patient, initialValues)
   )
@@ -165,6 +170,8 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
   const [isLoading, setIsLoading] = useState(false)
   const [emailSummary, setEmailSummary] = useState<EmailSummary | null>(null)
   const [sendReminder, setSendReminder] = useState(false)
+  const [calendarConnected, setCalendarConnected] = useState(false)
+  const [loadingCalendarSettings, setLoadingCalendarSettings] = useState(true)
 
   useEffect(() => {
     fetch('/api/settings/email')
@@ -175,13 +182,14 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
         if (
           settings?.isEnabled &&
           settings.hasAppPassword &&
-          settings.sendSessionRemindersByDefault
+          settings.sendSessionRemindersByDefault &&
+          !isEdit
         ) {
           setSendReminder(true)
         }
       })
       .catch(() => setEmailSummary(null))
-  }, [])
+  }, [isEdit])
 
   const emailReady = Boolean(emailSummary?.isEnabled && emailSummary?.hasAppPassword)
   const patientHasEmail = Boolean(patient.email)
@@ -193,13 +201,30 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
     setErrors((previous) => ({ ...previous, [key]: undefined }))
   }
 
+  useEffect(() => {
+    fetch('/api/integrations/google-calendar')
+      .then((response) => response.json())
+      .then((data) => {
+        const connection = data.connection
+        setCalendarConnected(Boolean(connection?.connected))
+        setForm((previous) => ({
+          ...previous,
+          syncWithGoogleCalendar: isEdit
+            ? previous.syncWithGoogleCalendar
+            : Boolean(connection?.connected && connection?.syncNewSessionsByDefault),
+        }))
+      })
+      .catch(() => setCalendarConnected(false))
+      .finally(() => setLoadingCalendarSettings(false))
+  }, [isEdit])
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setServerError('')
     setIsLoading(true)
 
     try {
-      const url = isEdit ? `/api/sessions/${initialValues.id}` : '/api/sessions'
+      const url = isEdit ? `/api/sessions/${initialValues!.id}` : '/api/sessions'
       const method = isEdit ? 'PUT' : 'POST'
 
       const body: Record<string, unknown> = {
@@ -211,6 +236,7 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
         objective: form.objective,
         assessment: form.assessment,
         plan: form.plan,
+        syncWithGoogleCalendar: form.syncWithGoogleCalendar,
       }
 
       if (!isEdit) {
@@ -342,7 +368,48 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
           </Field>
         </div>
 
-        {form.status === 'AGENDADO' ? (
+        <div className="rounded-[18px] border border-border bg-background/70 p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+                <CalendarCheck2 className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="font-body text-[13px] font-semibold text-foreground">
+                  Google Calendar
+                </p>
+                <p className="mt-1 font-body text-[12px] text-muted-foreground">
+                  {calendarConnected
+                    ? 'Adicionar ou atualizar este atendimento na agenda conectada.'
+                    : 'Conecte uma agenda para sincronizar este atendimento.'}
+                </p>
+              </div>
+            </div>
+
+            {loadingCalendarSettings ? (
+              <span className="font-body text-[12px] text-muted-foreground">Carregando...</span>
+            ) : calendarConnected ? (
+              <label className="inline-flex items-center gap-2 font-body text-[13px] font-semibold text-foreground">
+                <input
+                  type="checkbox"
+                  checked={form.syncWithGoogleCalendar}
+                  onChange={(event) => set('syncWithGoogleCalendar', event.target.checked)}
+                  className="h-4 w-4 accent-[var(--color-primary)]"
+                />
+                Sincronizar
+              </label>
+            ) : (
+              <Link
+                href="/configuracoes/integracoes"
+                className="font-body text-[12px] font-semibold text-primary transition-colors hover:text-primary-hover"
+              >
+                Configurar integração
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {!isEdit && form.status === 'AGENDADO' ? (
           <label className="flex cursor-pointer items-start gap-2.5 rounded-xl border border-border bg-background/60 p-3">
             <input
               type="checkbox"

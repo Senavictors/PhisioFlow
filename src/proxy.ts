@@ -13,7 +13,14 @@ const sessionOptions = {
 }
 
 const PUBLIC_PATHS = ['/login', '/register']
-const APP_PATHS = ['/dashboard', '/pacientes', '/atendimentos', '/agenda', '/documentos', '/configuracoes']
+const APP_PATHS = [
+  '/dashboard',
+  '/pacientes',
+  '/atendimentos',
+  '/agenda',
+  '/documentos',
+  '/configuracoes',
+]
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl

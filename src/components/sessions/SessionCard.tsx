@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { SESSION_TYPE_LABELS } from '@/components/sessions/session-meta'
 import { SendSessionReminderButton } from '@/components/sessions/SendSessionReminderButton'
+import { CalendarSyncBadge } from '@/components/calendar/CalendarSyncBadge'
+import { SyncSessionCalendarButton } from '@/components/calendar/SyncSessionCalendarButton'
 
 interface SessionCardProps {
   session: {
@@ -22,6 +24,14 @@ interface SessionCardProps {
     objective?: string | null
     assessment?: string | null
     plan?: string | null
+    calendarEventLinks?: Array<{
+      id: string
+      status: string
+      calendarId: string
+      externalEventId: string
+      errorMessage?: string | null
+      lastSyncedAt?: Date | string | null
+    }>
     patient: {
       id: string
       name: string
@@ -53,6 +63,7 @@ export function SessionCard({
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const summary = getSessionSummary(session)
+  const calendarLink = session.calendarEventLinks?.[0]
 
   async function updateStatus(nextStatus: Extract<SessionStatus, 'REALIZADO' | 'CANCELADO'>) {
     const response = await fetch(`/api/sessions/${session.id}`, {
@@ -103,18 +114,17 @@ export function SessionCard({
                   Domiciliar
                 </span>
               ) : null}
-              {session.type === 'HOME_CARE' &&
-              session.patient.homeCarePriority === 'URGENT' ? (
+              {session.type === 'HOME_CARE' && session.patient.homeCarePriority === 'URGENT' ? (
                 <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-1 font-body text-[11px] font-semibold uppercase tracking-wide text-white">
                   Urgente
                 </span>
-              ) : session.type === 'HOME_CARE' &&
-                session.patient.homeCarePriority === 'HIGH' ? (
+              ) : session.type === 'HOME_CARE' && session.patient.homeCarePriority === 'HIGH' ? (
                 <span className="rounded-full bg-warning-soft px-2.5 py-1 font-body text-[11px] font-semibold text-warning">
                   Prioritário
                 </span>
               ) : null}
               <StatusBadge status={session.status} />
+              <CalendarSyncBadge status={calendarLink?.status} />
             </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-body text-[12px] text-muted-foreground">
@@ -188,6 +198,13 @@ export function SessionCard({
                 patientHasEmail={Boolean(session.patient.email)}
               />
             </>
+          ) : null}
+
+          {session.status === 'AGENDADO' ? (
+            <SyncSessionCalendarButton
+              sessionId={session.id}
+              currentStatus={calendarLink?.status}
+            />
           ) : null}
 
           <Link

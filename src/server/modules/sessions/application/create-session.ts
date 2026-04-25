@@ -4,6 +4,7 @@ import { findPatientById } from '@/server/modules/patients/infra/patient.reposit
 import type { CreateSessionDTO } from '../http/session.dto'
 import { createSession } from '../infra/session.repository'
 import { assertSessionSchedule, normalizeSessionSoapInput } from '../domain/session'
+import { syncSessionCalendarAfterMutation } from '@/server/modules/calendar/application/auto-sync-session-calendar'
 
 export async function createSessionUseCase(userId: string, dto: CreateSessionDTO) {
   const patient = await findPatientById(dto.patientId, userId)
@@ -17,7 +18,7 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
 
   assertSessionSchedule(date, status)
 
-  return createSession({
+  const createdSession = await createSession({
     userId,
     patientId: dto.patientId,
     date,
@@ -31,4 +32,13 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
       plan: dto.plan,
     }),
   })
+
+  await syncSessionCalendarAfterMutation({
+    userId,
+    sessionId: createdSession.id,
+    syncWithGoogleCalendar: dto.syncWithGoogleCalendar,
+    status,
+  })
+
+  return createdSession
 }

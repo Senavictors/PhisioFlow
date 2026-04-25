@@ -79,6 +79,7 @@ export default async function EditarAtendimentoPage({
           id: clinicalSession.patient.id,
           name: clinicalSession.patient.name,
           area: clinicalSession.patient.area,
+          email: clinicalSession.patient.email,
         }}
         initialValues={{
           id: clinicalSession.id,
@@ -90,6 +91,9 @@ export default async function EditarAtendimentoPage({
           objective: clinicalSession.objective,
           assessment: clinicalSession.assessment,
           plan: clinicalSession.plan,
+          syncWithGoogleCalendar: Boolean(
+            clinicalSession.calendarEventLinks?.some((link) => link.status !== 'REMOVED')
+          ),
         }}
       />
     </div>

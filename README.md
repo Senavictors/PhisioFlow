@@ -165,13 +165,14 @@ Após o seed:
   e painel de sessões do dia)
 - Phase 11 — E-mails com Gmail App Password (configuração SMTP por usuário com
   Senha de App criptografada, envio de documento por e-mail e aviso de atendimento)
+- Phase 12 — Integração com Google Calendar (OAuth, agenda padrão e sync unidirecional
+  PhysioFlow → Google Calendar)
 
 ### 🗺️ Planejado
 
-- Phase 12 — Integração com Google Calendar
+- Validar integrações em ambiente real e preparar deploy na Vercel
 
 ### ➡️ Próximo Passo
 
-Executar **Phase 12 — Integração com Google Calendar**.
-
-Task restante em `.docs/tasks/phase-12-google-calendar.md`.
+Aplicar as migrations no Neon com `npx prisma migrate deploy`, configurar as variáveis
+de e-mail/Google na Vercel e validar os fluxos reais de envio e sincronização.

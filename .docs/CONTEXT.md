@@ -4,6 +4,12 @@
 
 ## Fase Atual
 
+**Phase 12 — Integração com Google Calendar implementada**
+OAuth Google Calendar, armazenamento criptografado de tokens, página
+`/configuracoes/integracoes`, seleção de agenda padrão, sync manual por sessão, checkbox
+no formulário de atendimento e atualização/remoção tolerante a falhas em criação/edição/
+cancelamento de sessões. Migration `phase12_google_calendar` criada.
+
 **Phase 11 — E-mails com Gmail App Password concluída**
 Migration `phase11_email_notifications` (modelos `EmailSettings`/`EmailMessage` +
 3 enums), helper `aes-256-gcm` em `src/lib/crypto.ts`, módulo `server/modules/email/`
@@ -33,9 +39,9 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-Seguir a ordem arquitetada:
-
-- **Phase 12** — Integração com Google Calendar
+Validar integrações em ambiente real e preparar deploy na Vercel. Ainda falta validação
+manual com conta Google real após configurar `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`,
+`GOOGLE_CALENDAR_REDIRECT_URI` e `INTEGRATION_ENCRYPTION_KEY`.
 
 `INTEGRATION_ENCRYPTION_KEY` (gerada com `openssl rand -base64 32`) precisa estar
 configurada localmente e na Vercel antes de testar/usar as integrações externas.
@@ -96,6 +102,7 @@ em uma futura iteração.
 - **Sessões SOAP (Phase 4)**:
   - Modelo `Session` no Prisma + migration `phase4_sessions`
   - `GET/POST /api/sessions` e `GET/PUT/DELETE /api/sessions/:id`
+  - `POST/DELETE /api/sessions/:id/calendar-sync` para sincronizar/remover evento Google Calendar
   - Módulo `server/modules/sessions/` com application, domain, http e infra
   - Páginas `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova`
   - Componentes `SessionCard`, `StatusBadge` e `SessionForm`
@@ -115,6 +122,19 @@ em uma futura iteração.
   - `renderDocumentPDF()` em `src/lib/pdf/render.ts` (server-only)
   - Componentes `DocumentCard`, `DocumentFilters`, `NovoDocumentoModal`
   - Página `/documentos` com modal de geração + download automático
+- **Google Calendar (Phase 12)**:
+  - Dependências `googleapis` e `server-only`
+  - Enums `CalendarProvider` e `CalendarSyncStatus`
+  - Modelos `CalendarConnection` e `CalendarEventLink` no Prisma
+  - `GET/PUT/DELETE /api/integrations/google-calendar`
+  - `GET /api/integrations/google-calendar/connect`
+  - `GET /api/integrations/google-calendar/callback`
+  - `GET /api/integrations/google-calendar/calendars`
+  - Módulo `server/modules/calendar/` com camadas application, domain, http e infra
+  - Tokens OAuth criptografados com `INTEGRATION_ENCRYPTION_KEY`
+  - Página `/configuracoes/integracoes` protegida pelo proxy
+  - Badge e ações de sync no `SessionCard`
+  - Checkbox de sync no `SessionForm`
 - **Páginas stub restantes**: nenhuma
 
 ### Notas técnicas importantes
@@ -130,6 +150,9 @@ em uma futura iteração.
 - **Migration já aplicada** não deve ser editada; mudanças novas devem virar uma nova migration
 - **PDF gerado on-demand**: nenhum arquivo é persistido; `storagePath` é null na v1
 - **@react-pdf/renderer** só importado server-side; adicionado a `serverExternalPackages` no `next.config.ts`
+- **Google Calendar** exige envs server-side: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`,
+  `GOOGLE_CALENDAR_REDIRECT_URI` e `INTEGRATION_ENCRYPTION_KEY`
+- **Clientes Google/OAuth** são inicializados dentro de funções, nunca em module scope
 - Migrations ainda precisam ser executadas contra a `DATABASE_URL` real para validar o fluxo completo com Neon
 
 ## Modelos de Banco
@@ -139,6 +162,8 @@ em uma futura iteração.
 - `ClinicalRecord` — prontuário inicial vinculado 1:1 ao paciente
 - `Session` — atendimento clínico com data, duração, tipo, status e campos SOAP
 - `Document` — metadados do documento gerado (tipo, título, período, patientId, userId), `isActive`
+- `CalendarConnection` — conexão Google Calendar por usuário, com tokens criptografados e agenda padrão
+- `CalendarEventLink` — vínculo entre uma sessão e um evento externo Google Calendar
 
 ## Realidade Arquitetural Atual
 
@@ -150,12 +175,13 @@ Módulo `auth` completo com camadas: application, domain, http, infra
 Módulo `patients` segue a mesma estrutura em `src/server/modules/patients/`
 Módulo `sessions` segue o mesmo padrão em `src/server/modules/sessions/`
 Módulo `documents` segue o mesmo padrão em `src/server/modules/documents/`
+Módulo `calendar` segue o mesmo padrão em `src/server/modules/calendar/`
 
 ## Pendências Conhecidas
 
-- Executar Phase 9 antes das integrações externas para reduzir atritos visíveis no produto
+- Validar Phase 12 com conta Google real depois de configurar OAuth no Google Cloud Console
+- Executar `npx prisma migrate dev` para aplicar `phase12_google_calendar` na base real
 - Validar decisão do `ENCAMINHAMENTO`: card "em breve" ou documento PDF gerável com enum/template próprios
-- Definir `INTEGRATION_ENCRYPTION_KEY` antes de implementar e-mail ou Google Calendar
 - Rodar `npx prisma migrate dev` e `npx prisma db seed` contra a base real (phases 4 e 5 dependem disso para validação completa)
 - Reiniciar o `npm run dev` local após o `prisma generate` para carregar `prisma.session`
 - Validar no browser: `/dashboard`, `/pacientes`, `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova`
