@@ -2,11 +2,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { updateSessionUseCase } from './update-session'
 import { findSessionById, updateSession } from '../infra/session.repository'
 import { SessionNotFoundError } from './get-session'
+import { syncSessionCalendarAfterMutation } from '@/server/modules/calendar/application/auto-sync-session-calendar'
 
 vi.mock('../infra/session.repository')
+vi.mock('@/server/modules/calendar/application/auto-sync-session-calendar')
 
 const mockFindSessionById = vi.mocked(findSessionById)
 const mockUpdateSession = vi.mocked(updateSession)
+const mockSyncSessionCalendarAfterMutation = vi.mocked(syncSessionCalendarAfterMutation)
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -37,6 +40,12 @@ describe('updateSessionUseCase', () => {
         plan: 'Revisar carga na próxima semana',
       })
     )
+    expect(mockSyncSessionCalendarAfterMutation).toHaveBeenCalledWith({
+      userId: 'user-1',
+      sessionId: 'session-1',
+      syncWithGoogleCalendar: undefined,
+      status: 'REALIZADO',
+    })
   })
 
   it('lança erro quando a sessão não pertence ao usuário', async () => {

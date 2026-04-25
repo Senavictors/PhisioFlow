@@ -14,6 +14,18 @@ const sessionInclude = {
       city: true,
     },
   },
+  calendarEventLinks: {
+    where: { provider: 'GOOGLE' },
+    select: {
+      id: true,
+      provider: true,
+      externalEventId: true,
+      calendarId: true,
+      status: true,
+      errorMessage: true,
+      lastSyncedAt: true,
+    },
+  },
 } satisfies Prisma.SessionInclude
 
 export type SessionWithPatient = Prisma.SessionGetPayload<{ include: typeof sessionInclude }>

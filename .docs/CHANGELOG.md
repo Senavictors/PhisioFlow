@@ -9,6 +9,20 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 12 — Integração com Google Calendar**
+  - Dependências `googleapis` e `server-only`
+  - Migration `phase12_google_calendar` com `CalendarConnection` e `CalendarEventLink`
+  - Helper `src/lib/crypto.ts` para criptografia AES-256-GCM de tokens
+  - Módulo `server/modules/calendar/` com OAuth, repositories, use cases e integração com Google Calendar API
+  - Endpoints OAuth/configuração: `/api/integrations/google-calendar`, `/connect`, `/callback` e `/calendars`
+  - Endpoint manual de sessão: `POST/DELETE /api/sessions/:id/calendar-sync`
+  - Página `/configuracoes/integracoes` com card de conexão, seleção de agenda padrão e toggle de sync automático
+  - `SessionForm` com checkbox "Sincronizar" pré-marcado conforme configuração do usuário
+  - `SessionCard` com badge de status de sync e ações para sincronizar, atualizar ou remover evento
+  - Sincronização tolerante a falhas em criação/edição/cancelamento de sessões
+  - Proteção de `/configuracoes` no `src/proxy.ts`
+  - Documentação de API em `.docs/api/google-calendar.md`
+
 - **Phase 9 — Polimento UX e Documentos v1.1**
   - Componente `DocumentTypeCards` com faixa de cards contextuais no topo de `/documentos`
     (Relatório de evolução, Laudo fisioterapêutico, Encaminhamento "em breve" e Declaração de horas)

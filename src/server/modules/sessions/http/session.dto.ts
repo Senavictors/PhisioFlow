@@ -12,6 +12,7 @@ const optionalDateTimeString = z
   .optional()
 
 const optionalText = z.string().trim().optional()
+const optionalBoolean = z.coerce.boolean().optional()
 
 export const createSessionDTO = z.object({
   patientId: z.string().trim().min(1, 'Paciente é obrigatório'),
@@ -27,6 +28,7 @@ export const createSessionDTO = z.object({
   objective: optionalText,
   assessment: optionalText,
   plan: optionalText,
+  syncWithGoogleCalendar: optionalBoolean,
 })
 
 export const updateSessionDTO = z.object({
@@ -43,6 +45,7 @@ export const updateSessionDTO = z.object({
   objective: optionalText,
   assessment: optionalText,
   plan: optionalText,
+  syncWithGoogleCalendar: optionalBoolean,
 })
 
 export const listSessionsDTO = z.object({

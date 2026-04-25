@@ -3,6 +3,7 @@ import type { UpdateSessionDTO } from '../http/session.dto'
 import { normalizePartialSessionSoapInput, assertSessionSchedule } from '../domain/session'
 import { findSessionById, updateSession } from '../infra/session.repository'
 import { SessionNotFoundError } from './get-session'
+import { syncSessionCalendarAfterMutation } from '@/server/modules/calendar/application/auto-sync-session-calendar'
 
 export async function updateSessionUseCase(id: string, userId: string, dto: UpdateSessionDTO) {
   const existing = await findSessionById(id, userId)
@@ -16,7 +17,7 @@ export async function updateSessionUseCase(id: string, userId: string, dto: Upda
 
   assertSessionSchedule(nextDate, nextStatus)
 
-  return updateSession(id, {
+  const updatedSession = await updateSession(id, {
     date: dto.date ? nextDate : undefined,
     duration: dto.duration,
     type: dto.type as SessionType | undefined,
@@ -28,4 +29,13 @@ export async function updateSessionUseCase(id: string, userId: string, dto: Upda
       plan: dto.plan,
     }),
   })
+
+  await syncSessionCalendarAfterMutation({
+    userId,
+    sessionId: id,
+    syncWithGoogleCalendar: dto.syncWithGoogleCalendar,
+    status: nextStatus,
+  })
+
+  return updatedSession
 }

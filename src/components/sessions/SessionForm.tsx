@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { CalendarCheck2 } from 'lucide-react'
 import { formatDateTimeLocalInputValue } from '@/lib/date'
 import { cn } from '@/lib/utils'
 
@@ -14,6 +16,7 @@ interface SessionFormData {
   objective: string
   assessment: string
   plan: string
+  syncWithGoogleCalendar: boolean
 }
 
 interface SessionFormProps {
@@ -105,15 +108,34 @@ export function SessionForm({ patient }: SessionFormProps) {
     objective: '',
     assessment: '',
     plan: '',
+    syncWithGoogleCalendar: false,
   })
   const [errors, setErrors] = useState<Partial<Record<keyof SessionFormData, string>>>({})
   const [serverError, setServerError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [calendarConnected, setCalendarConnected] = useState(false)
+  const [loadingCalendarSettings, setLoadingCalendarSettings] = useState(true)
 
   function set<K extends keyof SessionFormData>(key: K, value: SessionFormData[K]) {
     setForm((previous) => ({ ...previous, [key]: value }))
     setErrors((previous) => ({ ...previous, [key]: undefined }))
   }
+
+  useEffect(() => {
+    fetch('/api/integrations/google-calendar')
+      .then((response) => response.json())
+      .then((data) => {
+        const connection = data.connection
+        setCalendarConnected(Boolean(connection?.connected))
+        setForm((previous) => ({
+          ...previous,
+          syncWithGoogleCalendar: Boolean(
+            connection?.connected && connection?.syncNewSessionsByDefault
+          ),
+        }))
+      })
+      .finally(() => setLoadingCalendarSettings(false))
+  }, [])
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -228,6 +250,47 @@ export function SessionForm({ patient }: SessionFormProps) {
               ))}
             </select>
           </Field>
+        </div>
+
+        <div className="rounded-[18px] border border-border bg-background/70 p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+                <CalendarCheck2 className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="font-body text-[13px] font-semibold text-foreground">
+                  Google Calendar
+                </p>
+                <p className="mt-1 font-body text-[12px] text-muted-foreground">
+                  {calendarConnected
+                    ? 'Adicionar este atendimento à agenda conectada.'
+                    : 'Conecte uma agenda para sincronizar este atendimento.'}
+                </p>
+              </div>
+            </div>
+
+            {loadingCalendarSettings ? (
+              <span className="font-body text-[12px] text-muted-foreground">Carregando...</span>
+            ) : calendarConnected ? (
+              <label className="inline-flex items-center gap-2 font-body text-[13px] font-semibold text-foreground">
+                <input
+                  type="checkbox"
+                  checked={form.syncWithGoogleCalendar}
+                  onChange={(event) => set('syncWithGoogleCalendar', event.target.checked)}
+                  className="h-4 w-4 accent-[var(--color-primary)]"
+                />
+                Sincronizar
+              </label>
+            ) : (
+              <Link
+                href="/configuracoes/integracoes"
+                className="font-body text-[12px] font-semibold text-primary transition-colors hover:text-primary-hover"
+              >
+                Configurar integração
+              </Link>
+            )}
+          </div>
         </div>
       </section>
 

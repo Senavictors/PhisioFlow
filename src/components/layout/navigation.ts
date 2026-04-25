@@ -34,6 +34,7 @@ export const pageTitles: Record<string, string> = {
   '/atendimentos': 'Atendimentos',
   '/agenda': 'Agenda',
   '/documentos': 'Documentos',
+  '/configuracoes': 'Configurações',
 }
 
 export function isPathActive(pathname: string, href: string) {

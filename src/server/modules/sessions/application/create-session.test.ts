@@ -4,12 +4,15 @@ import { findPatientById } from '@/server/modules/patients/infra/patient.reposit
 import { InvalidSessionScheduleError } from '../domain/session'
 import { createSessionUseCase } from './create-session'
 import { createSession } from '../infra/session.repository'
+import { syncSessionCalendarAfterMutation } from '@/server/modules/calendar/application/auto-sync-session-calendar'
 
 vi.mock('@/server/modules/patients/infra/patient.repository')
 vi.mock('../infra/session.repository')
+vi.mock('@/server/modules/calendar/application/auto-sync-session-calendar')
 
 const mockFindPatientById = vi.mocked(findPatientById)
 const mockCreateSession = vi.mocked(createSession)
+const mockSyncSessionCalendarAfterMutation = vi.mocked(syncSessionCalendarAfterMutation)
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -47,6 +50,12 @@ describe('createSessionUseCase', () => {
         plan: 'Manter protocolo',
       })
     )
+    expect(mockSyncSessionCalendarAfterMutation).toHaveBeenCalledWith({
+      userId: 'user-1',
+      sessionId: 'session-1',
+      syncWithGoogleCalendar: undefined,
+      status: 'AGENDADO',
+    })
   })
 
   it('rejeita patientId de outro usuário', async () => {

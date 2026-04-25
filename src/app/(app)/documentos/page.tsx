@@ -29,22 +29,30 @@ function DocumentList() {
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
 
-  async function load() {
-    setLoading(true)
-    const params = new URLSearchParams()
-    if (type) params.set('type', type)
-    const res = await fetch(`/api/documents?${params.toString()}`)
-    if (res.ok) {
-      const data = await res.json()
-      setDocuments(data.documents ?? [])
-      setTotal(data.total ?? 0)
-    }
-    setLoading(false)
-  }
-
   useEffect(() => {
-    load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    let ignore = false
+
+    async function loadDocuments() {
+      const params = new URLSearchParams()
+      if (type) params.set('type', type)
+      const res = await fetch(`/api/documents?${params.toString()}`)
+
+      if (ignore) return
+
+      if (res.ok) {
+        const data = await res.json()
+        setDocuments(data.documents ?? [])
+        setTotal(data.total ?? 0)
+      }
+
+      setLoading(false)
+    }
+
+    void loadDocuments()
+
+    return () => {
+      ignore = true
+    }
   }, [type])
 
   function handleDelete(id: string) {

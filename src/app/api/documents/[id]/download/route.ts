@@ -20,22 +20,19 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ message: 'Documento não encontrado' }, { status: 404 })
     }
 
-    const patientData = (doc as any).patient
-    const userData = (doc as any).user
-
     const buffer = await renderDocumentPDF({
       type: doc.type,
-      userName: userData?.name ?? 'Fisioterapeuta',
+      userName: doc.user?.name ?? 'Fisioterapeuta',
       patient: {
-        name: patientData.name,
-        birthDate: patientData.birthDate,
-        phone: patientData.phone ?? undefined,
-        area: patientData.area,
-        classification: patientData.classification,
-        clinicalRecord: patientData.clinicalRecord ?? undefined,
+        name: doc.patient.name,
+        birthDate: doc.patient.birthDate,
+        phone: doc.patient.phone ?? undefined,
+        area: doc.patient.area,
+        classification: doc.patient.classification,
+        clinicalRecord: doc.patient.clinicalRecord ?? undefined,
       },
       period: doc.period ?? undefined,
-      sessions: (patientData.sessions ?? []).map((s: any) => ({
+      sessions: (doc.patient.sessions ?? []).map((s) => ({
         date: s.date,
         status: s.status,
         assessment: s.assessment,
