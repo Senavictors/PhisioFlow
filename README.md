@@ -160,17 +160,18 @@ Após o seed:
 - Phase 9 — Polimento UX e Documentos v1.1 (cards contextuais, tooltip de período,
   QuickActions revisado, loading no filtro domiciliar, botão Cancelar terracota,
   rebrand "Experiência Clínica Fluida")
+- Phase 10 — Edição SOAP e Agenda em Calendário (rota `/atendimentos/[id]/editar`,
+  `SessionForm` em modo create/edit, visão `/agenda?view=calendar` com calendário mensal
+  e painel de sessões do dia)
 
 ### 🗺️ Planejado
 
-- Phase 10 — Edição SOAP e Agenda em Calendário
 - Phase 11 — E-mails com Gmail App Password
 - Phase 12 — Integração com Google Calendar
 
 ### ➡️ Próximo Passo
 
-Executar **Phase 10 — Edição SOAP e Agenda em Calendário**.
+Executar **Phase 11 — E-mails com Gmail App Password**.
 
-Tasks restantes em `.docs/tasks/phase-10-clinical-agenda-flow.md`,
-`.docs/tasks/phase-11-email-notifications.md` e
+Tasks restantes em `.docs/tasks/phase-11-email-notifications.md` e
 `.docs/tasks/phase-12-google-calendar.md`.

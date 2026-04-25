@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
-import { CalendarDays, Check, Clock3, Home, MapPin, UserRound, X } from 'lucide-react'
+import { CalendarDays, Check, Clock3, Home, MapPin, Pencil, UserRound, X } from 'lucide-react'
 import type { SessionStatus, SessionType } from '@/generated/prisma/client'
 import { formatDateLongPtBr, formatTimePtBr } from '@/lib/date'
 import { cn } from '@/lib/utils'
@@ -183,6 +183,14 @@ export function SessionCard({
               </button>
             </>
           ) : null}
+
+          <Link
+            href={`/atendimentos/${session.id}/editar`}
+            className="flex items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 font-body text-[13px] font-semibold text-foreground transition-colors duration-[180ms] hover:border-primary/40 hover:bg-primary-soft"
+          >
+            <Pencil className="h-4 w-4" />
+            Editar SOAP
+          </Link>
 
           <Link
             href={`/pacientes/${session.patient.id}`}

@@ -5,15 +5,30 @@ import { useRouter } from 'next/navigation'
 import { formatDateTimeLocalInputValue } from '@/lib/date'
 import { cn } from '@/lib/utils'
 
+type SessionStatus = 'AGENDADO' | 'REALIZADO' | 'CANCELADO'
+type SessionType = 'PRESENTIAL' | 'HOME_CARE'
+
 interface SessionFormData {
   date: string
   duration: string
-  type: 'PRESENTIAL' | 'HOME_CARE'
-  status: 'AGENDADO' | 'REALIZADO'
+  type: SessionType
+  status: SessionStatus
   subjective: string
   objective: string
   assessment: string
   plan: string
+}
+
+export interface SessionFormInitialValues {
+  id: string
+  date: Date | string
+  duration: number
+  type: SessionType
+  status: SessionStatus
+  subjective?: string | null
+  objective?: string | null
+  assessment?: string | null
+  plan?: string | null
 }
 
 interface SessionFormProps {
@@ -22,17 +37,25 @@ interface SessionFormProps {
     name: string
     area: string
   }
+  mode?: 'create' | 'edit'
+  initialValues?: SessionFormInitialValues
 }
 
-const sessionTypeOptions = [
+const sessionTypeOptions: Array<{ value: SessionType; label: string }> = [
   { value: 'PRESENTIAL', label: 'Presencial' },
   { value: 'HOME_CARE', label: 'Domiciliar' },
-] as const
+]
 
-const sessionStatusOptions = [
+const createStatusOptions: Array<{ value: SessionStatus; label: string }> = [
   { value: 'AGENDADO', label: 'Agendado' },
   { value: 'REALIZADO', label: 'Realizado' },
-] as const
+]
+
+const editStatusOptions: Array<{ value: SessionStatus; label: string }> = [
+  { value: 'AGENDADO', label: 'Agendado' },
+  { value: 'REALIZADO', label: 'Realizado' },
+  { value: 'CANCELADO', label: 'Cancelado' },
+]
 
 const soapSections = [
   {
@@ -67,6 +90,35 @@ function buildDefaultDate() {
   return formatDateTimeLocalInputValue(date)
 }
 
+function buildInitialFormData(
+  patient: SessionFormProps['patient'],
+  initialValues?: SessionFormInitialValues
+): SessionFormData {
+  if (initialValues) {
+    return {
+      date: formatDateTimeLocalInputValue(new Date(initialValues.date)),
+      duration: String(initialValues.duration),
+      type: initialValues.type,
+      status: initialValues.status,
+      subjective: initialValues.subjective ?? '',
+      objective: initialValues.objective ?? '',
+      assessment: initialValues.assessment ?? '',
+      plan: initialValues.plan ?? '',
+    }
+  }
+
+  return {
+    date: buildDefaultDate(),
+    duration: '50',
+    type: patient.area === 'HOME_CARE' ? 'HOME_CARE' : 'PRESENTIAL',
+    status: 'AGENDADO',
+    subjective: '',
+    objective: '',
+    assessment: '',
+    plan: '',
+  }
+}
+
 function Field({
   label,
   error,
@@ -94,21 +146,16 @@ const inputClass = cn(
   'transition-colors duration-[180ms]'
 )
 
-export function SessionForm({ patient }: SessionFormProps) {
+export function SessionForm({ patient, mode = 'create', initialValues }: SessionFormProps) {
   const router = useRouter()
-  const [form, setForm] = useState<SessionFormData>({
-    date: buildDefaultDate(),
-    duration: '50',
-    type: patient.area === 'HOME_CARE' ? 'HOME_CARE' : 'PRESENTIAL',
-    status: 'AGENDADO',
-    subjective: '',
-    objective: '',
-    assessment: '',
-    plan: '',
-  })
+  const isEdit = mode === 'edit' && initialValues
+  const [form, setForm] = useState<SessionFormData>(() =>
+    buildInitialFormData(patient, initialValues)
+  )
   const [errors, setErrors] = useState<Partial<Record<keyof SessionFormData, string>>>({})
   const [serverError, setServerError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const statusOptions = isEdit ? editStatusOptions : createStatusOptions
 
   function set<K extends keyof SessionFormData>(key: K, value: SessionFormData[K]) {
     setForm((previous) => ({ ...previous, [key]: value }))
@@ -121,15 +168,28 @@ export function SessionForm({ patient }: SessionFormProps) {
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/sessions', {
-        method: 'POST',
+      const url = isEdit ? `/api/sessions/${initialValues.id}` : '/api/sessions'
+      const method = isEdit ? 'PUT' : 'POST'
+
+      const body: Record<string, unknown> = {
+        date: new Date(form.date).toISOString(),
+        duration: Number(form.duration),
+        type: form.type,
+        status: form.status,
+        subjective: form.subjective,
+        objective: form.objective,
+        assessment: form.assessment,
+        plan: form.plan,
+      }
+
+      if (!isEdit) {
+        body.patientId = patient.id
+      }
+
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          patientId: patient.id,
-          date: new Date(form.date).toISOString(),
-          duration: Number(form.duration),
-        }),
+        body: JSON.stringify(body),
       })
 
       const data = await response.json()
@@ -157,6 +217,14 @@ export function SessionForm({ patient }: SessionFormProps) {
     }
   }
 
+  const submitLabel = isEdit
+    ? isLoading
+      ? 'Salvando...'
+      : 'Salvar alterações'
+    : isLoading
+      ? 'Salvando...'
+      : 'Salvar atendimento'
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
       {serverError ? (
@@ -172,7 +240,9 @@ export function SessionForm({ patient }: SessionFormProps) {
               Dados do atendimento
             </h2>
             <p className="mt-1 font-body text-[13px] text-muted-foreground">
-              Registre data, duração, tipo e status inicial da sessão.
+              {isEdit
+                ? 'Atualize data, duração, tipo e status do atendimento.'
+                : 'Registre data, duração, tipo e status inicial da sessão.'}
             </p>
           </div>
           <div className="rounded-full bg-primary-soft px-3 py-1.5 font-body text-[11px] font-semibold text-primary-soft-fg">
@@ -205,7 +275,7 @@ export function SessionForm({ patient }: SessionFormProps) {
             <select
               className={inputClass}
               value={form.type}
-              onChange={(event) => set('type', event.target.value as SessionFormData['type'])}
+              onChange={(event) => set('type', event.target.value as SessionType)}
             >
               {sessionTypeOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -219,9 +289,9 @@ export function SessionForm({ patient }: SessionFormProps) {
             <select
               className={inputClass}
               value={form.status}
-              onChange={(event) => set('status', event.target.value as SessionFormData['status'])}
+              onChange={(event) => set('status', event.target.value as SessionStatus)}
             >
-              {sessionStatusOptions.map((option) => (
+              {statusOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -288,7 +358,7 @@ export function SessionForm({ patient }: SessionFormProps) {
           disabled={isLoading}
           className="w-full rounded-xl bg-primary px-6 py-2.5 font-body text-[13px] font-semibold text-primary-foreground shadow-glow transition-colors duration-[180ms] hover:bg-primary-hover disabled:opacity-50 sm:w-auto"
         >
-          {isLoading ? 'Salvando...' : 'Salvar atendimento'}
+          {submitLabel}
         </button>
       </div>
     </form>

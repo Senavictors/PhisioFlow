@@ -9,6 +9,23 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 10 — Edição SOAP e Agenda em Calendário**
+  - `SessionForm` refatorado para suportar `mode="create" | "edit"` com `initialValues`,
+    incluindo opção de status `CANCELADO` em edição
+  - Nova rota `/atendimentos/[id]/editar` carrega a sessão via `getSessionUseCase` e
+    persiste alterações com `PUT /api/sessions/:id` (mantém validação de data passada
+    para `AGENDADO`)
+  - Botão "Editar SOAP" no `SessionCard` apontando para a nova rota de edição
+  - Componente `AgendaViewToggle` com tabs "Lista" e "Calendário" preservando filtro
+    domiciliar e mês corrente
+  - Componente `MonthCalendar` (client) com grid 6×7, navegação de mês via Link, destaque
+    do dia atual, contagem por dia, indicadores de status e ícone de domiciliar; clique
+    em um dia exibe as sessões do dia em painel lateral
+  - `/agenda?view=calendar` busca sessões do mês via `listSessionsUseCase`
+    (`from`/`to` calculados a partir do parâmetro `month=YYYY-MM`)
+  - `DomiciliarToggle` agora preserva os demais query params ao alternar visão
+  - Limite máximo de `listSessionsDTO` aumentado de 100 para 500 para suportar a visão mensal
+
 - **Phase 9 — Polimento UX e Documentos v1.1**
   - Componente `DocumentTypeCards` com faixa de cards contextuais no topo de `/documentos`
     (Relatório de evolução, Laudo fisioterapêutico, Encaminhamento "em breve" e Declaração de horas)

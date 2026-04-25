@@ -4,6 +4,13 @@
 
 ## Fase Atual
 
+**Phase 10 — Edição SOAP e Agenda em Calendário concluída**
+`SessionForm` em modo create/edit, rota `/atendimentos/[id]/editar` para revisar/atualizar
+campos SOAP e dados do atendimento, e nova visão `/agenda?view=calendar&month=YYYY-MM` com
+calendário mensal, contagem por dia, indicadores de status e painel lateral de sessões do
+dia selecionado. `DomiciliarToggle` agora preserva os demais params; limite do
+`listSessionsDTO` elevado para 500.
+
 **Phase 9 — Polimento UX e Documentos v1.1 concluída**
 Cards contextuais no topo de `/documentos`, tooltip de período no modal de geração,
 QuickActions com botões mais visíveis, `DomiciliarToggle` com loading, botão "Cancelar"
@@ -20,7 +27,6 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 Seguir a ordem arquitetada:
 
-- **Phase 10** — Edição SOAP e Agenda em Calendário
 - **Phase 11** — E-mails com Gmail App Password
 - **Phase 12** — Integração com Google Calendar
 
