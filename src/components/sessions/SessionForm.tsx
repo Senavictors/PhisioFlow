@@ -11,12 +11,21 @@ import { ThemedSelect } from '@/components/ui/themed-select'
 
 type SessionStatus = 'AGENDADO' | 'REALIZADO' | 'CANCELADO'
 type SessionType = 'PRESENTIAL' | 'HOME_CARE'
+type AttendanceType = 'CLINIC' | 'HOME_CARE' | 'HOSPITAL' | 'CORPORATE' | 'ONLINE'
+
+interface WorkplaceSummary {
+  id: string
+  name: string
+  defaultAttendanceType: AttendanceType
+}
 
 interface SessionFormData {
   date: string
   duration: string
   type: SessionType
   status: SessionStatus
+  workplaceId: string
+  attendanceType: AttendanceType
   subjective: string
   objective: string
   assessment: string
@@ -30,6 +39,8 @@ export interface SessionFormInitialValues {
   duration: number
   type: SessionType
   status: SessionStatus
+  workplaceId?: string | null
+  attendanceType?: AttendanceType | null
   subjective?: string | null
   objective?: string | null
   assessment?: string | null
@@ -57,6 +68,14 @@ interface EmailSummary {
 const sessionTypeOptions: Array<{ value: SessionType; label: string }> = [
   { value: 'PRESENTIAL', label: 'Presencial' },
   { value: 'HOME_CARE', label: 'Domiciliar' },
+]
+
+const attendanceTypeOptions: Array<{ value: AttendanceType; label: string }> = [
+  { value: 'CLINIC', label: 'Clínica' },
+  { value: 'HOME_CARE', label: 'Domiciliar' },
+  { value: 'HOSPITAL', label: 'Hospital' },
+  { value: 'CORPORATE', label: 'Corporativo' },
+  { value: 'ONLINE', label: 'Online' },
 ]
 
 const createStatusOptions: Array<{ value: SessionStatus; label: string }> = [
@@ -113,6 +132,8 @@ function buildInitialFormData(
       duration: String(initialValues.duration),
       type: initialValues.type,
       status: initialValues.status,
+      workplaceId: initialValues.workplaceId ?? '',
+      attendanceType: initialValues.attendanceType ?? 'CLINIC',
       subjective: initialValues.subjective ?? '',
       objective: initialValues.objective ?? '',
       assessment: initialValues.assessment ?? '',
@@ -126,6 +147,8 @@ function buildInitialFormData(
     duration: '50',
     type: patient.area === 'HOME_CARE' ? 'HOME_CARE' : 'PRESENTIAL',
     status: 'AGENDADO',
+    workplaceId: '',
+    attendanceType: patient.area === 'HOME_CARE' ? 'HOME_CARE' : 'CLINIC',
     subjective: '',
     objective: '',
     assessment: '',
@@ -174,6 +197,26 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
   const [sendReminder, setSendReminder] = useState(false)
   const [calendarConnected, setCalendarConnected] = useState(false)
   const [loadingCalendarSettings, setLoadingCalendarSettings] = useState(true)
+  const [workplaces, setWorkplaces] = useState<WorkplaceSummary[]>([])
+
+  useEffect(() => {
+    fetch('/api/workplaces')
+      .then((r) => r.json())
+      .then((data) => {
+        const list: WorkplaceSummary[] = data.workplaces ?? []
+        setWorkplaces(list)
+        if (!isEdit && list.length > 0 && !form.workplaceId) {
+          const first = list[0]
+          setForm((prev) => ({
+            ...prev,
+            workplaceId: first.id,
+            attendanceType: prev.attendanceType !== 'CLINIC' ? prev.attendanceType : first.defaultAttendanceType,
+          }))
+        }
+      })
+      .catch(() => undefined)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit])
 
   useEffect(() => {
     fetch('/api/settings/email')
@@ -234,6 +277,8 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
         duration: Number(form.duration),
         type: form.type,
         status: form.status,
+        workplaceId: form.workplaceId || undefined,
+        attendanceType: form.attendanceType || undefined,
         subjective: form.subjective,
         objective: form.objective,
         assessment: form.assessment,
@@ -351,6 +396,33 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
               onChange={(next) => set('status', next as SessionStatus)}
               options={statusOptions}
               ariaLabel="Status do atendimento"
+            />
+          </Field>
+
+          {workplaces.length > 0 ? (
+            <Field label="Local de trabalho" error={errors.workplaceId}>
+              <ThemedSelect
+                value={form.workplaceId}
+                onChange={(next) => {
+                  const selected = workplaces.find((w) => w.id === next)
+                  set('workplaceId', next)
+                  if (selected) set('attendanceType', selected.defaultAttendanceType)
+                }}
+                options={[
+                  { value: '', label: 'Sem local específico' },
+                  ...workplaces.map((w) => ({ value: w.id, label: w.name })),
+                ]}
+                ariaLabel="Local de trabalho"
+              />
+            </Field>
+          ) : null}
+
+          <Field label="Modalidade" error={errors.attendanceType}>
+            <ThemedSelect
+              value={form.attendanceType}
+              onChange={(next) => set('attendanceType', next as AttendanceType)}
+              options={attendanceTypeOptions}
+              ariaLabel="Modalidade de atendimento"
             />
           </Field>
         </div>

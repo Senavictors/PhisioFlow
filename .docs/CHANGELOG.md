@@ -9,6 +9,26 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 14 — Locais de Trabalho**
+  - Enum `WorkplaceKind` (`OWN_CLINIC`, `PARTNER_CLINIC`, `PARTICULAR`, `ONLINE`)
+  - Enum `AttendanceType` (`CLINIC`, `HOME_CARE`, `HOSPITAL`, `CORPORATE`, `ONLINE`)
+  - Modelo `Workplace` no schema Prisma com `defaultAttendanceType`, `defaultSessionPrice`,
+    `defaultCommissionPct`, `address`, `notes` e `isActive`
+  - `Session.workplaceId` (nullable) e `Session.attendanceType` (nullable)
+  - Migration `phase14_workplaces` com backfill SQL: 1 workplace default por usuário e
+    vinculação automática de todas as sessões existentes
+  - Módulo `workplaces` completo: `domain/`, `http/`, `infra/`, `application/` com
+    create, list, get, update e archive; testes unitários incluídos
+  - `POST/GET /api/workplaces` e `GET/PUT/DELETE /api/workplaces/:id`
+  - Página `/configuracoes/locais` com lista e CRUD inline (`WorkplacesManager`,
+    `WorkplaceCard`, `WorkplaceForm`)
+  - `SessionForm` com seletor de workplace (popula attendanceType default) e seletor de
+    modalidade (`AttendanceType`)
+  - `SessionCard` exibe nome do local de trabalho abaixo do horário
+  - Link "Locais" na sidebar (secundário, com ícone `MapPin`)
+  - Seed demo com "Clínica Movimento" (OWN_CLINIC) e "Atendimento Particular" (PARTICULAR)
+  - `createSessionUseCase` busca workplace default do usuário quando `workplaceId` omitido
+
 - **Phase 13 — Polimento de UI e Componentes**
   - Componente `ThemedSelect` (`src/components/ui/themed-select.tsx`): select customizado
     com botão trigger, lista flutuante, checkmark no item ativo, hover/focus na paleta

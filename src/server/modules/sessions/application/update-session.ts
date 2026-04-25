@@ -1,4 +1,4 @@
-import type { SessionStatus, SessionType } from '@/generated/prisma/client'
+import type { AttendanceType, SessionStatus, SessionType } from '@/generated/prisma/client'
 import type { UpdateSessionDTO } from '../http/session.dto'
 import { normalizePartialSessionSoapInput, assertSessionSchedule } from '../domain/session'
 import { findSessionById, updateSession } from '../infra/session.repository'
@@ -22,6 +22,8 @@ export async function updateSessionUseCase(id: string, userId: string, dto: Upda
     duration: dto.duration,
     type: dto.type as SessionType | undefined,
     status: dto.status as SessionStatus | undefined,
+    workplaceId: dto.workplaceId,
+    attendanceType: dto.attendanceType as AttendanceType | undefined,
     ...normalizePartialSessionSoapInput({
       subjective: dto.subjective,
       objective: dto.objective,

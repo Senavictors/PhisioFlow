@@ -4,6 +4,16 @@
 
 ## Fase Atual
 
+**Phase 14 — Locais de Trabalho concluída**
+Enum `WorkplaceKind` (`OWN_CLINIC`, `PARTNER_CLINIC`, `PARTICULAR`, `ONLINE`) e enum
+`AttendanceType` (`CLINIC`, `HOME_CARE`, `HOSPITAL`, `CORPORATE`, `ONLINE`) adicionados.
+Modelo `Workplace` criado; `Session` ganhou `workplaceId` e `attendanceType` (nullable).
+Migration `phase14_workplaces` com backfill SQL: 1 workplace default por usuário + sessões
+vinculadas. Módulo `workplaces` completo (domain, dto, infra, application). CRUD REST em
+`/api/workplaces`. Página `/configuracoes/locais`. `SessionForm` seleciona workplace e
+modalidade; `SessionCard` exibe nome do local. Sidebar com link "Locais". Seed demo com
+"Clínica Movimento" e "Atendimento Particular".
+
 **Phase 13 — Polimento de UI e Componentes concluída**
 `ThemedSelect` e `DateTimePicker` temáticos substituem todos os controles nativos do navegador.
 `SessionCard` refatorado com menu flutuante `...` (Confirmar exposto, demais ações no menu).
@@ -44,33 +54,19 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-**Ciclo "Multi-modalidade + Financeiro" planejado** — [ADR-005](decisions/ADR-005-multi-modalidade-financeiro.md)
-desacopla área do paciente (passa para `TreatmentPlan`), introduz locais de trabalho
-(`Workplace`) e adiciona acompanhamento financeiro (`Payment`, `expectedFee`, dashboard).
+**Phase 15 — Plano de Tratamento** — [task file](tasks/phase-15-treatment-plans.md)
+Modelo `TreatmentPlan` (1 paciente → N planos), expansão de `TherapyArea`, novo enum
+`Specialty`. Backfill cria plano legado por paciente. Remove `Patient.area` e
+`Session.type` (campos legados que coexistiram com os novos desde a Phase 14).
 
-Sequência:
+Sequência restante do ciclo "Multi-modalidade + Financeiro":
+- **Phase 16** — [Pagamentos](tasks/phase-16-payments.md)
+- **Phase 17** — [Dashboard financeiro](tasks/phase-17-finance-dashboard.md)
 
-- **Phase 14** — [Locais de trabalho](tasks/phase-14-workplaces.md): modelo `Workplace`,
-  `Session.workplaceId` e `Session.attendanceType`. Backfill: 1 workplace default por
-  usuário. Mantém `Patient.area` e `Session.type` por compatibilidade.
-- **Phase 15** — [Plano de tratamento](tasks/phase-15-treatment-plans.md): modelo
-  `TreatmentPlan` (1 paciente → N planos), expansão de `TherapyArea`, novo enum
-  `Specialty`. Backfill cria plano legado por paciente. Remove `Patient.area` e
-  `Session.type`.
-- **Phase 16** — [Pagamentos](tasks/phase-16-payments.md): modelo `Payment`,
-  `Session.expectedFee` snapshot, `Session.paymentStatus` cache, modal de registrar
-  pagamento, saldo do plano (avulso ou pacote).
-- **Phase 17** — [Dashboard financeiro](tasks/phase-17-finance-dashboard.md): página
-  `/financeiro` com recebido vs previsto, série temporal, breakdowns por local e por
-  área, lista de pendências.
-
-Antes de iniciar Phase 14, ainda pendente da janela anterior:
-
+Pendências operacionais:
 - Validar integrações em ambiente real (Phase 11/12) e preparar deploy na Vercel
 - Configurar `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALENDAR_REDIRECT_URI`
   e `INTEGRATION_ENCRYPTION_KEY` (esta última gerada com `openssl rand -base64 32`)
-- Decisão registrada: `ENCAMINHAMENTO` segue apenas como card "em breve" em `/documentos`.
-  Caso o usuário aprove gerar PDF, criar enum, migration, DTO e template em iteração futura.
 
 ## O Que Existe
 
@@ -89,7 +85,6 @@ Antes de iniciar Phase 14, ainda pendente da janela anterior:
 
 ### Tasks planejadas
 
-- `.docs/tasks/phase-14-workplaces.md` — Locais de trabalho e desacoplamento de atendimento
 - `.docs/tasks/phase-15-treatment-plans.md` — Plano de tratamento e multi-modalidade
 - `.docs/tasks/phase-16-payments.md` — Pagamentos e cobrança (avulso e pacote)
 - `.docs/tasks/phase-17-finance-dashboard.md` — Dashboard financeiro (recebido vs previsto)
@@ -98,6 +93,7 @@ Antes de iniciar Phase 14, ainda pendente da janela anterior:
 
 ### Tasks já concluídas (referência)
 
+- `.docs/tasks/phase-14-workplaces.md` — Locais de trabalho (`Workplace`, `AttendanceType`, CRUD + UI)
 - `.docs/tasks/phase-9-ux-polish.md` — Polimentos visuais e de microinteração
 - `.docs/tasks/phase-10-clinical-agenda-flow.md` — Edição SOAP e visualização mensal da agenda
 - `.docs/tasks/phase-11-email-notifications.md` — Gmail App Password e envios
@@ -195,6 +191,7 @@ Antes de iniciar Phase 14, ainda pendente da janela anterior:
 - `Document` — metadados do documento gerado (tipo, título, período, patientId, userId), `isActive`
 - `CalendarConnection` — conexão Google Calendar por usuário, com tokens criptografados e agenda padrão
 - `CalendarEventLink` — vínculo entre uma sessão e um evento externo Google Calendar
+- `Workplace` — local de trabalho do fisioterapeuta (OWN_CLINIC, PARTNER_CLINIC, PARTICULAR, ONLINE)
 
 ## Realidade Arquitetural Atual
 
@@ -207,6 +204,7 @@ Módulo `patients` segue a mesma estrutura em `src/server/modules/patients/`
 Módulo `sessions` segue o mesmo padrão em `src/server/modules/sessions/`
 Módulo `documents` segue o mesmo padrão em `src/server/modules/documents/`
 Módulo `calendar` segue o mesmo padrão em `src/server/modules/calendar/`
+Módulo `workplaces` segue o mesmo padrão em `src/server/modules/workplaces/`
 
 ## Pendências Conhecidas
 

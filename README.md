@@ -192,14 +192,16 @@ Após o seed:
   PhysioFlow → Google Calendar)
 - Phase 13 — Polimento de UI e Componentes (`ThemedSelect`, `DateTimePicker`, refatoração
   do `SessionCard` com menu flutuante, correção do sidebar mobile, remoção de emoji no dashboard)
+- Phase 14 — Locais de Trabalho (modelo `Workplace`, enums `WorkplaceKind`/`AttendanceType`,
+  migration com backfill, CRUD `/configuracoes/locais`, seletor de local e modalidade no
+  `SessionForm`, nome do local no `SessionCard`)
 
 ### 🗺️ Planejado — Ciclo "Multi-modalidade + Financeiro"
 
 > Decisão arquitetural: [ADR-005](.docs/decisions/ADR-005-multi-modalidade-financeiro.md)
 
-- **Phase 14 — Locais de Trabalho** (`Workplace`, `Session.workplaceId`, `attendanceType`)
 - **Phase 15 — Plano de Tratamento** (multi-modalidade por paciente, remoção do
-  `Patient.area`, expansão de `TherapyArea`, novo enum `Specialty`)
+  `Patient.area` e `Session.type`, expansão de `TherapyArea`, novo enum `Specialty`)
 - **Phase 16 — Pagamentos** (`Payment`, `expectedFee` snapshot, avulso e pacote,
   saldo do plano)
 - **Phase 17 — Dashboard Financeiro** (recebido vs previsto, série temporal,
@@ -207,10 +209,9 @@ Após o seed:
 
 ### ➡️ Próximo Passo
 
-Iniciar **Phase 14**: criar modelo `Workplace`, migration `phase14_workplaces` com
-backfill (1 workplace default por usuário), página `/configuracoes/locais` e seletor de
-local + tipo de atendimento no formulário de sessão.
+Iniciar **Phase 15**: modelo `TreatmentPlan` (1 paciente → N planos), backfill que cria
+plano legado por paciente, expansão de `TherapyArea`, novo enum `Specialty`. Remove
+`Patient.area` e `Session.type` (campos mantidos em coexistência desde a Phase 14).
 
-Em paralelo, ainda pendente do ciclo anterior: aplicar as migrations atuais no Neon com
-`npx prisma migrate deploy`, configurar as variáveis de e-mail/Google na Vercel e
+Ainda pendente do ciclo anterior: configurar as variáveis de e-mail/Google na Vercel e
 validar os fluxos reais de envio e sincronização.

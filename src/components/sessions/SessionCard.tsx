@@ -36,6 +36,7 @@ interface SessionCardProps {
     objective?: string | null
     assessment?: string | null
     plan?: string | null
+    workplace?: { id: string; name: string } | null
     calendarEventLinks?: Array<{
       id: string
       status: string
@@ -281,6 +282,12 @@ export function SessionCard({
                 <span className="flex items-center gap-1.5">
                   <CalendarDays className="h-3.5 w-3.5" />
                   {formatDateLongPtBr(session.date)}
+                </span>
+              ) : null}
+              {session.workplace ? (
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5" />
+                  {session.workplace.name}
                 </span>
               ) : null}
               {showAddress && session.patient.address ? (
