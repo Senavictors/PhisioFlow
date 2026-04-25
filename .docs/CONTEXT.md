@@ -4,6 +4,11 @@
 
 ## Fase Atual
 
+**Planejamento do próximo ciclo concluído**
+Foram criadas as tasks das Phases 9-12 para organizar o próximo ciclo: polimentos de UX,
+edição SOAP + agenda em calendário, e-mails via Gmail App Password e integração com Google
+Calendar.
+
 **Phase 8 — Logística Domiciliar concluída**
 Campos de endereço e prioridade no modelo `Patient`, seção de logística na ficha e no formulário de edição, badge de prioridade no `SessionCard`, e visão domiciliar na agenda (`/agenda?domiciliar=1`) com ordenação por prioridade. Migration `phase8_homecare_logistics` aplicada.
 
@@ -11,7 +16,20 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-Próximo ciclo: melhorias de UX, notificações, multi-usuário por clínica (multi-tenant expandido) e integração com calendários externos (Google Calendar).
+Executar **Phase 9 — Polimento UX e Documentos v1.1**:
+
+- cards contextuais na aba Documentos;
+- atualização do card de ações rápidas;
+- feedback/hover/loading no filtro Domiciliar;
+- info tooltip para o campo Período no modal de documento;
+- cor terracota para o botão Cancelar em atendimentos;
+- troca de "Portal Restaurativo" para "Experiência Clínica Fluida".
+
+Depois, seguir a ordem arquitetada:
+
+- **Phase 10** — Edição SOAP e Agenda em Calendário
+- **Phase 11** — E-mails com Gmail App Password
+- **Phase 12** — Integração com Google Calendar
 
 ## O Que Existe
 
@@ -27,6 +45,14 @@ Próximo ciclo: melhorias de UX, notificações, multi-usuário por clínica (mu
 - ESLint + Prettier configurados
 - Design system completo em `physioflow-design-system/project/`
 - `@react-pdf/renderer` v4 instalado (`serverExternalPackages` configurado em `next.config.ts`)
+
+### Tasks planejadas
+
+- `.docs/tasks/phase-9-ux-polish.md` — Polimentos visuais e de microinteração, incluindo Documentos, QuickActions, Agenda, Atendimentos e troca de naming
+- `.docs/tasks/phase-10-clinical-agenda-flow.md` — Edição SOAP de atendimentos existentes e visualização mensal da agenda
+- `.docs/tasks/phase-11-email-notifications.md` — Configuração de Gmail App Password, envio de documento por e-mail e aviso de atendimento
+- `.docs/tasks/phase-12-google-calendar.md` — OAuth Google Calendar e sincronização unidirecional de sessões
+- `.docs/decisions/ADR-004-integracoes-externas.md` — Decisão proposta para SMTP Gmail, OAuth Calendar, criptografia e sync opt-in
 
 ### Features implementadas
 
@@ -114,6 +140,9 @@ Módulo `documents` segue o mesmo padrão em `src/server/modules/documents/`
 
 ## Pendências Conhecidas
 
+- Executar Phase 9 antes das integrações externas para reduzir atritos visíveis no produto
+- Validar decisão do `ENCAMINHAMENTO`: card "em breve" ou documento PDF gerável com enum/template próprios
+- Definir `INTEGRATION_ENCRYPTION_KEY` antes de implementar e-mail ou Google Calendar
 - Rodar `npx prisma migrate dev` e `npx prisma db seed` contra a base real (phases 4 e 5 dependem disso para validação completa)
 - Reiniciar o `npm run dev` local após o `prisma generate` para carregar `prisma.session`
 - Validar no browser: `/dashboard`, `/pacientes`, `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova`
@@ -124,3 +153,4 @@ Módulo `documents` segue o mesmo padrão em `src/server/modules/documents/`
 - [ADR-001](decisions/ADR-001-tech-stack.md) — Tech Stack
 - [ADR-002](decisions/ADR-002-soap-notes.md) — Estrutura SOAP
 - [ADR-003](decisions/ADR-003-auth-approach.md) — Estratégia de Auth
+- [ADR-004](decisions/ADR-004-integracoes-externas.md) — Integrações externas de e-mail e calendário

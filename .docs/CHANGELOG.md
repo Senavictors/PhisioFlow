@@ -9,6 +9,13 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- Planejamento do próximo ciclo:
+  - Task `phase-9-ux-polish` para polimentos de UX, cards de documentos, microinterações e troca de naming
+  - Task `phase-10-clinical-agenda-flow` para edição SOAP e visualização mensal da agenda
+  - Task `phase-11-email-notifications` para Gmail App Password, envio de documentos e avisos de atendimento
+  - Task `phase-12-google-calendar` para OAuth e sincronização unidirecional com Google Calendar
+  - ADR-004 para registrar decisões de segurança e arquitetura das integrações externas
+
 - **Phase 8 — Logística Domiciliar**
   - Enum `HomeCarePriority` (NORMAL / HIGH / URGENT) + migration `phase8_homecare_logistics`
   - Campos novos no modelo `Patient`: `address`, `neighborhood`, `city`, `homeCareNotes`, `homeCarePriority`
