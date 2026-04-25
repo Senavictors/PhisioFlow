@@ -25,12 +25,6 @@ interface GoogleCalendarSettingsCardProps {
   status?: string
 }
 
-const inputClass = cn(
-  'w-full rounded-xl border border-border bg-input px-3.5 py-2.5',
-  'font-body text-[14px] text-foreground',
-  'focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring',
-  'transition-colors duration-[180ms]'
-)
 
 export function GoogleCalendarSettingsCard({
   initialConnection,

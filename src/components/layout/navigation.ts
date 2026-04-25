@@ -5,6 +5,7 @@ import {
   FileText,
   HelpCircle,
   LayoutDashboard,
+  MapPin,
   Settings,
   Users,
 } from 'lucide-react'
@@ -24,6 +25,7 @@ export const primaryNavigation: NavigationItem[] = [
 ]
 
 export const secondaryNavigation: NavigationItem[] = [
+  { label: 'Locais', href: '/configuracoes/locais', icon: MapPin },
   { label: 'Configurações', href: '/configuracoes/email', icon: Settings },
   { label: 'Suporte', href: '/suporte', icon: HelpCircle },
 ]

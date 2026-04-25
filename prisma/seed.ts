@@ -17,35 +17,23 @@ async function main() {
   const demoPassword = 'demo1234'
 
   await prisma.session.deleteMany({
-    where: {
-      user: {
-        email: demoEmail,
-      },
-    },
+    where: { user: { email: demoEmail } },
   })
 
   await prisma.clinicalRecord.deleteMany({
-    where: {
-      patient: {
-        user: {
-          email: demoEmail,
-        },
-      },
-    },
+    where: { patient: { user: { email: demoEmail } } },
   })
 
   await prisma.patient.deleteMany({
-    where: {
-      user: {
-        email: demoEmail,
-      },
-    },
+    where: { user: { email: demoEmail } },
+  })
+
+  await prisma.workplace.deleteMany({
+    where: { user: { email: demoEmail } },
   })
 
   await prisma.user.deleteMany({
-    where: {
-      email: demoEmail,
-    },
+    where: { email: demoEmail },
   })
 
   const user = await prisma.user.create({
@@ -118,6 +106,27 @@ async function main() {
     },
   })
 
+  const clinica = await prisma.workplace.create({
+    data: {
+      userId: user.id,
+      name: 'Clínica Movimento',
+      kind: 'OWN_CLINIC',
+      defaultAttendanceType: 'CLINIC',
+      address: 'Rua das Flores, 120 — São Paulo',
+      notes: 'Consultório principal com equipamentos completos.',
+    },
+  })
+
+  const particular = await prisma.workplace.create({
+    data: {
+      userId: user.id,
+      name: 'Atendimento Particular',
+      kind: 'PARTICULAR',
+      defaultAttendanceType: 'HOME_CARE',
+      notes: 'Pacientes atendidos em domicílio.',
+    },
+  })
+
   const now = new Date()
   const daysFromNow = (days: number, hour: number, minute = 0) => {
     const date = new Date(now)
@@ -142,6 +151,8 @@ async function main() {
         duration: 60,
         type: 'PRESENTIAL',
         status: 'REALIZADO',
+        workplaceId: clinica.id,
+        attendanceType: 'CLINIC',
         subjective: 'Paciente relata melhora da dor lombar. EVA 4/10.',
         objective:
           'Teste de Lasègue negativo bilateralmente. Força muscular 4/5 em flexores de tronco.',
@@ -155,6 +166,8 @@ async function main() {
         duration: 60,
         type: 'PRESENTIAL',
         status: 'REALIZADO',
+        workplaceId: clinica.id,
+        attendanceType: 'CLINIC',
         subjective: 'Sem queixas de dor em repouso. Dor leve ao esforço (EVA 2/10).',
         objective: 'Mobilidade lombar em 80% do esperado para a idade. Sem sinais neurológicos.',
         assessment: 'Alta funcional próxima. Considerar espaçamento das sessões.',
@@ -167,6 +180,8 @@ async function main() {
         duration: 50,
         type: 'PRESENTIAL',
         status: 'REALIZADO',
+        workplaceId: clinica.id,
+        attendanceType: 'CLINIC',
         subjective: 'Paciente tolerou bem o treino e relata confiança maior para subir escadas.',
         objective: 'ADM de joelho em 120 graus, sem edema. Controle excêntrico melhorado.',
         assessment: 'Boa progressão pós-LCA. Liberar exercícios funcionais com cautela.',
@@ -179,6 +194,8 @@ async function main() {
         duration: 45,
         type: 'HOME_CARE',
         status: 'AGENDADO',
+        workplaceId: particular.id,
+        attendanceType: 'HOME_CARE',
         subjective: 'Paciente solicita foco em analgesia e mobilidade global.',
         plan: 'Sessão domiciliar com recursos manuais e orientação de exercícios leves.',
       },
@@ -189,6 +206,8 @@ async function main() {
         duration: 50,
         type: 'PRESENTIAL',
         status: 'AGENDADO',
+        workplaceId: clinica.id,
+        attendanceType: 'CLINIC',
         plan: 'Reavaliação funcional e progressão do treino de força.',
       },
       {
@@ -198,6 +217,8 @@ async function main() {
         duration: 60,
         type: 'PRESENTIAL',
         status: 'CANCELADO',
+        workplaceId: clinica.id,
+        attendanceType: 'CLINIC',
         subjective: 'Paciente em viagem, solicitou reagendamento.',
         plan: 'Remarcar após retorno à rotina.',
       },
@@ -207,6 +228,7 @@ async function main() {
   console.log('Seed concluído')
   console.log(`Usuário demo: ${demoEmail} / ${demoPassword}`)
   console.log(`Pacientes: ${gervasio.name}, ${carla.name}, ${rafael.name}`)
+  console.log(`Locais: ${clinica.name}, ${particular.name}`)
 }
 
 main()

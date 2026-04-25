@@ -69,6 +69,21 @@ enum CalendarSyncStatus {
   REMOVED
 }
 
+enum WorkplaceKind {
+  OWN_CLINIC
+  PARTNER_CLINIC
+  PARTICULAR
+  ONLINE
+}
+
+enum AttendanceType {
+  CLINIC
+  HOME_CARE
+  HOSPITAL
+  CORPORATE
+  ONLINE
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -84,6 +99,7 @@ model User {
   emailMessages       EmailMessage[]
   calendarConnections CalendarConnection[]
   calendarEventLinks  CalendarEventLink[]
+  workplaces          Workplace[]
 }
 
 model Patient {
@@ -135,9 +151,11 @@ model Session {
   patientId  String
   date       DateTime
   duration   Int
-  type       SessionType   @default(PRESENTIAL)
-  status     SessionStatus @default(AGENDADO)
-  isActive   Boolean       @default(true)
+  type           SessionType    @default(PRESENTIAL)
+  status         SessionStatus  @default(AGENDADO)
+  workplaceId    String?
+  attendanceType AttendanceType?
+  isActive       Boolean        @default(true)
   subjective String?
   objective  String?
   assessment String?
@@ -147,6 +165,7 @@ model Session {
 
   user               User                @relation(fields: [userId], references: [id])
   patient            Patient             @relation(fields: [patientId], references: [id])
+  workplace          Workplace?          @relation(fields: [workplaceId], references: [id])
   emailMessages      EmailMessage[]
   calendarEventLinks CalendarEventLink[]
 
@@ -154,6 +173,27 @@ model Session {
   @@index([userId, patientId])
   @@index([userId, date])
   @@index([userId, status])
+  @@index([userId, isActive])
+}
+
+model Workplace {
+  id                    String         @id @default(cuid())
+  userId                String
+  name                  String
+  kind                  WorkplaceKind
+  defaultAttendanceType AttendanceType
+  address               String?
+  defaultSessionPrice   Decimal?       @db.Decimal(10, 2)
+  defaultCommissionPct  Decimal?       @db.Decimal(5, 2)
+  notes                 String?
+  isActive              Boolean        @default(true)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id])
+  sessions Session[]
+
+  @@index([userId])
   @@index([userId, isActive])
 }
 

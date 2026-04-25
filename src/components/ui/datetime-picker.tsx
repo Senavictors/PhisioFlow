@@ -118,12 +118,15 @@ export function DateTimePicker({
   const [viewYear, setViewYear] = useState(fallback.year)
   const [viewMonth, setViewMonth] = useState(fallback.month)
 
+  // Sync calendar view to the selected value when the picker opens
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (open && parsed) {
       setViewYear(parsed.year)
       setViewMonth(parsed.month)
     }
   }, [open, parsed])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (!open) return

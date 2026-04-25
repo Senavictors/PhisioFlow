@@ -1,5 +1,11 @@
 import { prisma } from '@/lib/prisma'
-import type { Prisma, SessionStatus, SessionType, TherapyArea } from '@/generated/prisma/client'
+import type {
+  AttendanceType,
+  Prisma,
+  SessionStatus,
+  SessionType,
+  TherapyArea,
+} from '@/generated/prisma/client'
 
 const sessionInclude = {
   patient: {
@@ -14,6 +20,9 @@ const sessionInclude = {
       city: true,
       email: true,
     },
+  },
+  workplace: {
+    select: { id: true, name: true },
   },
   calendarEventLinks: {
     where: { provider: 'GOOGLE' },
@@ -38,6 +47,8 @@ export interface SessionCreateInput {
   duration: number
   type: SessionType
   status: SessionStatus
+  workplaceId?: string | null
+  attendanceType?: AttendanceType | null
   subjective?: string | null
   objective?: string | null
   assessment?: string | null
@@ -49,6 +60,8 @@ export interface SessionUpdateInput {
   duration?: number
   type?: SessionType
   status?: SessionStatus
+  workplaceId?: string | null
+  attendanceType?: AttendanceType | null
   subjective?: string | null
   objective?: string | null
   assessment?: string | null

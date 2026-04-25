@@ -24,6 +24,10 @@ export const createSessionDTO = z.object({
     .max(240, 'Duração máxima de 240 minutos'),
   type: z.enum(['PRESENTIAL', 'HOME_CARE']).default('PRESENTIAL'),
   status: z.enum(['AGENDADO', 'REALIZADO', 'CANCELADO']).default('AGENDADO'),
+  workplaceId: z.string().trim().optional(),
+  attendanceType: z
+    .enum(['CLINIC', 'HOME_CARE', 'HOSPITAL', 'CORPORATE', 'ONLINE'])
+    .optional(),
   subjective: optionalText,
   objective: optionalText,
   assessment: optionalText,
@@ -41,6 +45,10 @@ export const updateSessionDTO = z.object({
     .optional(),
   type: z.enum(['PRESENTIAL', 'HOME_CARE']).optional(),
   status: z.enum(['AGENDADO', 'REALIZADO', 'CANCELADO']).optional(),
+  workplaceId: z.string().trim().optional(),
+  attendanceType: z
+    .enum(['CLINIC', 'HOME_CARE', 'HOSPITAL', 'CORPORATE', 'ONLINE'])
+    .optional(),
   subjective: optionalText,
   objective: optionalText,
   assessment: optionalText,
