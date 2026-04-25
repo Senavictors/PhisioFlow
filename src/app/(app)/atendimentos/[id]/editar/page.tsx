@@ -8,13 +8,6 @@ import {
   SessionNotFoundError,
 } from '@/server/modules/sessions/application/get-session'
 
-const AREA_LABELS: Record<string, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Fisioterapia Motora',
-  AESTHETIC: 'Fisioterapia Estética',
-  HOME_CARE: 'Atendimento Domiciliar',
-}
-
 async function loadSession(id: string, userId: string) {
   try {
     return await getSessionUseCase(id, userId)
@@ -66,8 +59,7 @@ export default async function EditarAtendimentoPage({
           <div className="flex items-center gap-2 self-start rounded-full bg-primary-soft px-3.5 py-2">
             <ClipboardEdit className="h-4 w-4 text-primary" />
             <span className="font-body text-[12px] font-semibold text-primary-soft-fg">
-              {clinicalSession.patient.name} •{' '}
-              {AREA_LABELS[clinicalSession.patient.area] ?? clinicalSession.patient.area}
+              {clinicalSession.patient.name}
             </span>
           </div>
         </div>
@@ -78,15 +70,16 @@ export default async function EditarAtendimentoPage({
         patient={{
           id: clinicalSession.patient.id,
           name: clinicalSession.patient.name,
-          area: clinicalSession.patient.area,
           email: clinicalSession.patient.email,
         }}
         initialValues={{
           id: clinicalSession.id,
           date: clinicalSession.date,
           duration: clinicalSession.duration,
-          type: clinicalSession.type,
+          treatmentPlanId: clinicalSession.treatmentPlanId,
           status: clinicalSession.status,
+          workplaceId: clinicalSession.workplaceId,
+          attendanceType: clinicalSession.attendanceType,
           subjective: clinicalSession.subjective,
           objective: clinicalSession.objective,
           assessment: clinicalSession.assessment,

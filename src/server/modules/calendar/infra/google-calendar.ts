@@ -3,6 +3,7 @@ import 'server-only'
 import { google } from 'googleapis'
 import type { OAuth2Client } from 'google-auth-library'
 import type { SessionWithPatient } from '@/server/modules/sessions/infra/session.repository'
+import { ATTENDANCE_TYPE_LABELS } from '@/lib/clinical-labels'
 
 const APP_TIME_ZONE = 'America/Sao_Paulo'
 
@@ -22,7 +23,7 @@ function getCalendarApi(auth: OAuth2Client) {
 }
 
 function buildLocation(session: SessionWithPatient) {
-  if (session.type !== 'HOME_CARE') return undefined
+  if (session.attendanceType !== 'HOME_CARE') return undefined
 
   return [session.patient.address, session.patient.neighborhood, session.patient.city]
     .filter(Boolean)
@@ -38,7 +39,7 @@ function buildEventResource(session: SessionWithPatient) {
     summary: `Atendimento - ${session.patient.name}`,
     description: [
       'Evento sincronizado pelo PhysioFlow.',
-      `Tipo: ${session.type === 'HOME_CARE' ? 'Domiciliar' : 'Presencial'}`,
+      `Modalidade: ${ATTENDANCE_TYPE_LABELS[session.attendanceType] ?? session.attendanceType}`,
       `Status: ${session.status}`,
     ].join('\n'),
     location,

@@ -9,6 +9,27 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 15 — Plano de Tratamento**
+  - Modelo `TreatmentPlan` com `area`, `specialties`, `attendanceType`, `workplaceId`,
+    `pricingModel`, status e campos preparatórios de cobrança por sessão/pacote
+  - Enums `Specialty`, `PricingModel` e `PlanStatus`; enum `TherapyArea` expandido para
+    áreas clínicas atuais
+  - Migrations `phase15a_treatment_plans` e `phase15b_drop_legacy_fields` com backfill
+    de planos legados, vínculo de sessões existentes e remoção de `Patient.area`,
+    `Session.type` e `SessionType`
+  - Módulo `treatment-plans` com use cases, repository, DTOs Zod e testes unitários
+  - Endpoints REST:
+    `GET/POST /api/patients/:id/treatment-plans`,
+    `GET/PUT/DELETE /api/treatment-plans/:id`,
+    `POST /api/treatment-plans/:id/pause|resume|complete`
+  - Ficha do paciente com seção "Planos de tratamento", cards com contagem de sessões e
+    ações de editar, pausar, retomar, concluir e cancelar
+  - Páginas `/pacientes/:id/planos/novo` e `/pacientes/:id/planos/:planId/editar`
+  - `SessionForm` com seletor de plano ativo ou atendimento avulso, herdando local e
+    modalidade do plano quando selecionado
+  - Seed demo com paciente multi-modalidade, paciente de estética domiciliar e paciente
+    com sessões avulsas
+
 - **Phase 14 — Locais de Trabalho**
   - Enum `WorkplaceKind` (`OWN_CLINIC`, `PARTNER_CLINIC`, `PARTICULAR`, `ONLINE`)
   - Enum `AttendanceType` (`CLINIC`, `HOME_CARE`, `HOSPITAL`, `CORPORATE`, `ONLINE`)
@@ -44,14 +65,14 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Fixed
 
-  - Sidebar mobile: `useEffect` corrigido com `useRef` de pathname — o menu não fecha mais
-    imediatamente ao ser aberto; fecha apenas após navegação bem-sucedida
-  - Selects nativos substituídos por `ThemedSelect` em: `PatientFilters`, `DocumentFilters`,
-    `SessionForm` (Tipo, Status), `PatientForm` (Área, Classificação, Prioridade),
-    `NovoDocumentoModal` (Paciente, Tipo), `GoogleCalendarSettingsCard` (Agenda padrão)
-  - Input `datetime-local` e `date` substituídos por `DateTimePicker` em `SessionForm` e
-    `PatientForm`
-  - Emoji 👋 removido da saudação do dashboard
+- Sidebar mobile: `useEffect` corrigido com `useRef` de pathname — o menu não fecha mais
+  imediatamente ao ser aberto; fecha apenas após navegação bem-sucedida
+- Selects nativos substituídos por `ThemedSelect` em: `PatientFilters`, `DocumentFilters`,
+  `SessionForm` (Tipo, Status), `PatientForm` (Área, Classificação, Prioridade),
+  `NovoDocumentoModal` (Paciente, Tipo), `GoogleCalendarSettingsCard` (Agenda padrão)
+- Input `datetime-local` e `date` substituídos por `DateTimePicker` em `SessionForm` e
+  `PatientForm`
+- Emoji 👋 removido da saudação do dashboard
 
 - **Phase 10 — Edição SOAP e Agenda em Calendário**
   - `SessionForm` refatorado para suportar `mode="create" | "edit"` com `initialValues`,
@@ -175,6 +196,10 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Changed
 
+- Pacientes não têm mais área terapêutica própria; filtros e badges usam planos ativos.
+- Sessões usam `attendanceType` para modalidade e `treatmentPlanId` opcional para vínculo
+  clínico; e-mails, Google Calendar, agenda, dashboard e documentos foram atualizados para
+  esse modelo.
 - Phase 3 passou a criar e editar prontuário base junto com o cadastro do paciente
 - Datas de nascimento agora usam helpers UTC-safe para evitar drift de fuso
 - E-mail do paciente passou a ser validado como único por fisioterapeuta entre registros ativos

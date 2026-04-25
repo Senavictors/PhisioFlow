@@ -4,6 +4,18 @@
 
 ## Fase Atual
 
+**Phase 15 — Plano de Tratamento concluída**
+Modelo `TreatmentPlan` criado com `TherapyArea` expandido, enums `Specialty`,
+`PricingModel` e `PlanStatus`, vínculo opcional de `Session.treatmentPlanId` e backfill
+SQL em duas migrations (`phase15a_treatment_plans` e `phase15b_drop_legacy_fields`).
+`Patient.area`, `Session.type` e `SessionType` foram removidos; `Session.workplaceId` e
+`Session.attendanceType` agora são obrigatórios. Módulo `treatment-plans` completo com
+CRUD/status REST, use cases e testes. Ficha do paciente ganhou seção "Planos de
+tratamento", páginas de novo/editar plano, `SessionForm` ganhou seletor de plano/avulso,
+agenda/e-mails/Google Calendar/documentos/dashboard passaram a usar `attendanceType` e
+área do plano. Seed demo mostra paciente com dois planos, paciente com estética domiciliar
+e paciente com sessões avulsas.
+
 **Phase 14 — Locais de Trabalho concluída**
 Enum `WorkplaceKind` (`OWN_CLINIC`, `PARTNER_CLINIC`, `PARTICULAR`, `ONLINE`) e enum
 `AttendanceType` (`CLINIC`, `HOME_CARE`, `HOSPITAL`, `CORPORATE`, `ONLINE`) adicionados.
@@ -54,16 +66,16 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-**Phase 15 — Plano de Tratamento** — [task file](tasks/phase-15-treatment-plans.md)
-Modelo `TreatmentPlan` (1 paciente → N planos), expansão de `TherapyArea`, novo enum
-`Specialty`. Backfill cria plano legado por paciente. Remove `Patient.area` e
-`Session.type` (campos legados que coexistiram com os novos desde a Phase 14).
+**Phase 16 — Pagamentos** — [task file](tasks/phase-16-payments.md)
+Introduzir o financeiro real (`Payment`), snapshot `expectedFee` por sessão, cobranças
+avulsas e pacotes vinculados a `TreatmentPlan`.
 
 Sequência restante do ciclo "Multi-modalidade + Financeiro":
-- **Phase 16** — [Pagamentos](tasks/phase-16-payments.md)
+
 - **Phase 17** — [Dashboard financeiro](tasks/phase-17-finance-dashboard.md)
 
 Pendências operacionais:
+
 - Validar integrações em ambiente real (Phase 11/12) e preparar deploy na Vercel
 - Configurar `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALENDAR_REDIRECT_URI`
   e `INTEGRATION_ENCRYPTION_KEY` (esta última gerada com `openssl rand -base64 32`)
@@ -85,7 +97,6 @@ Pendências operacionais:
 
 ### Tasks planejadas
 
-- `.docs/tasks/phase-15-treatment-plans.md` — Plano de tratamento e multi-modalidade
 - `.docs/tasks/phase-16-payments.md` — Pagamentos e cobrança (avulso e pacote)
 - `.docs/tasks/phase-17-finance-dashboard.md` — Dashboard financeiro (recebido vs previsto)
 - `.docs/decisions/ADR-005-multi-modalidade-financeiro.md` — Decisão proposta para
@@ -94,6 +105,7 @@ Pendências operacionais:
 ### Tasks já concluídas (referência)
 
 - `.docs/tasks/phase-14-workplaces.md` — Locais de trabalho (`Workplace`, `AttendanceType`, CRUD + UI)
+- `.docs/tasks/phase-15-treatment-plans.md` — Plano de tratamento e multi-modalidade
 - `.docs/tasks/phase-9-ux-polish.md` — Polimentos visuais e de microinteração
 - `.docs/tasks/phase-10-clinical-agenda-flow.md` — Edição SOAP e visualização mensal da agenda
 - `.docs/tasks/phase-11-email-notifications.md` — Gmail App Password e envios
@@ -135,6 +147,16 @@ Pendências operacionais:
   - Componentes `SessionCard`, `StatusBadge` e `SessionForm`
   - Seed demo com histórico, agendamentos e atendimento domiciliar
   - Testes unitários cobrindo create/list/update do módulo
+- **Planos de Tratamento (Phase 15)**:
+  - Modelo `TreatmentPlan` com área, especialidades, modalidade, local, status e modelo
+    de cobrança preparatório para a Phase 16
+  - `POST/GET /api/patients/:id/treatment-plans`, `GET/PUT/DELETE /api/treatment-plans/:id`
+    e ações `pause`, `resume`, `complete`
+  - Ficha do paciente com cards de planos e ações de editar/pausar/concluir/cancelar
+  - Formulário de plano em `/pacientes/:id/planos/novo` e `/pacientes/:id/planos/:planId/editar`
+  - `SessionForm` com seletor de plano ativo ou atendimento avulso
+  - Filtros de pacientes/sessões por área usando planos ativos/vínculo de plano
+  - Seed demo com multi-modalidade e sessões avulsas
 - **Logística Domiciliar (Phase 8)**:
   - Enum `HomeCarePriority` + campos `address`, `neighborhood`, `city`, `homeCareNotes`, `homeCarePriority` no modelo `Patient` (migration `phase8_homecare_logistics`)
   - `PUT /api/patients/:id` aceita os novos campos via DTO Zod atualizado
@@ -185,9 +207,12 @@ Pendências operacionais:
 ## Modelos de Banco
 
 - `User` — id, email, name, password, createdAt, updatedAt
-- `Patient` — cadastro clínico base, classificação, área terapêutica, observações, endereço (address, neighborhood, city), homeCareNotes, homeCarePriority, `isActive`
+- `Patient` — cadastro clínico base, classificação, observações, endereço (address, neighborhood, city), homeCareNotes, homeCarePriority, `isActive`
 - `ClinicalRecord` — prontuário inicial vinculado 1:1 ao paciente
-- `Session` — atendimento clínico com data, duração, tipo, status e campos SOAP
+- `TreatmentPlan` — plano/modalidade clínica do paciente com área, especialidades,
+  local, modalidade, status e modelo de cobrança
+- `Session` — atendimento clínico com data, duração, status, plano opcional, local,
+  modalidade e campos SOAP
 - `Document` — metadados do documento gerado (tipo, título, período, patientId, userId), `isActive`
 - `CalendarConnection` — conexão Google Calendar por usuário, com tokens criptografados e agenda padrão
 - `CalendarEventLink` — vínculo entre uma sessão e um evento externo Google Calendar
@@ -205,6 +230,7 @@ Módulo `sessions` segue o mesmo padrão em `src/server/modules/sessions/`
 Módulo `documents` segue o mesmo padrão em `src/server/modules/documents/`
 Módulo `calendar` segue o mesmo padrão em `src/server/modules/calendar/`
 Módulo `workplaces` segue o mesmo padrão em `src/server/modules/workplaces/`
+Módulo `treatment-plans` segue o mesmo padrão em `src/server/modules/treatment-plans/`
 
 ## Pendências Conhecidas
 

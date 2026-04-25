@@ -8,6 +8,7 @@ import { sendEmailWithSettings } from '../infra/transporter'
 import { getSessionUseCase } from '@/server/modules/sessions/application/get-session'
 import { prisma } from '@/lib/prisma'
 import { formatDateLongPtBr, formatTimePtBr } from '@/lib/date'
+import { ATTENDANCE_TYPE_LABELS } from '@/lib/clinical-labels'
 
 interface SendSessionReminderInput {
   userId: string
@@ -42,18 +43,17 @@ export async function sendSessionReminderEmailUseCase(input: SendSessionReminder
 
   const dateLabel = formatDateLongPtBr(session.date)
   const timeLabel = formatTimePtBr(session.date)
-  const typeLabel = session.type === 'HOME_CARE' ? 'atendimento domiciliar' : 'atendimento presencial'
+  const modalityLabel = ATTENDANCE_TYPE_LABELS[session.attendanceType] ?? session.attendanceType
+  const typeLabel = `atendimento ${modalityLabel.toLowerCase()}`
 
   const addressLine =
-    session.type === 'HOME_CARE'
+    session.attendanceType === 'HOME_CARE'
       ? [patient.address, patient.neighborhood, patient.city].filter(Boolean).join(', ')
       : ''
 
   const subject = input.subject?.trim() || `Lembrete: ${typeLabel} em ${dateLabel}`
 
-  const introBody =
-    input.message?.trim() ||
-    `Passando para confirmar o seu ${typeLabel} agendado.`
+  const introBody = input.message?.trim() || `Passando para confirmar o seu ${typeLabel} agendado.`
 
   const lines: string[] = [
     `Olá, ${patient.name}!`,

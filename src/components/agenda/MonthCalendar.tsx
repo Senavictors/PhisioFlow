@@ -10,7 +10,7 @@ type CalendarSession = {
   id: string
   date: Date | string
   duration: number
-  type: 'PRESENTIAL' | 'HOME_CARE'
+  attendanceType: string
   status: 'AGENDADO' | 'REALIZADO' | 'CANCELADO'
   subjective?: string | null
   objective?: string | null
@@ -19,7 +19,6 @@ type CalendarSession = {
   patient: {
     id: string
     name: string
-    area?: string
     homeCarePriority?: string | null
     address?: string | null
     neighborhood?: string | null
@@ -154,7 +153,7 @@ export function MonthCalendar({
           {days.map((day) => {
             const sessions = sessionsByDay[day.key] ?? []
             const total = sessions.length
-            const hasHomeCare = sessions.some((s) => s.type === 'HOME_CARE')
+            const hasHomeCare = sessions.some((s) => s.attendanceType === 'HOME_CARE')
             const isToday = day.key === todayKey
             const isSelected = day.key === selectedKey
 

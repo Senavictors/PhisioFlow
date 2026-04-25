@@ -13,21 +13,33 @@ const optionalDateTimeString = z
 
 const optionalText = z.string().trim().optional()
 const optionalBoolean = z.coerce.boolean().optional()
+const attendanceTypeEnum = z.enum(['CLINIC', 'HOME_CARE', 'HOSPITAL', 'CORPORATE', 'ONLINE'])
+
+const therapyAreaEnum = z.enum([
+  'ORTOPEDICA',
+  'NEUROLOGICA',
+  'CARDIORESPIRATORIA',
+  'ESTETICA',
+  'ESPORTIVA',
+  'PELVICA',
+  'PEDIATRICA',
+  'GERIATRICA',
+  'PREVENTIVA',
+  'OUTRA',
+])
 
 export const createSessionDTO = z.object({
   patientId: z.string().trim().min(1, 'Paciente é obrigatório'),
+  treatmentPlanId: z.string().trim().optional(),
   date: requiredDateTimeString,
   duration: z.coerce
     .number()
     .int('Duração deve ser um número inteiro')
     .min(15, 'Duração mínima de 15 minutos')
     .max(240, 'Duração máxima de 240 minutos'),
-  type: z.enum(['PRESENTIAL', 'HOME_CARE']).default('PRESENTIAL'),
   status: z.enum(['AGENDADO', 'REALIZADO', 'CANCELADO']).default('AGENDADO'),
   workplaceId: z.string().trim().optional(),
-  attendanceType: z
-    .enum(['CLINIC', 'HOME_CARE', 'HOSPITAL', 'CORPORATE', 'ONLINE'])
-    .optional(),
+  attendanceType: attendanceTypeEnum.optional(),
   subjective: optionalText,
   objective: optionalText,
   assessment: optionalText,
@@ -36,6 +48,7 @@ export const createSessionDTO = z.object({
 })
 
 export const updateSessionDTO = z.object({
+  treatmentPlanId: z.string().trim().nullish(),
   date: optionalDateTimeString,
   duration: z.coerce
     .number()
@@ -43,12 +56,9 @@ export const updateSessionDTO = z.object({
     .min(15, 'Duração mínima de 15 minutos')
     .max(240, 'Duração máxima de 240 minutos')
     .optional(),
-  type: z.enum(['PRESENTIAL', 'HOME_CARE']).optional(),
   status: z.enum(['AGENDADO', 'REALIZADO', 'CANCELADO']).optional(),
   workplaceId: z.string().trim().optional(),
-  attendanceType: z
-    .enum(['CLINIC', 'HOME_CARE', 'HOSPITAL', 'CORPORATE', 'ONLINE'])
-    .optional(),
+  attendanceType: attendanceTypeEnum.optional(),
   subjective: optionalText,
   objective: optionalText,
   assessment: optionalText,
@@ -58,9 +68,10 @@ export const updateSessionDTO = z.object({
 
 export const listSessionsDTO = z.object({
   patientId: z.string().trim().optional(),
+  treatmentPlanId: z.string().trim().optional(),
   status: z.enum(['AGENDADO', 'REALIZADO', 'CANCELADO']).optional(),
-  type: z.enum(['PRESENTIAL', 'HOME_CARE']).optional(),
-  area: z.enum(['PILATES', 'MOTOR', 'AESTHETIC', 'HOME_CARE']).optional(),
+  attendanceType: attendanceTypeEnum.optional(),
+  area: therapyAreaEnum.optional(),
   from: optionalDateTimeString,
   to: optionalDateTimeString,
   page: z.coerce.number().int().min(1).default(1),

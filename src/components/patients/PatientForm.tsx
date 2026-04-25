@@ -13,7 +13,6 @@ interface PatientFormData {
   phone: string
   email: string
   classification: string
-  area: string
   notes: string
   mainComplaint: string
   medicalHistory: string
@@ -35,13 +34,6 @@ const HOME_CARE_PRIORITIES = [
   { value: 'NORMAL', label: 'Normal' },
   { value: 'HIGH', label: 'Prioritário' },
   { value: 'URGENT', label: 'Urgente' },
-]
-
-const AREAS = [
-  { value: 'PILATES', label: 'Pilates' },
-  { value: 'MOTOR', label: 'Fisioterapia Motora' },
-  { value: 'AESTHETIC', label: 'Fisioterapia Estética' },
-  { value: 'HOME_CARE', label: 'Atendimento Domiciliar' },
 ]
 
 const CLASSIFICATIONS = [
@@ -88,7 +80,6 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
     phone: initialData?.phone ?? '',
     email: initialData?.email ?? '',
     classification: initialData?.classification ?? 'STANDARD',
-    area: initialData?.area ?? '',
     notes: initialData?.notes ?? '',
     mainComplaint: initialData?.mainComplaint ?? '',
     medicalHistory: initialData?.medicalHistory ?? '',
@@ -208,15 +199,6 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
         </h2>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Field label="Área terapêutica *" error={errors.area}>
-            <ThemedSelect
-              value={form.area}
-              onChange={(next) => set('area', next)}
-              options={[{ value: '', label: 'Selecionar área' }, ...AREAS]}
-              ariaLabel="Área terapêutica"
-            />
-          </Field>
-
           <Field label="Classificação" error={errors.classification}>
             <ThemedSelect
               value={form.classification}
@@ -284,11 +266,6 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
           <h2 className="font-display font-bold text-[16px] text-foreground">
             Logística Domiciliar
           </h2>
-          {form.area === 'HOME_CARE' && (
-            <span className="rounded-full bg-warning-soft px-2.5 py-1 font-body text-[11px] font-semibold text-warning">
-              HOME CARE
-            </span>
-          )}
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

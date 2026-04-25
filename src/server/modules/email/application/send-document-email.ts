@@ -31,6 +31,8 @@ export async function sendDocumentEmailUseCase(input: SendDocumentEmailInput) {
     throw new PatientEmailMissingError()
   }
 
+  const primaryPlan = document.patient.treatmentPlans?.[0] ?? null
+
   const pdf = await renderDocumentPDF({
     type: document.type,
     userName: document.user.name,
@@ -38,7 +40,7 @@ export async function sendDocumentEmailUseCase(input: SendDocumentEmailInput) {
       name: document.patient.name,
       birthDate: document.patient.birthDate,
       phone: document.patient.phone,
-      area: document.patient.area,
+      area: primaryPlan?.area,
       classification: document.patient.classification,
       clinicalRecord: document.patient.clinicalRecord,
     },

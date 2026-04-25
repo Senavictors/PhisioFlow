@@ -15,7 +15,6 @@ const TYPE_OPTIONS = [
 interface Patient {
   id: string
   name: string
-  area: string
   email?: string | null
 }
 
@@ -106,9 +105,7 @@ export function NovoDocumentoModal({
         })
         if (!emailRes.ok) {
           const errData = await emailRes.json().catch(() => ({}))
-          setWarning(
-            `PDF gerado, mas o e-mail falhou: ${errData.message ?? 'erro desconhecido'}`
-          )
+          setWarning(`PDF gerado, mas o e-mail falhou: ${errData.message ?? 'erro desconhecido'}`)
           return
         }
       }
@@ -179,8 +176,7 @@ export function NovoDocumentoModal({
 
           <div className="space-y-1.5">
             <label className="flex items-center gap-1.5 font-body text-[13px] font-semibold text-foreground">
-              Período{' '}
-              <span className="font-normal text-muted-foreground">(opcional)</span>
+              Período <span className="font-normal text-muted-foreground">(opcional)</span>
               <PeriodInfoTooltip />
             </label>
             <input

@@ -20,6 +20,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ message: 'Documento não encontrado' }, { status: 404 })
     }
 
+    const primaryPlan = doc.patient.treatmentPlans?.[0] ?? null
+
     const buffer = await renderDocumentPDF({
       type: doc.type,
       userName: doc.user?.name ?? 'Fisioterapeuta',
@@ -27,7 +29,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         name: doc.patient.name,
         birthDate: doc.patient.birthDate,
         phone: doc.patient.phone ?? undefined,
-        area: doc.patient.area,
+        area: primaryPlan?.area,
         classification: doc.patient.classification,
         clinicalRecord: doc.patient.clinicalRecord ?? undefined,
       },

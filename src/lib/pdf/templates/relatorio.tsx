@@ -1,13 +1,7 @@
 import React from 'react'
 import { Document, Page, View, Text } from '@react-pdf/renderer'
 import { baseStyles } from '../styles'
-
-const AREA_LABELS: Record<string, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Motora',
-  AESTHETIC: 'Estética',
-  HOME_CARE: 'Domiciliar',
-}
+import { THERAPY_AREA_LABELS } from '@/lib/clinical-labels'
 
 const STATUS_LABELS: Record<string, string> = {
   REALIZADO: 'Realizado',
@@ -29,7 +23,7 @@ interface RelatorioData {
   patient: {
     name: string
     birthDate?: Date | string | null
-    area: string
+    area?: string | null
   }
   period?: string
   sessions: Session[]
@@ -76,7 +70,11 @@ export function RelatorioTemplate({ data }: { data: RelatorioData }) {
           )}
           <View style={baseStyles.row}>
             <Text style={baseStyles.label}>Área Terapêutica:</Text>
-            <Text style={baseStyles.value}>{AREA_LABELS[patient.area] ?? patient.area}</Text>
+            <Text style={baseStyles.value}>
+              {patient.area
+                ? (THERAPY_AREA_LABELS[patient.area] ?? patient.area)
+                : 'Sem plano vinculado'}
+            </Text>
           </View>
           {period && (
             <View style={baseStyles.row}>
@@ -140,9 +138,7 @@ export function RelatorioTemplate({ data }: { data: RelatorioData }) {
           <View style={baseStyles.signatureBlock}>
             <Text style={baseStyles.signatureName}>{userName}</Text>
             <Text style={baseStyles.signatureRole}>Fisioterapeuta Responsável</Text>
-            <Text style={[baseStyles.signatureRole, { marginTop: 2 }]}>
-              {formatDate(emitedAt)}
-            </Text>
+            <Text style={[baseStyles.signatureRole, { marginTop: 2 }]}>{formatDate(emitedAt)}</Text>
           </View>
         </View>
       </Page>

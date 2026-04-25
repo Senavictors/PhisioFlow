@@ -18,7 +18,7 @@ interface Patient {
   name: string
   birthDate?: Date | string | null
   phone?: string | null
-  area: string
+  area?: string | null
   classification: string
   clinicalRecord?: {
     mainComplaint?: string | null

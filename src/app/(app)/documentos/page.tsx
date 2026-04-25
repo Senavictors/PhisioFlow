@@ -17,7 +17,7 @@ interface Document {
   patient: {
     id: string
     name: string
-    area: string
+    treatmentPlans?: Array<{ id: string; area: string; specialties: string[] }>
   }
 }
 
@@ -122,9 +122,7 @@ export default function DocumentosPage() {
       .catch(() => setEmailSettings(null))
   }, [])
 
-  const emailReady = Boolean(
-    emailSettings?.isEnabled && emailSettings?.hasAppPassword
-  )
+  const emailReady = Boolean(emailSettings?.isEnabled && emailSettings?.hasAppPassword)
 
   return (
     <div className="space-y-6 sm:space-y-8">

@@ -6,8 +6,12 @@ const documentInclude = {
     select: {
       id: true,
       name: true,
-      area: true,
       classification: true,
+      treatmentPlans: {
+        where: { status: { in: ['ACTIVE', 'PAUSED'] } },
+        select: { id: true, area: true, specialties: true, status: true },
+        orderBy: { createdAt: 'desc' },
+      },
     },
   },
 } satisfies Prisma.DocumentInclude
@@ -79,6 +83,11 @@ export async function findDocumentForDownload(
       patient: {
         include: {
           clinicalRecord: true,
+          treatmentPlans: {
+            where: { status: { in: ['ACTIVE', 'PAUSED'] } },
+            select: { id: true, area: true, specialties: true, status: true },
+            orderBy: { createdAt: 'desc' },
+          },
           sessions: {
             where: {
               isActive: true,
@@ -91,6 +100,9 @@ export async function findDocumentForDownload(
                     },
                   }
                 : {}),
+            },
+            include: {
+              treatmentPlan: { select: { id: true, area: true, specialties: true } },
             },
             orderBy: { date: 'desc' },
             take: 20,

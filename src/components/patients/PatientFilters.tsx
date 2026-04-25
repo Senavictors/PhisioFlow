@@ -8,10 +8,16 @@ import { ThemedSelect } from '@/components/ui/themed-select'
 
 const AREAS = [
   { value: '', label: 'Todas as Áreas' },
-  { value: 'PILATES', label: 'Pilates' },
-  { value: 'MOTOR', label: 'Motora' },
-  { value: 'AESTHETIC', label: 'Estética' },
-  { value: 'HOME_CARE', label: 'Domiciliar' },
+  { value: 'ORTOPEDICA', label: 'Ortopedica' },
+  { value: 'NEUROLOGICA', label: 'Neurologica' },
+  { value: 'CARDIORESPIRATORIA', label: 'Cardiorrespiratoria' },
+  { value: 'ESTETICA', label: 'Estetica' },
+  { value: 'ESPORTIVA', label: 'Esportiva' },
+  { value: 'PELVICA', label: 'Pelvica' },
+  { value: 'PEDIATRICA', label: 'Pediatrica' },
+  { value: 'GERIATRICA', label: 'Geriatrica' },
+  { value: 'PREVENTIVA', label: 'Preventiva' },
+  { value: 'OUTRA', label: 'Outra' },
 ]
 
 const CLASSIFICATIONS = [

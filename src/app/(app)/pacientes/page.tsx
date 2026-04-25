@@ -59,7 +59,22 @@ async function PatientList({ searchParams }: { searchParams: SearchParams }) {
       </p>
       <div className="space-y-3">
         {patients.map((patient) => (
-          <PatientCard key={patient.id} patient={patient} />
+          <PatientCard
+            key={patient.id}
+            patient={{
+              id: patient.id,
+              name: patient.name,
+              phone: patient.phone,
+              birthDate: patient.birthDate ? patient.birthDate.toISOString() : null,
+              classification: patient.classification,
+              treatmentPlans: (patient.treatmentPlans ?? []).map((plan) => ({
+                id: plan.id,
+                area: plan.area,
+                specialties: plan.specialties,
+                status: plan.status,
+              })),
+            }}
+          />
         ))}
       </div>
     </div>

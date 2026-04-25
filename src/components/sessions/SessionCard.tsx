@@ -18,25 +18,33 @@ import {
   UserRound,
   X,
 } from 'lucide-react'
-import type { SessionStatus, SessionType } from '@/generated/prisma/client'
+import type { SessionStatus } from '@/generated/prisma/client'
 import { formatDateLongPtBr, formatTimePtBr } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
-import { SESSION_TYPE_LABELS } from '@/components/sessions/session-meta'
 import { CalendarSyncBadge } from '@/components/calendar/CalendarSyncBadge'
+import { ATTENDANCE_TYPE_LABELS, formatTreatmentPlanLabel } from '@/lib/clinical-labels'
 
 interface SessionCardProps {
   session: {
     id: string
     date: Date | string
     duration: number
-    type: SessionType
+    attendanceType: string
     status: SessionStatus
     subjective?: string | null
     objective?: string | null
     assessment?: string | null
     plan?: string | null
     workplace?: { id: string; name: string } | null
+    treatmentPlan?: {
+      id: string
+      area: string
+      specialties: string[]
+      attendanceType: string
+      status: string
+      pricingModel: string
+    } | null
     calendarEventLinks?: Array<{
       id: string
       status: string
@@ -114,6 +122,7 @@ export function SessionCard({
   const calendarLink = session.calendarEventLinks?.[0]
   const isScheduled = session.status === 'AGENDADO'
   const isSynced = calendarLink?.status === 'SYNCED'
+  const isHomeCare = session.attendanceType === 'HOME_CARE'
 
   useEffect(() => {
     if (allowStatusActions && isScheduled && !emailSettings) {
@@ -251,32 +260,35 @@ export function SessionCard({
             </Link>
 
             <div className="flex flex-wrap items-center gap-2">
-              {session.type === 'HOME_CARE' ? (
+              {isHomeCare ? (
                 <span className="rounded-full bg-accent-soft px-2.5 py-1 font-body text-[11px] font-semibold text-accent-soft-fg">
                   Domiciliar
                 </span>
               ) : null}
-              {session.type === 'HOME_CARE' && session.patient.homeCarePriority === 'URGENT' ? (
+              {isHomeCare && session.patient.homeCarePriority === 'URGENT' ? (
                 <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-1 font-body text-[11px] font-semibold uppercase tracking-wide text-white">
                   Urgente
                 </span>
-              ) : session.type === 'HOME_CARE' && session.patient.homeCarePriority === 'HIGH' ? (
+              ) : isHomeCare && session.patient.homeCarePriority === 'HIGH' ? (
                 <span className="rounded-full bg-warning-soft px-2.5 py-1 font-body text-[11px] font-semibold text-warning">
                   Prioritário
                 </span>
               ) : null}
+              <span className="rounded-full bg-muted px-2.5 py-1 font-body text-[11px] font-semibold text-muted-foreground">
+                {session.treatmentPlan ? formatTreatmentPlanLabel(session.treatmentPlan) : 'Avulso'}
+              </span>
               <StatusBadge status={session.status} />
               <CalendarSyncBadge status={calendarLink?.status} />
             </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-body text-[12px] text-muted-foreground">
               <span className="flex items-center gap-1.5">
-                {session.type === 'HOME_CARE' ? (
+                {isHomeCare ? (
                   <Home className="h-3.5 w-3.5" />
                 ) : (
                   <UserRound className="h-3.5 w-3.5" />
                 )}
-                {session.type === 'HOME_CARE' ? 'Atendimento domiciliar' : SESSION_TYPE_LABELS[session.type]}
+                {ATTENDANCE_TYPE_LABELS[session.attendanceType] ?? session.attendanceType}
               </span>
               {!showDate ? (
                 <span className="flex items-center gap-1.5">

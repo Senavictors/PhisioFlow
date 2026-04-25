@@ -1,6 +1,6 @@
-import type { PatientClassification, TherapyArea } from '@/generated/prisma/client'
+import type { PatientClassification } from '@/generated/prisma/client'
 
-export type { PatientClassification, TherapyArea }
+export type { PatientClassification }
 
 type OptionalStringInput = string | null | undefined
 
@@ -12,7 +12,6 @@ export interface Patient {
   phone: string | null
   email: string | null
   classification: PatientClassification
-  area: TherapyArea
   notes: string | null
   isActive: boolean
   createdAt: Date

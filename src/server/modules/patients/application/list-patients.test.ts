@@ -22,25 +22,28 @@ describe('listPatientsUseCase', () => {
   it('não mescla pacientes de userId diferente', async () => {
     mockList.mockResolvedValue([])
 
-    await listPatientsUseCase('user-b', { area: 'PILATES' })
+    await listPatientsUseCase('user-b', { area: 'ORTOPEDICA' })
 
-    expect(mockList).toHaveBeenCalledWith('user-b', expect.objectContaining({ area: 'PILATES' }))
+    expect(mockList).toHaveBeenCalledWith('user-b', expect.objectContaining({ area: 'ORTOPEDICA' }))
     expect(mockList).not.toHaveBeenCalledWith('user-a', expect.anything())
   })
 
   it('passa filtros de area e classification para o repositório', async () => {
     mockList.mockResolvedValue([])
 
-    await listPatientsUseCase('u1', { area: 'MOTOR', classification: 'PCD', search: 'Rafael' })
+    await listPatientsUseCase('u1', { area: 'ESTETICA', classification: 'PCD', search: 'Rafael' })
 
     expect(mockList).toHaveBeenCalledWith(
       'u1',
-      expect.objectContaining({ area: 'MOTOR', classification: 'PCD', search: 'Rafael' }),
+      expect.objectContaining({ area: 'ESTETICA', classification: 'PCD', search: 'Rafael' })
     )
   })
 
   it('retorna a lista devolvida pelo repositório', async () => {
-    const patients = [{ id: 'p1', name: 'João' }, { id: 'p2', name: 'Maria' }]
+    const patients = [
+      { id: 'p1', name: 'João' },
+      { id: 'p2', name: 'Maria' },
+    ]
     mockList.mockResolvedValue(patients as never)
 
     const result = await listPatientsUseCase('u1')

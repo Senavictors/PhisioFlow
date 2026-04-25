@@ -14,13 +14,25 @@ const optionalText = z.string().trim().optional()
 
 const homeCarePriorityEnum = z.enum(['NORMAL', 'HIGH', 'URGENT'])
 
+const therapyAreaEnum = z.enum([
+  'ORTOPEDICA',
+  'NEUROLOGICA',
+  'CARDIORESPIRATORIA',
+  'ESTETICA',
+  'ESPORTIVA',
+  'PELVICA',
+  'PEDIATRICA',
+  'GERIATRICA',
+  'PREVENTIVA',
+  'OUTRA',
+])
+
 export const createPatientDTO = z.object({
   name: z.string().trim().min(2, 'Nome deve ter ao menos 2 caracteres'),
   birthDate: optionalDateString,
   phone: optionalText,
   email: optionalEmail,
   classification: z.enum(['ELDERLY', 'PCD', 'POST_ACCIDENT', 'STANDARD']).default('STANDARD'),
-  area: z.enum(['PILATES', 'MOTOR', 'AESTHETIC', 'HOME_CARE']),
   notes: optionalText,
   mainComplaint: optionalText,
   medicalHistory: optionalText,
@@ -39,7 +51,6 @@ export const updatePatientDTO = z.object({
   phone: optionalText,
   email: optionalEmail,
   classification: z.enum(['ELDERLY', 'PCD', 'POST_ACCIDENT', 'STANDARD']).optional(),
-  area: z.enum(['PILATES', 'MOTOR', 'AESTHETIC', 'HOME_CARE']).optional(),
   notes: optionalText,
   mainComplaint: optionalText,
   medicalHistory: optionalText,
@@ -53,7 +64,7 @@ export const updatePatientDTO = z.object({
 })
 
 export const listPatientsDTO = z.object({
-  area: z.enum(['PILATES', 'MOTOR', 'AESTHETIC', 'HOME_CARE']).optional(),
+  area: therapyAreaEnum.optional(),
   classification: z.enum(['ELDERLY', 'PCD', 'POST_ACCIDENT', 'STANDARD']).optional(),
   search: z.string().trim().optional(),
 })

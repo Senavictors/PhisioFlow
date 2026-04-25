@@ -1,7 +1,12 @@
-import type { AttendanceType, SessionStatus, SessionType } from '@/generated/prisma/client'
+import type { AttendanceType, SessionStatus } from '@/generated/prisma/client'
 import { PatientNotFoundError } from '@/server/modules/patients/application/get-patient'
 import { findPatientById } from '@/server/modules/patients/infra/patient.repository'
 import { findDefaultWorkplace } from '@/server/modules/workplaces/infra/workplace.repository'
+import { findTreatmentPlanById } from '@/server/modules/treatment-plans/infra/treatment-plan.repository'
+import {
+  TreatmentPlanInactiveError,
+  TreatmentPlanNotFoundError,
+} from '@/server/modules/treatment-plans/domain/treatment-plan'
 import type { CreateSessionDTO } from '../http/session.dto'
 import { createSession } from '../infra/session.repository'
 import { assertSessionSchedule, normalizeSessionSoapInput } from '../domain/session'
@@ -21,27 +26,43 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
 
   let workplaceId = dto.workplaceId ?? null
   let attendanceType = (dto.attendanceType as AttendanceType | undefined) ?? null
+  let treatmentPlanId: string | null = null
+
+  if (dto.treatmentPlanId) {
+    const plan = await findTreatmentPlanById(dto.treatmentPlanId, userId)
+    if (!plan || plan.patientId !== dto.patientId) {
+      throw new TreatmentPlanNotFoundError()
+    }
+    if (plan.status === 'COMPLETED' || plan.status === 'CANCELED') {
+      throw new TreatmentPlanInactiveError()
+    }
+    treatmentPlanId = plan.id
+    if (!workplaceId) workplaceId = plan.workplaceId
+    if (!attendanceType) attendanceType = plan.attendanceType
+  }
 
   if (!workplaceId) {
     const defaultWorkplace = await findDefaultWorkplace(userId)
     if (defaultWorkplace) {
       workplaceId = defaultWorkplace.id
-      if (!attendanceType) {
-        attendanceType = defaultWorkplace.defaultAttendanceType
-      }
+      if (!attendanceType) attendanceType = defaultWorkplace.defaultAttendanceType
     }
   }
 
+  if (!workplaceId) {
+    throw new Error('Nenhum local de trabalho disponível para criar a sessão')
+  }
+
   if (!attendanceType) {
-    attendanceType = dto.type === 'HOME_CARE' ? 'HOME_CARE' : 'CLINIC'
+    attendanceType = 'CLINIC'
   }
 
   const createdSession = await createSession({
     userId,
     patientId: dto.patientId,
+    treatmentPlanId,
     date,
     duration: dto.duration,
-    type: dto.type as SessionType,
     status,
     workplaceId,
     attendanceType,

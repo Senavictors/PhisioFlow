@@ -1,13 +1,7 @@
 import React from 'react'
 import { Document, Page, View, Text } from '@react-pdf/renderer'
 import { baseStyles, COLORS } from '../styles'
-
-const AREA_LABELS: Record<string, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Motora',
-  AESTHETIC: 'Estética',
-  HOME_CARE: 'Domiciliar',
-}
+import { THERAPY_AREA_LABELS } from '@/lib/clinical-labels'
 
 const CLASS_LABELS: Record<string, string> = {
   ELDERLY: 'Idoso',
@@ -29,7 +23,7 @@ interface LaudoData {
   patient: {
     name: string
     birthDate?: Date | string | null
-    area: string
+    area?: string | null
     classification: string
     phone?: string | null
     clinicalRecord?: {
@@ -80,7 +74,11 @@ export function LaudoTemplate({ data }: { data: LaudoData }) {
           )}
           <View style={baseStyles.row}>
             <Text style={baseStyles.label}>Área Terapêutica:</Text>
-            <Text style={baseStyles.value}>{AREA_LABELS[patient.area] ?? patient.area}</Text>
+            <Text style={baseStyles.value}>
+              {patient.area
+                ? (THERAPY_AREA_LABELS[patient.area] ?? patient.area)
+                : 'Sem plano vinculado'}
+            </Text>
           </View>
           <View style={baseStyles.row}>
             <Text style={baseStyles.label}>Classificação:</Text>
@@ -132,7 +130,9 @@ export function LaudoTemplate({ data }: { data: LaudoData }) {
         {/* Evolução */}
         {sessions.length > 0 && (
           <View style={baseStyles.section}>
-            <Text style={baseStyles.sectionTitle}>Evolução Clínica ({sessions.length} sessões)</Text>
+            <Text style={baseStyles.sectionTitle}>
+              Evolução Clínica ({sessions.length} sessões)
+            </Text>
             {sessions.map((s, i) => (
               <View key={i} style={baseStyles.sessionCard}>
                 <Text style={baseStyles.sessionDate}>Sessão — {formatDate(s.date)}</Text>
@@ -171,9 +171,7 @@ export function LaudoTemplate({ data }: { data: LaudoData }) {
           <View style={baseStyles.signatureBlock}>
             <Text style={baseStyles.signatureName}>{userName}</Text>
             <Text style={baseStyles.signatureRole}>Fisioterapeuta Responsável</Text>
-            <Text style={[baseStyles.signatureRole, { marginTop: 2 }]}>
-              {formatDate(emitedAt)}
-            </Text>
+            <Text style={[baseStyles.signatureRole, { marginTop: 2 }]}>{formatDate(emitedAt)}</Text>
           </View>
         </View>
       </Page>

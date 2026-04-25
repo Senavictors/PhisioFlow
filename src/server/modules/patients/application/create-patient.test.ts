@@ -18,12 +18,11 @@ describe('createPatientUseCase', () => {
 
     const result = await createPatientUseCase('u1', {
       name: 'João Silva',
-      area: 'PILATES',
       classification: 'STANDARD',
     })
 
     expect(mockCreate).toHaveBeenCalledWith(
-      expect.objectContaining({ userId: 'u1', name: 'João Silva', area: 'PILATES' })
+      expect.objectContaining({ userId: 'u1', name: 'João Silva' })
     )
     expect(result).toBe(expected)
   })
@@ -33,7 +32,6 @@ describe('createPatientUseCase', () => {
 
     await createPatientUseCase('u1', {
       name: 'Maria',
-      area: 'MOTOR',
       classification: 'ELDERLY',
       birthDate: '1950-01-01',
     })
@@ -48,7 +46,6 @@ describe('createPatientUseCase', () => {
 
     await createPatientUseCase('u1', {
       name: 'Ana',
-      area: 'AESTHETIC',
       classification: 'STANDARD',
       email: '',
     })
@@ -61,7 +58,6 @@ describe('createPatientUseCase', () => {
 
     await createPatientUseCase('u1', {
       name: 'Lucas',
-      area: 'HOME_CARE',
       classification: 'POST_ACCIDENT',
       mainComplaint: 'Dor lombar persistente',
       allergies: 'Lactose',
@@ -83,7 +79,6 @@ describe('createPatientUseCase', () => {
     await expect(
       createPatientUseCase('u1', {
         name: 'Ana',
-        area: 'AESTHETIC',
         classification: 'STANDARD',
         email: 'ana@exemplo.com',
       })

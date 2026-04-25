@@ -1,6 +1,6 @@
 import type { CreatePatientDTO } from '../http/patient.dto'
 import { parseDateOnly } from '@/lib/date'
-import type { PatientClassification, TherapyArea } from '@/generated/prisma/client'
+import type { PatientClassification } from '@/generated/prisma/client'
 import {
   hasClinicalRecordContent,
   normalizeClinicalRecordInput,
@@ -36,7 +36,6 @@ export async function createPatientUseCase(userId: string, dto: CreatePatientDTO
     phone: toNullableText(dto.phone),
     email: normalizedEmail,
     classification: dto.classification as PatientClassification,
-    area: dto.area as TherapyArea,
     notes: toNullableText(dto.notes),
     clinicalRecord: hasClinicalRecordContent(clinicalRecord) ? clinicalRecord : undefined,
   })

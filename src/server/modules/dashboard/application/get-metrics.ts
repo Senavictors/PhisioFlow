@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import type { SessionStatus, SessionType, TherapyArea } from '@/generated/prisma/client'
+import type { SessionStatus } from '@/generated/prisma/client'
 
 const APP_TZ = 'America/Sao_Paulo'
 
@@ -18,8 +18,8 @@ function shortDayLabel(dateKey: string): string {
 export interface RecentSessionItem {
   id: string
   patientName: string
-  type: SessionType
-  area: TherapyArea
+  attendanceType: string
+  treatmentPlan: { area: string; specialties: string[] } | null
   date: string
   status: SessionStatus
   isHomeCare: boolean
@@ -89,12 +89,13 @@ export async function getDashboardMetrics(userId: string): Promise<DashboardMetr
       orderBy: { date: 'desc' },
       take: 5,
       include: {
-        patient: { select: { name: true, area: true } },
+        patient: { select: { name: true } },
+        treatmentPlan: { select: { area: true, specialties: true } },
       },
     }),
   ])
 
-  const recentPatientIds = patientsWithRecentSession.map(s => s.patientId)
+  const recentPatientIds = patientsWithRecentSession.map((s) => s.patientId)
   const patientsWithoutReturn = await prisma.patient.count({
     where: {
       userId,
@@ -103,25 +104,25 @@ export async function getDashboardMetrics(userId: string): Promise<DashboardMetr
     },
   })
 
-  const countByDay = new Map<string, number>(weekDayKeys.map(k => [k, 0]))
+  const countByDay = new Map<string, number>(weekDayKeys.map((k) => [k, 0]))
   for (const s of weekSessionsRaw) {
     const k = dayKey(s.date)
     if (countByDay.has(k)) countByDay.set(k, (countByDay.get(k) ?? 0) + 1)
   }
 
-  const weeklySessions = weekDayKeys.map(k => ({
+  const weeklySessions = weekDayKeys.map((k) => ({
     day: shortDayLabel(k),
     count: countByDay.get(k) ?? 0,
   }))
 
-  const recentSessions: RecentSessionItem[] = recentSessionsRaw.map(s => ({
+  const recentSessions: RecentSessionItem[] = recentSessionsRaw.map((s) => ({
     id: s.id,
     patientName: s.patient.name,
-    type: s.type,
-    area: s.patient.area,
+    attendanceType: s.attendanceType,
+    treatmentPlan: s.treatmentPlan,
     date: s.date.toISOString(),
     status: s.status,
-    isHomeCare: s.type === 'HOME_CARE',
+    isHomeCare: s.attendanceType === 'HOME_CARE',
   }))
 
   return { activePatients, sessionsToday, patientsWithoutReturn, weeklySessions, recentSessions }

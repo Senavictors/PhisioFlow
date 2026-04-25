@@ -1,19 +1,13 @@
 import { StatusBadge } from '@/components/sessions/StatusBadge'
-import type { SessionStatus, SessionType, TherapyArea } from '@/generated/prisma/client'
+import type { SessionStatus } from '@/generated/prisma/client'
 import { formatTimePtBr, formatDateLongPtBr } from '@/lib/date'
-
-const AREA_LABELS: Record<TherapyArea, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Motora',
-  AESTHETIC: 'Estética',
-  HOME_CARE: 'Domiciliar',
-}
+import { formatTreatmentPlanLabel } from '@/lib/clinical-labels'
 
 interface RecentSessionItem {
   id: string
   patientName: string
-  type: SessionType
-  area: TherapyArea
+  attendanceType: string
+  treatmentPlan: { area: string; specialties: string[] } | null
   date: string
   status: SessionStatus
   isHomeCare: boolean
@@ -30,14 +24,18 @@ export function RecentSessions({ sessions }: { sessions: RecentSessionItem[] }) 
         </p>
       ) : (
         <ul className="mt-4 divide-y divide-border">
-          {sessions.map(s => (
-            <li key={s.id} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+          {sessions.map((s) => (
+            <li
+              key={s.id}
+              className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
+            >
               <div className="min-w-0">
                 <p className="truncate font-body text-[15px] font-semibold text-foreground">
                   {s.patientName}
                 </p>
                 <p className="mt-0.5 font-body text-[12.5px] text-muted-foreground">
-                  {AREA_LABELS[s.area] ?? s.area} · {formatTimePtBr(s.date)} · {formatDateLongPtBr(s.date)}
+                  {formatTreatmentPlanLabel(s.treatmentPlan ?? undefined)} ·{' '}
+                  {formatTimePtBr(s.date)} · {formatDateLongPtBr(s.date)}
                 </p>
               </div>
 

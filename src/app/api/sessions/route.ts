@@ -5,6 +5,10 @@ import { PatientNotFoundError } from '@/server/modules/patients/application/get-
 import { createSessionUseCase } from '@/server/modules/sessions/application/create-session'
 import { listSessionsUseCase } from '@/server/modules/sessions/application/list-sessions'
 import { InvalidSessionScheduleError } from '@/server/modules/sessions/domain/session'
+import {
+  TreatmentPlanInactiveError,
+  TreatmentPlanNotFoundError,
+} from '@/server/modules/treatment-plans/domain/treatment-plan'
 
 export async function GET(request: Request) {
   const session = await getSession()
@@ -16,8 +20,11 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const parsed = listSessionsDTO.safeParse({
     patientId: searchParams.get('patientId') ?? undefined,
+    treatmentPlanId: searchParams.get('treatmentPlanId') ?? undefined,
     status: searchParams.get('status') ?? undefined,
-    type: searchParams.get('type') ?? undefined,
+    attendanceType:
+      searchParams.get('attendanceType') ??
+      (searchParams.get('type') === 'HOME_CARE' ? 'HOME_CARE' : undefined),
     area: searchParams.get('area') ?? undefined,
     from: searchParams.get('from') ?? undefined,
     to: searchParams.get('to') ?? undefined,
@@ -56,6 +63,14 @@ export async function POST(request: Request) {
     }
 
     if (error instanceof InvalidSessionScheduleError) {
+      return NextResponse.json({ message: error.message }, { status: 400 })
+    }
+
+    if (error instanceof TreatmentPlanNotFoundError) {
+      return NextResponse.json({ message: error.message }, { status: 404 })
+    }
+
+    if (error instanceof TreatmentPlanInactiveError) {
       return NextResponse.json({ message: error.message }, { status: 400 })
     }
 

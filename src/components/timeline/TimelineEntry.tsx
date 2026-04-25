@@ -1,5 +1,5 @@
 import { Home } from 'lucide-react'
-import type { SessionStatus, SessionType } from '@/generated/prisma/client'
+import type { SessionStatus } from '@/generated/prisma/client'
 import { formatDateLongPtBr, formatTimePtBr } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
@@ -16,7 +16,7 @@ interface TimelineEntryProps {
     id: string
     date: Date | string
     duration: number
-    type: SessionType
+    attendanceType: string
     status: SessionStatus
     subjective?: string | null
     objective?: string | null
@@ -28,9 +28,10 @@ interface TimelineEntryProps {
 
 export function TimelineEntry({ session, isLast = false }: TimelineEntryProps) {
   const hasContent = [session.subjective, session.objective, session.assessment, session.plan].some(
-    v => v && v.trim().length > 0
+    (v) => v && v.trim().length > 0
   )
   const defaultOpen = session.status === 'REALIZADO' && hasContent
+  const isHomeCare = session.attendanceType === 'HOME_CARE'
 
   return (
     <div className="relative flex gap-4 pb-6">
@@ -58,7 +59,7 @@ export function TimelineEntry({ session, isLast = false }: TimelineEntryProps) {
               <span>{formatTimePtBr(session.date)}</span>
               <span>·</span>
               <span>{session.duration} min</span>
-              {session.type === 'HOME_CARE' && (
+              {isHomeCare && (
                 <>
                   <span>·</span>
                   <span className="flex items-center gap-1">
@@ -71,7 +72,7 @@ export function TimelineEntry({ session, isLast = false }: TimelineEntryProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            {session.type === 'HOME_CARE' && (
+            {isHomeCare && (
               <span className="rounded-full bg-accent-soft px-2.5 py-1 font-body text-[11px] font-semibold text-accent-soft-fg">
                 Domiciliar
               </span>

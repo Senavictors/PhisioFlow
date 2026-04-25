@@ -8,6 +8,10 @@ import { updateSessionUseCase } from '@/server/modules/sessions/application/upda
 import { archiveSessionUseCase } from '@/server/modules/sessions/application/archive-session'
 import { updateSessionDTO } from '@/server/modules/sessions/http/session.dto'
 import { InvalidSessionScheduleError } from '@/server/modules/sessions/domain/session'
+import {
+  TreatmentPlanInactiveError,
+  TreatmentPlanNotFoundError,
+} from '@/server/modules/treatment-plans/domain/treatment-plan'
 
 type Params = { params: Promise<{ id: string }> }
 
@@ -56,6 +60,14 @@ export async function PUT(request: Request, { params }: Params) {
     }
 
     if (error instanceof InvalidSessionScheduleError) {
+      return NextResponse.json({ message: error.message }, { status: 400 })
+    }
+
+    if (error instanceof TreatmentPlanNotFoundError) {
+      return NextResponse.json({ message: error.message }, { status: 404 })
+    }
+
+    if (error instanceof TreatmentPlanInactiveError) {
       return NextResponse.json({ message: error.message }, { status: 400 })
     }
 

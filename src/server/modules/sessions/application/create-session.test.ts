@@ -5,17 +5,25 @@ import { InvalidSessionScheduleError } from '../domain/session'
 import { createSessionUseCase } from './create-session'
 import { createSession } from '../infra/session.repository'
 import { syncSessionCalendarAfterMutation } from '@/server/modules/calendar/application/auto-sync-session-calendar'
+import { findDefaultWorkplace } from '@/server/modules/workplaces/infra/workplace.repository'
 
 vi.mock('@/server/modules/patients/infra/patient.repository')
 vi.mock('../infra/session.repository')
 vi.mock('@/server/modules/calendar/application/auto-sync-session-calendar')
+vi.mock('@/server/modules/workplaces/infra/workplace.repository')
+vi.mock('@/server/modules/treatment-plans/infra/treatment-plan.repository')
 
 const mockFindPatientById = vi.mocked(findPatientById)
 const mockCreateSession = vi.mocked(createSession)
 const mockSyncSessionCalendarAfterMutation = vi.mocked(syncSessionCalendarAfterMutation)
+const mockFindDefaultWorkplace = vi.mocked(findDefaultWorkplace)
 
 beforeEach(() => {
   vi.clearAllMocks()
+  mockFindDefaultWorkplace.mockResolvedValue({
+    id: 'wp-default',
+    defaultAttendanceType: 'CLINIC',
+  } as never)
 })
 
 describe('createSessionUseCase', () => {
@@ -29,7 +37,6 @@ describe('createSessionUseCase', () => {
       patientId: 'patient-1',
       date: futureDate,
       duration: 50,
-      type: 'PRESENTIAL',
       status: 'AGENDADO',
       subjective: ' Dor lombar ',
       objective: '',
@@ -42,8 +49,9 @@ describe('createSessionUseCase', () => {
         userId: 'user-1',
         patientId: 'patient-1',
         duration: 50,
-        type: 'PRESENTIAL',
         status: 'AGENDADO',
+        workplaceId: 'wp-default',
+        attendanceType: 'CLINIC',
         subjective: 'Dor lombar',
         objective: null,
         assessment: 'Boa evolução',
@@ -66,7 +74,6 @@ describe('createSessionUseCase', () => {
         patientId: 'patient-other',
         date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
         duration: 60,
-        type: 'PRESENTIAL',
         status: 'AGENDADO',
       })
     ).rejects.toBeInstanceOf(PatientNotFoundError)
@@ -80,7 +87,6 @@ describe('createSessionUseCase', () => {
         patientId: 'patient-1',
         date: '2024-01-01T10:00:00.000Z',
         duration: 60,
-        type: 'PRESENTIAL',
         status: 'AGENDADO',
       })
     ).rejects.toBeInstanceOf(InvalidSessionScheduleError)

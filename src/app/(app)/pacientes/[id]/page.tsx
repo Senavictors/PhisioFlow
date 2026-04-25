@@ -1,19 +1,23 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, ChevronLeft, Edit, FilePlus2, Mail, MapPin, Phone, TrendingUp } from 'lucide-react'
+import {
+  Calendar,
+  ChevronLeft,
+  Edit,
+  FilePlus2,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+  TrendingUp,
+} from 'lucide-react'
 import { getSession } from '@/lib/session'
 import { formatDateOnlyPtBr } from '@/lib/date'
 import {
   getPatientUseCase,
   PatientNotFoundError,
 } from '@/server/modules/patients/application/get-patient'
-
-const AREA_LABELS: Record<string, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Fisioterapia Motora',
-  AESTHETIC: 'Fisioterapia Estética',
-  HOME_CARE: 'Atendimento Domiciliar',
-}
+import { TreatmentPlanCard } from '@/components/treatment-plans/TreatmentPlanCard'
 
 const CLASSIFICATION_LABELS: Record<string, string> = {
   ELDERLY: 'Idoso',
@@ -32,13 +36,6 @@ const PRIORITY_COLORS: Record<string, string> = {
   NORMAL: 'bg-muted text-muted-foreground',
   HIGH: 'bg-warning-soft text-warning',
   URGENT: 'bg-[var(--color-accent)] text-white',
-}
-
-const AREA_COLORS: Record<string, string> = {
-  PILATES: 'bg-primary-soft text-primary-soft-fg',
-  MOTOR: 'bg-accent-soft text-accent-soft-fg',
-  AESTHETIC: 'bg-success-soft text-success',
-  HOME_CARE: 'bg-warning-soft text-warning',
 }
 
 function InfoRow({
@@ -101,6 +98,19 @@ export default async function FichaClinicaPage({ params }: { params: Promise<{ i
   }
 
   const birthFormatted = patient.birthDate ? formatDateOnlyPtBr(patient.birthDate) : null
+  const treatmentPlans = (patient.treatmentPlans ?? []).map((plan) => ({
+    ...plan,
+    sessionPrice: plan.sessionPrice?.toString() ?? null,
+    packageAmount: plan.packageAmount?.toString() ?? null,
+  }))
+  const hasHomeCarePlan = treatmentPlans.some((plan) => plan.attendanceType === 'HOME_CARE')
+  const hasHomeCareInfo = Boolean(
+    hasHomeCarePlan ||
+    patient.address ||
+    patient.neighborhood ||
+    patient.city ||
+    patient.homeCareNotes
+  )
 
   return (
     <div className="max-w-[1080px] space-y-6 sm:space-y-8">
@@ -125,13 +135,6 @@ export default async function FichaClinicaPage({ params }: { params: Promise<{ i
                 {patient.name}
               </h1>
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span
-                  className={`rounded-full px-2.5 py-1 font-body text-[11px] font-semibold ${
-                    AREA_COLORS[patient.area] ?? 'bg-muted text-muted-foreground'
-                  }`}
-                >
-                  {AREA_LABELS[patient.area] ?? patient.area}
-                </span>
                 {patient.classification !== 'STANDARD' && (
                   <span className="px-2.5 py-1 rounded-full bg-danger-soft text-danger font-body text-[11px] font-semibold">
                     {CLASSIFICATION_LABELS[patient.classification]}
@@ -148,6 +151,13 @@ export default async function FichaClinicaPage({ params }: { params: Promise<{ i
             >
               <FilePlus2 className="h-4 w-4" />
               Registrar atendimento
+            </Link>
+            <Link
+              href={`/pacientes/${id}/planos/novo`}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 font-body text-[13px] font-semibold text-foreground transition-all hover:border-primary/40 hover:bg-primary-soft sm:w-auto"
+            >
+              <Plus className="h-4 w-4" />
+              Novo plano
             </Link>
             <Link
               href={`/pacientes/${id}/evolucao`}
@@ -198,7 +208,41 @@ export default async function FichaClinicaPage({ params }: { params: Promise<{ i
         </section>
       </div>
 
-      {patient.area === 'HOME_CARE' && (
+      <section className="space-y-4 rounded-[18px] border border-border bg-card p-5 sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="font-display font-bold text-[15px] text-foreground">
+              Planos de tratamento
+            </h2>
+            <p className="mt-1 font-body text-[12.5px] text-muted-foreground">
+              Modalidades ativas e pausadas vinculadas ao paciente.
+            </p>
+          </div>
+          <Link
+            href={`/pacientes/${id}/planos/novo`}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 font-body text-[13px] font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary-hover sm:w-auto"
+          >
+            <Plus className="h-4 w-4" />
+            Novo plano
+          </Link>
+        </div>
+
+        {treatmentPlans.length === 0 ? (
+          <div className="rounded-[16px] border border-dashed border-border bg-background/70 px-4 py-6 text-center">
+            <p className="font-body text-[13px] text-muted-foreground">
+              Nenhum plano cadastrado. Atendimentos ainda podem ser avulsos.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {treatmentPlans.map((plan) => (
+              <TreatmentPlanCard key={plan.id} plan={plan} patientId={id} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {hasHomeCareInfo && (
         <section className="space-y-4 rounded-[18px] border border-border bg-card p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-display font-bold text-[15px] text-foreground">

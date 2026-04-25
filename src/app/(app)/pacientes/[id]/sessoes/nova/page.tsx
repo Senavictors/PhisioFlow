@@ -8,13 +8,6 @@ import {
   PatientNotFoundError,
 } from '@/server/modules/patients/application/get-patient'
 
-const AREA_LABELS: Record<string, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Fisioterapia Motora',
-  AESTHETIC: 'Fisioterapia Estética',
-  HOME_CARE: 'Atendimento Domiciliar',
-}
-
 async function loadPatient(id: string, userId: string) {
   try {
     return await getPatientUseCase(id, userId)
@@ -63,7 +56,7 @@ export default async function NovaSessaoPage({ params }: { params: Promise<{ id:
           <div className="flex items-center gap-2 self-start rounded-full bg-primary-soft px-3.5 py-2">
             <FilePlus2 className="h-4 w-4 text-primary" />
             <span className="font-body text-[12px] font-semibold text-primary-soft-fg">
-              {patient.name} • {AREA_LABELS[patient.area] ?? patient.area}
+              {patient.name}
             </span>
           </div>
         </div>
@@ -73,7 +66,6 @@ export default async function NovaSessaoPage({ params }: { params: Promise<{ id:
         patient={{
           id: patient.id,
           name: patient.name,
-          area: patient.area,
           email: patient.email,
         }}
       />

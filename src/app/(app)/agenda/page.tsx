@@ -1,10 +1,7 @@
 import Link from 'next/link'
 import { CalendarCheck2, CalendarDays, Home } from 'lucide-react'
 import { getSession } from '@/lib/session'
-import {
-  formatAgendaDayLabel,
-  formatCalendarDateKey,
-} from '@/lib/date'
+import { formatAgendaDayLabel, formatCalendarDateKey } from '@/lib/date'
 import { SessionCard } from '@/components/sessions/SessionCard'
 import { DomiciliarToggle } from '@/components/agenda/DomiciliarToggle'
 import { AgendaViewToggle } from '@/components/agenda/AgendaViewToggle'
@@ -65,7 +62,7 @@ export default async function AgendaPage({
       to: to.toISOString(),
       limit: 500,
       order: 'asc',
-      ...(isHomeCareMode ? { type: 'HOME_CARE' } : {}),
+      ...(isHomeCareMode ? { attendanceType: 'HOME_CARE' } : {}),
     })
 
     const sessionsByDay = sessions.reduce<Record<string, typeof sessions>>((acc, item) => {
@@ -81,7 +78,7 @@ export default async function AgendaPage({
     }
 
     const todayKey = formatCalendarDateKey(new Date())
-    const homeCareCount = sessions.filter((item) => item.type === 'HOME_CARE').length
+    const homeCareCount = sessions.filter((item) => item.attendanceType === 'HOME_CARE').length
 
     return (
       <div className="space-y-6 sm:space-y-8">
@@ -108,10 +105,10 @@ export default async function AgendaPage({
     from: new Date().toISOString(),
     limit: 100,
     order: 'asc',
-    ...(isHomeCareMode ? { type: 'HOME_CARE' } : {}),
+    ...(isHomeCareMode ? { attendanceType: 'HOME_CARE' } : {}),
   })
 
-  const homeCareCount = sessions.filter((item) => item.type === 'HOME_CARE').length
+  const homeCareCount = sessions.filter((item) => item.attendanceType === 'HOME_CARE').length
 
   const groupedSessions = sessions.reduce<
     Array<{ key: string; label: string; items: typeof sessions }>
@@ -157,9 +154,7 @@ export default async function AgendaPage({
             </div>
             <div>
               <p className="font-display text-[22px] font-bold text-foreground">
-                {isHomeCareMode
-                  ? 'Nenhum atendimento domiciliar'
-                  : 'Nenhum agendamento futuro'}
+                {isHomeCareMode ? 'Nenhum atendimento domiciliar' : 'Nenhum agendamento futuro'}
               </p>
               <p className="mt-1 font-body text-[14px] text-muted-foreground">
                 {isHomeCareMode
@@ -183,7 +178,8 @@ export default async function AgendaPage({
                 <span className="rounded-full bg-accent-soft px-3 py-1 font-body text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-soft-fg">
                   {group.label}
                 </span>
-                {!isHomeCareMode && group.items.some((item) => item.type === 'HOME_CARE') ? (
+                {!isHomeCareMode &&
+                group.items.some((item) => item.attendanceType === 'HOME_CARE') ? (
                   <span className="flex items-center gap-1 rounded-full bg-primary-soft px-3 py-1 font-body text-[11px] font-semibold text-primary-soft-fg">
                     <Home className="h-3.5 w-3.5" />
                     Inclui domiciliar
@@ -227,7 +223,11 @@ function AgendaHeader({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            {isHomeCareMode ? 'Atendimentos Domiciliares' : view === 'calendar' ? 'Visão mensal' : 'Próximos'}
+            {isHomeCareMode
+              ? 'Atendimentos Domiciliares'
+              : view === 'calendar'
+                ? 'Visão mensal'
+                : 'Próximos'}
           </p>
           <h1 className="font-display text-[30px] font-bold leading-tight text-foreground sm:text-[36px]">
             Agenda

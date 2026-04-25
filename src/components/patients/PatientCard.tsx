@@ -4,13 +4,7 @@ import Link from 'next/link'
 import { Phone, Calendar, ChevronRight } from 'lucide-react'
 import { formatDateOnlyPtBr } from '@/lib/date'
 import { cn } from '@/lib/utils'
-
-const AREA_LABELS: Record<string, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Motora',
-  AESTHETIC: 'Estética',
-  HOME_CARE: 'Domiciliar',
-}
+import { formatTreatmentPlanLabel } from '@/lib/clinical-labels'
 
 const CLASSIFICATION_LABELS: Record<string, string> = {
   ELDERLY: 'Idoso',
@@ -19,20 +13,18 @@ const CLASSIFICATION_LABELS: Record<string, string> = {
   STANDARD: 'Padrão',
 }
 
-const AREA_COLORS: Record<string, string> = {
-  PILATES: 'bg-primary-soft text-primary-soft-fg',
-  MOTOR: 'bg-accent-soft text-accent-soft-fg',
-  AESTHETIC: 'bg-success-soft text-success',
-  HOME_CARE: 'bg-warning-soft text-warning',
-}
-
 interface Patient {
   id: string
   name: string
   phone: string | null
   birthDate: Date | string | null
   classification: string
-  area: string
+  treatmentPlans?: Array<{
+    id: string
+    area: string
+    specialties: string[]
+    status: string
+  }>
 }
 
 export function PatientCard({ patient }: { patient: Patient }) {
@@ -76,14 +68,19 @@ export function PatientCard({ patient }: { patient: Patient }) {
         </div>
 
         <div className="flex w-full flex-wrap items-center gap-2 lg:w-auto lg:justify-end">
-          <span
-            className={cn(
-              'rounded-full px-2.5 py-1 font-body text-[11px] font-semibold',
-              AREA_COLORS[patient.area] ?? 'bg-muted text-muted-foreground'
-            )}
-          >
-            {AREA_LABELS[patient.area] ?? patient.area}
-          </span>
+          {(patient.treatmentPlans ?? []).slice(0, 2).map((plan) => (
+            <span
+              key={plan.id}
+              className="rounded-full bg-primary-soft px-2.5 py-1 font-body text-[11px] font-semibold text-primary-soft-fg"
+            >
+              {formatTreatmentPlanLabel(plan)}
+            </span>
+          ))}
+          {(patient.treatmentPlans ?? []).length === 0 ? (
+            <span className="rounded-full bg-muted px-2.5 py-1 font-body text-[11px] font-semibold text-muted-foreground">
+              Sem plano
+            </span>
+          ) : null}
           {patient.classification !== 'STANDARD' && (
             <span className="rounded-full bg-danger-soft px-2.5 py-1 font-body text-[11px] font-semibold text-danger">
               {CLASSIFICATION_LABELS[patient.classification] ?? patient.classification}

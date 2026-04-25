@@ -25,7 +25,7 @@ describe('listSessionsUseCase', () => {
     await listSessionsUseCase('user-b', {
       patientId: 'patient-1',
       status: 'AGENDADO',
-      area: 'MOTOR',
+      area: 'ORTOPEDICA',
       from: '2026-04-24T10:00:00.000Z',
       page: 2,
       limit: 15,
@@ -37,7 +37,7 @@ describe('listSessionsUseCase', () => {
       expect.objectContaining({
         patientId: 'patient-1',
         status: 'AGENDADO',
-        area: 'MOTOR',
+        area: 'ORTOPEDICA',
         from: expect.any(Date),
         page: 2,
         limit: 15,

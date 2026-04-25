@@ -4,7 +4,7 @@
 
 - [ ] Todo
 - [ ] In Progress
-- [ ] Done
+- [x] Done
 
 ## Contexto
 
@@ -30,22 +30,22 @@ vinculadas a um plano legado. Remover `Patient.area` e `Session.type` do schema.
 
 ### Backend — Migration
 
-- [ ] Expandir enum `TherapyArea` com `ORTOPEDICA`, `NEUROLOGICA`, `CARDIORESPIRATORIA`,
-  `ESTETICA`, `ESPORTIVA`, `PELVICA`, `PEDIATRICA`, `GERIATRICA`, `PREVENTIVA`, `OUTRA`
-- [ ] Criar enum `Specialty` com `PILATES`, `RPG`, `ACUPUNTURA`, `LIBERACAO_MIOFASCIAL`,
-  `VENTOSATERAPIA`, `DRY_NEEDLING`, `TERAPIA_MANUAL`, `OUTRA`
-- [ ] Criar enum `PricingModel` com `PER_SESSION`, `PACKAGE`
-- [ ] Criar enum `PlanStatus` com `ACTIVE`, `COMPLETED`, `CANCELED`, `PAUSED`
-- [ ] Criar modelo `TreatmentPlan`
-- [ ] Adicionar `treatmentPlanId: String?` em `Session`
-- [ ] Adicionar relação reversa `treatmentPlans` em `User` e `Patient`
-- [ ] Adicionar relação reversa `sessions` em `TreatmentPlan`
+- [x] Expandir enum `TherapyArea` com `ORTOPEDICA`, `NEUROLOGICA`, `CARDIORESPIRATORIA`,
+      `ESTETICA`, `ESPORTIVA`, `PELVICA`, `PEDIATRICA`, `GERIATRICA`, `PREVENTIVA`, `OUTRA`
+- [x] Criar enum `Specialty` com `PILATES`, `RPG`, `ACUPUNTURA`, `LIBERACAO_MIOFASCIAL`,
+      `VENTOSATERAPIA`, `DRY_NEEDLING`, `TERAPIA_MANUAL`, `OUTRA`
+- [x] Criar enum `PricingModel` com `PER_SESSION`, `PACKAGE`
+- [x] Criar enum `PlanStatus` com `ACTIVE`, `COMPLETED`, `CANCELED`, `PAUSED`
+- [x] Criar modelo `TreatmentPlan`
+- [x] Adicionar `treatmentPlanId: String?` em `Session`
+- [x] Adicionar relação reversa `treatmentPlans` em `User` e `Patient`
+- [x] Adicionar relação reversa `sessions` em `TreatmentPlan`
 
 ### Backend — Backfill
 
 Em script idempotente executado depois da migration:
 
-- [ ] Para cada `Patient` ativo, criar 1 `TreatmentPlan` legado:
+- [x] Para cada `Patient` ativo, criar 1 `TreatmentPlan` legado:
   - `area` derivado do `Patient.area` antigo:
     - `MOTOR` → `ORTOPEDICA`
     - `AESTHETIC` → `ESTETICA`
@@ -57,82 +57,82 @@ Em script idempotente executado depois da migration:
   - `pricingModel = PER_SESSION`
   - `status = ACTIVE`
   - `notes` carrega marca "Plano legado migrado de v14"
-- [ ] Vincular todas as `Session` existentes do paciente ao plano legado
-- [ ] Validar que toda sessão tem `treatmentPlanId` antes de prosseguir
+- [x] Vincular todas as `Session` existentes do paciente ao plano legado
+- [x] Validar que toda sessão tem `treatmentPlanId` antes de prosseguir
 
 ### Backend — Migration de fechamento
 
-- [ ] Remover `Patient.area`
-- [ ] Remover `Session.type` e enum `SessionType`
-- [ ] Tornar `Session.workplaceId` `NOT NULL`
-- [ ] Tornar `Session.attendanceType` `NOT NULL`
-- [ ] Descontinuar valores antigos do enum `TherapyArea` (`MOTOR`, `AESTHETIC`, `PILATES`,
+- [x] Remover `Patient.area`
+- [x] Remover `Session.type` e enum `SessionType`
+- [x] Tornar `Session.workplaceId` `NOT NULL`
+- [x] Tornar `Session.attendanceType` `NOT NULL`
+- [x] Descontinuar valores antigos do enum `TherapyArea` (`MOTOR`, `AESTHETIC`, `PILATES`,
       `HOME_CARE`) — substituir por nova versão do enum
 
 ### Backend — Use Cases
 
-- [ ] `createTreatmentPlanUseCase`
-- [ ] `listPatientTreatmentPlansUseCase`
-- [ ] `getTreatmentPlanUseCase`
-- [ ] `updateTreatmentPlanUseCase`
-- [ ] `archiveTreatmentPlanUseCase`
-- [ ] `pauseTreatmentPlanUseCase`
-- [ ] `completeTreatmentPlanUseCase`
-- [ ] Atualizar `createSessionUseCase` para aceitar `treatmentPlanId?` (opcional)
+- [x] `createTreatmentPlanUseCase`
+- [x] `listPatientTreatmentPlansUseCase`
+- [x] `getTreatmentPlanUseCase`
+- [x] `updateTreatmentPlanUseCase`
+- [x] `archiveTreatmentPlanUseCase`
+- [x] `pauseTreatmentPlanUseCase`
+- [x] `completeTreatmentPlanUseCase`
+- [x] Atualizar `createSessionUseCase` para aceitar `treatmentPlanId?` (opcional)
   - se preenchido, valida ownership + que o plano não está `COMPLETED`/`CANCELED`
   - se preenchido, herda `area`/`workplaceId`/`attendanceType` do plano (overridable)
   - se omitido, sessão é avulsa (caminho permitido)
-- [ ] Atualizar `updateSessionUseCase` para aceitar mudança de plano
-- [ ] Multi-tenant: toda query de plan filtra por `userId`
+- [x] Atualizar `updateSessionUseCase` para aceitar mudança de plano
+- [x] Multi-tenant: toda query de plan filtra por `userId`
 
 ### Backend — HTTP
 
-- [ ] `POST /api/patients/:id/treatment-plans`
-- [ ] `GET /api/patients/:id/treatment-plans`
-- [ ] `GET /api/treatment-plans/:id`
-- [ ] `PUT /api/treatment-plans/:id`
-- [ ] `POST /api/treatment-plans/:id/pause`
-- [ ] `POST /api/treatment-plans/:id/complete`
-- [ ] `DELETE /api/treatment-plans/:id` (soft cancel via status `CANCELED`)
-- [ ] Atualizar `POST /api/sessions` e `PUT /api/sessions/:id` com `treatmentPlanId?`
+- [x] `POST /api/patients/:id/treatment-plans`
+- [x] `GET /api/patients/:id/treatment-plans`
+- [x] `GET /api/treatment-plans/:id`
+- [x] `PUT /api/treatment-plans/:id`
+- [x] `POST /api/treatment-plans/:id/pause`
+- [x] `POST /api/treatment-plans/:id/complete`
+- [x] `DELETE /api/treatment-plans/:id` (soft cancel via status `CANCELED`)
+- [x] Atualizar `POST /api/sessions` e `PUT /api/sessions/:id` com `treatmentPlanId?`
 
 ### Frontend
 
-- [ ] Remover campo "Área" do `PatientForm`
-- [ ] Remover badge de área da listagem `/pacientes` e da ficha
-- [ ] Adicionar seção "Planos de tratamento" na ficha `/pacientes/:id`:
+- [x] Remover campo "Área" do `PatientForm`
+- [x] Remover badge de área da listagem `/pacientes` e da ficha
+- [x] Adicionar seção "Planos de tratamento" na ficha `/pacientes/:id`:
   - Lista os planos com badge de área, especialidades, tipo, local, status
   - Botão "Novo plano"
   - Em cada plano: contador "X de Y sessões" (se PACKAGE) e ações editar/pausar/concluir
-- [ ] Página `/pacientes/:id/planos/novo` — formulário de criação de plano
-- [ ] Página `/pacientes/:id/planos/:planId/editar`
-- [ ] Componentes:
+- [x] Página `/pacientes/:id/planos/novo` — formulário de criação de plano
+- [x] Página `/pacientes/:id/planos/:planId/editar`
+- [x] Componentes:
   - `TreatmentPlanCard` (resumo do plano com badges)
   - `TreatmentPlanForm` (criar/editar)
   - `AreaBadge`, `SpecialtyBadges`, `AttendanceTypeBadge`
-- [ ] No `SessionForm`:
+- [x] No `SessionForm`:
   - Após escolher paciente, dropdown "Plano" com planos ativos do paciente +
     opção "Avulso"
   - Se plano selecionado, área/especialidades/local/tipo são pré-preenchidos
     (campos exibidos como herdados; podem ser sobrescritos individualmente)
   - Se "Avulso", os campos são preenchidos manualmente
-- [ ] No `SessionCard`, mostrar badge de plano (área + especialidades em forma compacta)
-  ou "Avulso"
+- [x] No `SessionCard`, mostrar badge de plano (área + especialidades em forma compacta)
+      ou "Avulso"
 
 ### Filtros e listagens
 
-- [ ] Atualizar filtros de `/pacientes` para permitir buscar por área **dos planos
-  ativos** (não mais `Patient.area`)
-- [ ] Atualizar filtros de `/atendimentos` para permitir filtrar por área e tipo de
-  atendimento usando os campos atuais da sessão
+- [x] Atualizar filtros de `/pacientes` para permitir buscar por área **dos planos
+      ativos** (não mais `Patient.area`)
+- [x] Atualizar filtros de `/atendimentos` para permitir filtrar por área e tipo de
+      atendimento usando os campos atuais da sessão
 
 ### Seed
 
-- [ ] Atualizar `prisma/seed.ts` para criar planos demonstrando multi-modalidade:
+- [x] Atualizar `prisma/seed.ts` para criar planos demonstrando multi-modalidade:
   - 1 paciente com 2 planos ativos: Ortopédica (per session) + Pilates (pacote)
   - 1 paciente apenas com plano Estética
   - 1 paciente sem plano (sessões avulsas)
-- [ ] Vincular sessões existentes do seed aos planos
+- [x] Vincular sessões existentes do seed aos planos
 
 ## Fora de Escopo
 
@@ -333,37 +333,37 @@ ALTER TABLE "Session" ALTER COLUMN "attendanceType" SET NOT NULL;
 
 ## UI
 
-- [ ] Página: `/pacientes/:id` (seção "Planos de tratamento")
-- [ ] Página: `/pacientes/:id/planos/novo`
-- [ ] Página: `/pacientes/:id/planos/:planId/editar`
-- [ ] Componente: `TreatmentPlanCard`
-- [ ] Componente: `TreatmentPlanForm`
-- [ ] Componente: `AreaBadge`
-- [ ] Componente: `SpecialtyBadges`
-- [ ] Componente: `AttendanceTypeBadge`
-- [ ] Atualizar: `PatientForm` (remover campo área)
-- [ ] Atualizar: `SessionForm` (seletor de plano + override)
-- [ ] Atualizar: `SessionCard` (badge de plano)
-- [ ] Atualizar: filtros em `/pacientes` e `/atendimentos`
+- [x] Página: `/pacientes/:id` (seção "Planos de tratamento")
+- [x] Página: `/pacientes/:id/planos/novo`
+- [x] Página: `/pacientes/:id/planos/:planId/editar`
+- [x] Componente: `TreatmentPlanCard`
+- [x] Componente: `TreatmentPlanForm`
+- [x] Componente: `AreaBadge`
+- [x] Componente: `SpecialtyBadges`
+- [x] Componente: `AttendanceTypeBadge`
+- [x] Atualizar: `PatientForm` (remover campo área)
+- [x] Atualizar: `SessionForm` (seletor de plano + override)
+- [x] Atualizar: `SessionCard` (badge de plano)
+- [x] Atualizar: filtros em `/pacientes` e `/atendimentos`
 
 ## Checklist Final
 
-- [ ] Migration `phase15a_treatment_plans` (adições) aplicada
-- [ ] Backfill executado e validado (todo paciente com sessões tem plano legado)
-- [ ] Migration `phase15b_drop_patient_area_and_session_type` aplicada
-- [ ] Patient sem campo `area`
-- [ ] Session sem campo `type`
-- [ ] Session com `workplaceId` e `attendanceType` NOT NULL
-- [ ] CRUD de plano funciona
-- [ ] `SessionForm` com seletor de plano (ou avulso)
-- [ ] Multi-tenant em todas as queries
-- [ ] Seed atualizado demonstrando multi-modalidade
-- [ ] `npm run lint` passa sem erros
-- [ ] `npm run build` passa sem erros
-- [ ] Testes unitários do módulo `treatment-plans`
-- [ ] `.docs/CONTEXT.md` atualizado
-- [ ] `README.md` atualizado
-- [ ] `.docs/CHANGELOG.md` atualizado
+- [x] Migration `phase15a_treatment_plans` (adições) criada
+- [x] Backfill implementado na migration (todo paciente com sessões recebe plano legado)
+- [x] Migration `phase15b_drop_patient_area_and_session_type` criada
+- [x] Patient sem campo `area`
+- [x] Session sem campo `type`
+- [x] Session com `workplaceId` e `attendanceType` NOT NULL
+- [x] CRUD de plano funciona
+- [x] `SessionForm` com seletor de plano (ou avulso)
+- [x] Multi-tenant em todas as queries
+- [x] Seed atualizado demonstrando multi-modalidade
+- [x] `npm run lint` passa sem erros
+- [x] `npm run build` passa sem erros
+- [x] Testes unitários do módulo `treatment-plans`
+- [x] `.docs/CONTEXT.md` atualizado
+- [x] `README.md` atualizado
+- [x] `.docs/CHANGELOG.md` atualizado
 - [ ] Validação manual no browser
 
 ## Notas para Próxima Sessão

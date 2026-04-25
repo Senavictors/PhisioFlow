@@ -24,12 +24,12 @@ PhysioFlow centraliza toda a operação clínica em uma interface única — do 
 - **Dashboard de KPIs** — Pacientes ativos, atendimentos semanais, alertas de inatividade
 - **Central de Documentos** — Geração de laudos e relatórios em PDF com dados do prontuário
 - **Logística Domiciliar** — Gestão de atendimentos fora da clínica com tags de prioridade
+- **Locais de Trabalho** — Cadastro de clínicas, particular e online com defaults próprios
+- **Planos de Tratamento** — Multi-modalidade por paciente, com área, especialidades,
+  modalidade, local e pacote/avulso preparatório para o financeiro
 
 ### Em desenvolvimento (ciclo Multi-modalidade + Financeiro)
 
-- **Locais de Trabalho** — Cadastro de clínicas, particular e online com defaults próprios
-- **Plano de Tratamento** — Cada paciente em N modalidades simultâneas (Pilates +
-  Ortopédica + Estética, etc.) com área, especialidades e tipo de atendimento por plano
 - **Pagamentos** — Registro de cobranças avulsas e pacotes com método e status
 - **Dashboard Financeiro** — Recebido vs previsto por dia/semana/mês e quebra por
   local/área
@@ -195,13 +195,14 @@ Após o seed:
 - Phase 14 — Locais de Trabalho (modelo `Workplace`, enums `WorkplaceKind`/`AttendanceType`,
   migration com backfill, CRUD `/configuracoes/locais`, seletor de local e modalidade no
   `SessionForm`, nome do local no `SessionCard`)
+- Phase 15 — Plano de Tratamento (modelo `TreatmentPlan`, multi-modalidade por paciente,
+  remoção de `Patient.area` e `Session.type`, CRUD/status de planos, seed multi-modalidade
+  e seletor de plano/avulso no `SessionForm`)
 
 ### 🗺️ Planejado — Ciclo "Multi-modalidade + Financeiro"
 
 > Decisão arquitetural: [ADR-005](.docs/decisions/ADR-005-multi-modalidade-financeiro.md)
 
-- **Phase 15 — Plano de Tratamento** (multi-modalidade por paciente, remoção do
-  `Patient.area` e `Session.type`, expansão de `TherapyArea`, novo enum `Specialty`)
 - **Phase 16 — Pagamentos** (`Payment`, `expectedFee` snapshot, avulso e pacote,
   saldo do plano)
 - **Phase 17 — Dashboard Financeiro** (recebido vs previsto, série temporal,
@@ -209,9 +210,8 @@ Após o seed:
 
 ### ➡️ Próximo Passo
 
-Iniciar **Phase 15**: modelo `TreatmentPlan` (1 paciente → N planos), backfill que cria
-plano legado por paciente, expansão de `TherapyArea`, novo enum `Specialty`. Remove
-`Patient.area` e `Session.type` (campos mantidos em coexistência desde a Phase 14).
+Iniciar **Phase 16**: pagamentos reais com `Payment`, snapshot `expectedFee` por sessão,
+cobranças avulsas e pacotes vinculados a `TreatmentPlan`.
 
 Ainda pendente do ciclo anterior: configurar as variáveis de e-mail/Google na Vercel e
 validar os fluxos reais de envio e sincronização.

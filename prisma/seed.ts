@@ -28,6 +28,10 @@ async function main() {
     where: { user: { email: demoEmail } },
   })
 
+  await prisma.treatmentPlan.deleteMany({
+    where: { user: { email: demoEmail } },
+  })
+
   await prisma.calendarConnection.deleteMany({
     where: { user: { email: demoEmail } },
   })
@@ -71,7 +75,6 @@ async function main() {
       birthDate: new Date('1948-03-12T00:00:00.000Z'),
       phone: '(11) 99999-0001',
       classification: 'ELDERLY',
-      area: 'PILATES',
       notes: 'Paciente com boa adesão ao plano terapêutico.',
       clinicalRecord: {
         create: {
@@ -92,7 +95,6 @@ async function main() {
       phone: '(11) 99999-0002',
       email: 'carla.souza@exemplo.com',
       classification: 'STANDARD',
-      area: 'AESTHETIC',
       notes: 'Prefere atendimentos no período da manhã.',
       clinicalRecord: {
         create: {
@@ -113,7 +115,6 @@ async function main() {
       phone: '(11) 99999-0003',
       email: 'rafael.teixeira@exemplo.com',
       classification: 'PCD',
-      area: 'MOTOR',
       notes: 'Paciente em retorno gradual aos treinos.',
       clinicalRecord: {
         create: {
@@ -147,6 +148,49 @@ async function main() {
     },
   })
 
+  const gervasioOrtopedicaPlan = await prisma.treatmentPlan.create({
+    data: {
+      userId: user.id,
+      patientId: gervasio.id,
+      workplaceId: clinica.id,
+      area: 'ORTOPEDICA',
+      specialties: ['TERAPIA_MANUAL'],
+      attendanceType: 'CLINIC',
+      pricingModel: 'PER_SESSION',
+      sessionPrice: 180,
+      notes: 'Plano ortopedico para controle de dor lombar e manutencao funcional.',
+    },
+  })
+
+  const gervasioPilatesPlan = await prisma.treatmentPlan.create({
+    data: {
+      userId: user.id,
+      patientId: gervasio.id,
+      workplaceId: clinica.id,
+      area: 'ORTOPEDICA',
+      specialties: ['PILATES'],
+      attendanceType: 'CLINIC',
+      pricingModel: 'PACKAGE',
+      totalSessions: 10,
+      packageAmount: 1500,
+      notes: 'Pacote de Pilates terapeutico para estabilidade e prevencao.',
+    },
+  })
+
+  const carlaEsteticaPlan = await prisma.treatmentPlan.create({
+    data: {
+      userId: user.id,
+      patientId: carla.id,
+      workplaceId: particular.id,
+      area: 'ESTETICA',
+      specialties: ['LIBERACAO_MIOFASCIAL'],
+      attendanceType: 'HOME_CARE',
+      pricingModel: 'PER_SESSION',
+      sessionPrice: 220,
+      notes: 'Plano estetico com atendimento domiciliar e recursos manuais.',
+    },
+  })
+
   const now = new Date()
   const daysFromNow = (days: number, hour: number, minute = 0) => {
     const date = new Date(now)
@@ -167,9 +211,9 @@ async function main() {
       {
         userId: user.id,
         patientId: gervasio.id,
+        treatmentPlanId: gervasioOrtopedicaPlan.id,
         date: daysAgo(14, 9),
         duration: 60,
-        type: 'PRESENTIAL',
         status: 'REALIZADO',
         workplaceId: clinica.id,
         attendanceType: 'CLINIC',
@@ -182,9 +226,9 @@ async function main() {
       {
         userId: user.id,
         patientId: gervasio.id,
+        treatmentPlanId: gervasioPilatesPlan.id,
         date: daysAgo(7, 9),
         duration: 60,
-        type: 'PRESENTIAL',
         status: 'REALIZADO',
         workplaceId: clinica.id,
         attendanceType: 'CLINIC',
@@ -198,7 +242,6 @@ async function main() {
         patientId: rafael.id,
         date: daysAgo(2, 16, 30),
         duration: 50,
-        type: 'PRESENTIAL',
         status: 'REALIZADO',
         workplaceId: clinica.id,
         attendanceType: 'CLINIC',
@@ -210,9 +253,9 @@ async function main() {
       {
         userId: user.id,
         patientId: carla.id,
+        treatmentPlanId: carlaEsteticaPlan.id,
         date: daysFromNow(1, 8, 30),
         duration: 45,
-        type: 'HOME_CARE',
         status: 'AGENDADO',
         workplaceId: particular.id,
         attendanceType: 'HOME_CARE',
@@ -224,7 +267,6 @@ async function main() {
         patientId: rafael.id,
         date: daysFromNow(2, 15),
         duration: 50,
-        type: 'PRESENTIAL',
         status: 'AGENDADO',
         workplaceId: clinica.id,
         attendanceType: 'CLINIC',
@@ -233,9 +275,9 @@ async function main() {
       {
         userId: user.id,
         patientId: gervasio.id,
+        treatmentPlanId: gervasioPilatesPlan.id,
         date: daysFromNow(4, 10),
         duration: 60,
-        type: 'PRESENTIAL',
         status: 'CANCELADO',
         workplaceId: clinica.id,
         attendanceType: 'CLINIC',

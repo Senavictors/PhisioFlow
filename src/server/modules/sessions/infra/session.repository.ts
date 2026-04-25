@@ -1,18 +1,11 @@
 import { prisma } from '@/lib/prisma'
-import type {
-  AttendanceType,
-  Prisma,
-  SessionStatus,
-  SessionType,
-  TherapyArea,
-} from '@/generated/prisma/client'
+import type { AttendanceType, Prisma, SessionStatus, TherapyArea } from '@/generated/prisma/client'
 
 const sessionInclude = {
   patient: {
     select: {
       id: true,
       name: true,
-      area: true,
       classification: true,
       homeCarePriority: true,
       address: true,
@@ -23,6 +16,16 @@ const sessionInclude = {
   },
   workplace: {
     select: { id: true, name: true },
+  },
+  treatmentPlan: {
+    select: {
+      id: true,
+      area: true,
+      specialties: true,
+      attendanceType: true,
+      status: true,
+      pricingModel: true,
+    },
   },
   calendarEventLinks: {
     where: { provider: 'GOOGLE' },
@@ -43,12 +46,12 @@ export type SessionWithPatient = Prisma.SessionGetPayload<{ include: typeof sess
 export interface SessionCreateInput {
   userId: string
   patientId: string
+  treatmentPlanId?: string | null
   date: Date
   duration: number
-  type: SessionType
   status: SessionStatus
-  workplaceId?: string | null
-  attendanceType?: AttendanceType | null
+  workplaceId: string
+  attendanceType: AttendanceType
   subjective?: string | null
   objective?: string | null
   assessment?: string | null
@@ -56,12 +59,12 @@ export interface SessionCreateInput {
 }
 
 export interface SessionUpdateInput {
+  treatmentPlanId?: string | null
   date?: Date
   duration?: number
-  type?: SessionType
   status?: SessionStatus
-  workplaceId?: string | null
-  attendanceType?: AttendanceType | null
+  workplaceId?: string
+  attendanceType?: AttendanceType
   subjective?: string | null
   objective?: string | null
   assessment?: string | null
@@ -70,8 +73,9 @@ export interface SessionUpdateInput {
 
 export interface ListSessionFilters {
   patientId?: string
+  treatmentPlanId?: string
   status?: SessionStatus
-  type?: SessionType
+  attendanceType?: AttendanceType
   area?: TherapyArea
   from?: Date
   to?: Date
@@ -92,9 +96,10 @@ export async function listSessions(userId: string, filters: ListSessionFilters =
     userId,
     isActive: true,
     ...(filters.patientId ? { patientId: filters.patientId } : {}),
+    ...(filters.treatmentPlanId ? { treatmentPlanId: filters.treatmentPlanId } : {}),
     ...(filters.status ? { status: filters.status } : {}),
-    ...(filters.type ? { type: filters.type } : {}),
-    ...(filters.area ? { patient: { area: filters.area } } : {}),
+    ...(filters.attendanceType ? { attendanceType: filters.attendanceType } : {}),
+    ...(filters.area ? { treatmentPlan: { area: filters.area } } : {}),
     ...(filters.from || filters.to
       ? {
           date: {

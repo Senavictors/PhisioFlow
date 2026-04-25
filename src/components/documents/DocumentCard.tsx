@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { FileText, FilePlus, FileCheck, Download, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { formatTreatmentPlanLabel } from '@/lib/clinical-labels'
 
 const TYPE_LABELS: Record<string, string> = {
   LAUDO_FISIOTERAPEUTICO: 'Laudo Fisioterapêutico',
@@ -22,13 +23,6 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   DECLARACAO_COMPARECIMENTO: FileCheck,
 }
 
-const AREA_LABELS: Record<string, string> = {
-  PILATES: 'Pilates',
-  MOTOR: 'Motora',
-  AESTHETIC: 'Estética',
-  HOME_CARE: 'Domiciliar',
-}
-
 interface DocumentCardProps {
   document: {
     id: string
@@ -39,7 +33,7 @@ interface DocumentCardProps {
     patient: {
       id: string
       name: string
-      area: string
+      treatmentPlans?: Array<{ id: string; area: string; specialties: string[] }>
     }
   }
   onDelete: (id: string) => void
@@ -50,6 +44,7 @@ export function DocumentCard({ document: doc, onDelete }: DocumentCardProps) {
   const [confirming, setConfirming] = useState(false)
 
   const Icon = TYPE_ICONS[doc.type] ?? FileText
+  const primaryPlan = doc.patient.treatmentPlans?.[0] ?? null
   const date = new Date(doc.createdAt).toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: '2-digit',
@@ -92,12 +87,14 @@ export function DocumentCard({ document: doc, onDelete }: DocumentCardProps) {
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate font-body text-[15px] font-semibold text-foreground">{doc.title}</p>
+          <p className="truncate font-body text-[15px] font-semibold text-foreground">
+            {doc.title}
+          </p>
           <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
             <span className="font-body text-[12px] text-muted-foreground">{doc.patient.name}</span>
             <span className="font-body text-[12px] text-muted-foreground">·</span>
             <span className="font-body text-[12px] text-muted-foreground">
-              {AREA_LABELS[doc.patient.area] ?? doc.patient.area}
+              {primaryPlan ? formatTreatmentPlanLabel(primaryPlan) : 'Sem plano'}
             </span>
             {doc.period && (
               <>

@@ -15,21 +15,45 @@ enum PatientClassification {
 }
 
 enum TherapyArea {
+  ORTOPEDICA
+  NEUROLOGICA
+  CARDIORESPIRATORIA
+  ESTETICA
+  ESPORTIVA
+  PELVICA
+  PEDIATRICA
+  GERIATRICA
+  PREVENTIVA
+  OUTRA
+}
+
+enum Specialty {
   PILATES
-  MOTOR
-  AESTHETIC
-  HOME_CARE
+  RPG
+  ACUPUNTURA
+  LIBERACAO_MIOFASCIAL
+  VENTOSATERAPIA
+  DRY_NEEDLING
+  TERAPIA_MANUAL
+  OUTRA
+}
+
+enum PricingModel {
+  PER_SESSION
+  PACKAGE
+}
+
+enum PlanStatus {
+  ACTIVE
+  COMPLETED
+  CANCELED
+  PAUSED
 }
 
 enum SessionStatus {
   AGENDADO
   REALIZADO
   CANCELADO
-}
-
-enum SessionType {
-  PRESENTIAL
-  HOME_CARE
 }
 
 enum DocumentType {
@@ -100,6 +124,7 @@ model User {
   calendarConnections CalendarConnection[]
   calendarEventLinks  CalendarEventLink[]
   workplaces          Workplace[]
+  treatmentPlans      TreatmentPlan[]
 }
 
 model Patient {
@@ -110,7 +135,6 @@ model Patient {
   phone            String?
   email            String?
   classification   PatientClassification @default(STANDARD)
-  area             TherapyArea
   notes            String?
   address          String?
   neighborhood     String?
@@ -126,6 +150,7 @@ model Patient {
   sessions       Session[]
   documents      Document[]
   emailMessages  EmailMessage[]
+  treatmentPlans TreatmentPlan[]
 
   @@unique([userId, email])
   @@index([userId])
@@ -145,27 +170,60 @@ model ClinicalRecord {
   patient Patient @relation(fields: [patientId], references: [id])
 }
 
+model TreatmentPlan {
+  id             String         @id @default(cuid())
+  userId         String
+  patientId      String
+  workplaceId    String
+  area           TherapyArea
+  specialties    Specialty[]    @default([])
+  attendanceType AttendanceType
+  pricingModel   PricingModel   @default(PER_SESSION)
+  status         PlanStatus     @default(ACTIVE)
+
+  sessionPrice  Decimal? @db.Decimal(10, 2)
+  totalSessions Int?
+  packageAmount Decimal? @db.Decimal(10, 2)
+
+  startsAt  DateTime?
+  endsAt    DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id])
+  patient   Patient   @relation(fields: [patientId], references: [id])
+  workplace Workplace @relation(fields: [workplaceId], references: [id])
+  sessions  Session[]
+
+  @@index([userId])
+  @@index([userId, patientId])
+  @@index([userId, status])
+  @@index([userId, patientId, status])
+}
+
 model Session {
-  id         String        @id @default(cuid())
-  userId     String
-  patientId  String
-  date       DateTime
-  duration   Int
-  type           SessionType    @default(PRESENTIAL)
-  status         SessionStatus  @default(AGENDADO)
-  workplaceId    String?
-  attendanceType AttendanceType?
-  isActive       Boolean        @default(true)
-  subjective String?
-  objective  String?
-  assessment String?
-  plan       String?
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
+  id              String         @id @default(cuid())
+  userId          String
+  patientId       String
+  treatmentPlanId String?
+  date            DateTime
+  duration        Int
+  status          SessionStatus  @default(AGENDADO)
+  workplaceId     String
+  attendanceType  AttendanceType
+  isActive        Boolean        @default(true)
+  subjective      String?
+  objective       String?
+  assessment      String?
+  plan            String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 
   user               User                @relation(fields: [userId], references: [id])
   patient            Patient             @relation(fields: [patientId], references: [id])
-  workplace          Workplace?          @relation(fields: [workplaceId], references: [id])
+  workplace          Workplace           @relation(fields: [workplaceId], references: [id])
+  treatmentPlan      TreatmentPlan?      @relation(fields: [treatmentPlanId], references: [id])
   emailMessages      EmailMessage[]
   calendarEventLinks CalendarEventLink[]
 
@@ -174,6 +232,7 @@ model Session {
   @@index([userId, date])
   @@index([userId, status])
   @@index([userId, isActive])
+  @@index([userId, treatmentPlanId])
 }
 
 model Workplace {
@@ -190,8 +249,9 @@ model Workplace {
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @updatedAt
 
-  user     User      @relation(fields: [userId], references: [id])
-  sessions Session[]
+  user           User            @relation(fields: [userId], references: [id])
+  sessions       Session[]
+  treatmentPlans TreatmentPlan[]
 
   @@index([userId])
   @@index([userId, isActive])

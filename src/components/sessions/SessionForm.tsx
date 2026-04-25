@@ -8,9 +8,9 @@ import { formatDateTimeLocalInputValue } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { DateTimePicker } from '@/components/ui/datetime-picker'
 import { ThemedSelect } from '@/components/ui/themed-select'
+import { ATTENDANCE_TYPE_LABELS, formatTreatmentPlanLabel } from '@/lib/clinical-labels'
 
 type SessionStatus = 'AGENDADO' | 'REALIZADO' | 'CANCELADO'
-type SessionType = 'PRESENTIAL' | 'HOME_CARE'
 type AttendanceType = 'CLINIC' | 'HOME_CARE' | 'HOSPITAL' | 'CORPORATE' | 'ONLINE'
 
 interface WorkplaceSummary {
@@ -22,7 +22,7 @@ interface WorkplaceSummary {
 interface SessionFormData {
   date: string
   duration: string
-  type: SessionType
+  treatmentPlanId: string
   status: SessionStatus
   workplaceId: string
   attendanceType: AttendanceType
@@ -37,7 +37,7 @@ export interface SessionFormInitialValues {
   id: string
   date: Date | string
   duration: number
-  type: SessionType
+  treatmentPlanId?: string | null
   status: SessionStatus
   workplaceId?: string | null
   attendanceType?: AttendanceType | null
@@ -52,7 +52,6 @@ interface SessionFormProps {
   patient: {
     id: string
     name: string
-    area: string
     email?: string | null
   }
   mode?: 'create' | 'edit'
@@ -65,17 +64,22 @@ interface EmailSummary {
   sendSessionRemindersByDefault: boolean
 }
 
-const sessionTypeOptions: Array<{ value: SessionType; label: string }> = [
-  { value: 'PRESENTIAL', label: 'Presencial' },
-  { value: 'HOME_CARE', label: 'Domiciliar' },
-]
+interface TreatmentPlanSummary {
+  id: string
+  area: string
+  specialties: string[]
+  attendanceType: AttendanceType
+  workplaceId: string
+  workplace?: { id: string; name: string } | null
+  status: string
+}
 
 const attendanceTypeOptions: Array<{ value: AttendanceType; label: string }> = [
-  { value: 'CLINIC', label: 'Clínica' },
-  { value: 'HOME_CARE', label: 'Domiciliar' },
-  { value: 'HOSPITAL', label: 'Hospital' },
-  { value: 'CORPORATE', label: 'Corporativo' },
-  { value: 'ONLINE', label: 'Online' },
+  { value: 'CLINIC', label: ATTENDANCE_TYPE_LABELS.CLINIC },
+  { value: 'HOME_CARE', label: ATTENDANCE_TYPE_LABELS.HOME_CARE },
+  { value: 'HOSPITAL', label: ATTENDANCE_TYPE_LABELS.HOSPITAL },
+  { value: 'CORPORATE', label: ATTENDANCE_TYPE_LABELS.CORPORATE },
+  { value: 'ONLINE', label: ATTENDANCE_TYPE_LABELS.ONLINE },
 ]
 
 const createStatusOptions: Array<{ value: SessionStatus; label: string }> = [
@@ -122,15 +126,12 @@ function buildDefaultDate() {
   return formatDateTimeLocalInputValue(date)
 }
 
-function buildInitialFormData(
-  patient: SessionFormProps['patient'],
-  initialValues?: SessionFormInitialValues
-): SessionFormData {
+function buildInitialFormData(initialValues?: SessionFormInitialValues): SessionFormData {
   if (initialValues) {
     return {
       date: formatDateTimeLocalInputValue(new Date(initialValues.date)),
       duration: String(initialValues.duration),
-      type: initialValues.type,
+      treatmentPlanId: initialValues.treatmentPlanId ?? '',
       status: initialValues.status,
       workplaceId: initialValues.workplaceId ?? '',
       attendanceType: initialValues.attendanceType ?? 'CLINIC',
@@ -145,10 +146,10 @@ function buildInitialFormData(
   return {
     date: buildDefaultDate(),
     duration: '50',
-    type: patient.area === 'HOME_CARE' ? 'HOME_CARE' : 'PRESENTIAL',
+    treatmentPlanId: '',
     status: 'AGENDADO',
     workplaceId: '',
-    attendanceType: patient.area === 'HOME_CARE' ? 'HOME_CARE' : 'CLINIC',
+    attendanceType: 'CLINIC',
     subjective: '',
     objective: '',
     assessment: '',
@@ -187,9 +188,7 @@ const inputClass = cn(
 export function SessionForm({ patient, mode = 'create', initialValues }: SessionFormProps) {
   const router = useRouter()
   const isEdit = mode === 'edit' && Boolean(initialValues)
-  const [form, setForm] = useState<SessionFormData>(() =>
-    buildInitialFormData(patient, initialValues)
-  )
+  const [form, setForm] = useState<SessionFormData>(() => buildInitialFormData(initialValues))
   const [errors, setErrors] = useState<Partial<Record<keyof SessionFormData, string>>>({})
   const [serverError, setServerError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -198,6 +197,7 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
   const [calendarConnected, setCalendarConnected] = useState(false)
   const [loadingCalendarSettings, setLoadingCalendarSettings] = useState(true)
   const [workplaces, setWorkplaces] = useState<WorkplaceSummary[]>([])
+  const [treatmentPlans, setTreatmentPlans] = useState<TreatmentPlanSummary[]>([])
 
   useEffect(() => {
     fetch('/api/workplaces')
@@ -210,13 +210,37 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
           setForm((prev) => ({
             ...prev,
             workplaceId: first.id,
-            attendanceType: prev.attendanceType !== 'CLINIC' ? prev.attendanceType : first.defaultAttendanceType,
+            attendanceType:
+              prev.attendanceType !== 'CLINIC' ? prev.attendanceType : first.defaultAttendanceType,
           }))
         }
       })
       .catch(() => undefined)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit])
+
+  useEffect(() => {
+    fetch(`/api/patients/${patient.id}/treatment-plans`)
+      .then((response) => response.json())
+      .then((data) => {
+        const list: TreatmentPlanSummary[] = data.plans ?? []
+        setTreatmentPlans(list)
+
+        if (!isEdit && !form.treatmentPlanId) {
+          const firstActive = list.find((plan) => plan.status === 'ACTIVE')
+          if (firstActive) {
+            setForm((previous) => ({
+              ...previous,
+              treatmentPlanId: firstActive.id,
+              workplaceId: firstActive.workplaceId,
+              attendanceType: firstActive.attendanceType,
+            }))
+          }
+        }
+      })
+      .catch(() => undefined)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patient.id, isEdit])
 
   useEffect(() => {
     fetch('/api/settings/email')
@@ -240,6 +264,7 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
   const patientHasEmail = Boolean(patient.email)
   const canSendReminder = emailReady && patientHasEmail
   const statusOptions = isEdit ? editStatusOptions : createStatusOptions
+  const selectedPlan = treatmentPlans.find((plan) => plan.id === form.treatmentPlanId) ?? null
 
   function set<K extends keyof SessionFormData>(key: K, value: SessionFormData[K]) {
     setForm((previous) => ({ ...previous, [key]: value }))
@@ -275,7 +300,7 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
       const body: Record<string, unknown> = {
         date: new Date(form.date).toISOString(),
         duration: Number(form.duration),
-        type: form.type,
+        treatmentPlanId: form.treatmentPlanId || (isEdit ? null : undefined),
         status: form.status,
         workplaceId: form.workplaceId || undefined,
         attendanceType: form.attendanceType || undefined,
@@ -356,8 +381,8 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
             </h2>
             <p className="mt-1 font-body text-[13px] text-muted-foreground">
               {isEdit
-                ? 'Atualize data, duração, tipo e status do atendimento.'
-                : 'Registre data, duração, tipo e status inicial da sessão.'}
+                ? 'Atualize data, plano, modalidade e status do atendimento.'
+                : 'Registre data, plano, modalidade e status inicial da sessao.'}
             </p>
           </div>
           <div className="rounded-full bg-primary-soft px-3 py-1.5 font-body text-[11px] font-semibold text-primary-soft-fg">
@@ -381,12 +406,28 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
             />
           </Field>
 
-          <Field label="Tipo *" error={errors.type}>
+          <Field label="Plano" error={errors.treatmentPlanId}>
             <ThemedSelect
-              value={form.type}
-              onChange={(next) => set('type', next as SessionType)}
-              options={sessionTypeOptions}
-              ariaLabel="Tipo de atendimento"
+              value={form.treatmentPlanId}
+              onChange={(next) => {
+                set('treatmentPlanId', next)
+                const plan = treatmentPlans.find((item) => item.id === next)
+                if (plan) {
+                  setForm((previous) => ({
+                    ...previous,
+                    treatmentPlanId: plan.id,
+                    workplaceId: plan.workplaceId,
+                    attendanceType: plan.attendanceType,
+                  }))
+                }
+              }}
+              options={[
+                { value: '', label: 'Avulso' },
+                ...treatmentPlans
+                  .filter((plan) => plan.status === 'ACTIVE' || plan.id === form.treatmentPlanId)
+                  .map((plan) => ({ value: plan.id, label: formatTreatmentPlanLabel(plan) })),
+              ]}
+              ariaLabel="Plano de tratamento"
             />
           </Field>
 
@@ -409,7 +450,7 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
                   if (selected) set('attendanceType', selected.defaultAttendanceType)
                 }}
                 options={[
-                  { value: '', label: 'Sem local específico' },
+                  { value: '', label: 'Selecionar local' },
                   ...workplaces.map((w) => ({ value: w.id, label: w.name })),
                 ]}
                 ariaLabel="Local de trabalho"
@@ -426,6 +467,27 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
             />
           </Field>
         </div>
+
+        {selectedPlan ? (
+          <div className="rounded-[16px] border border-primary/20 bg-primary-soft/50 px-4 py-3">
+            <p className="font-body text-[12px] font-semibold text-primary-soft-fg">
+              Herdado do plano: {formatTreatmentPlanLabel(selectedPlan)}
+            </p>
+            <p className="mt-1 font-body text-[12px] text-muted-foreground">
+              Local e modalidade foram preenchidos pelo plano e podem ser ajustados para esta
+              sessao.
+            </p>
+          </div>
+        ) : (
+          <div className="rounded-[16px] border border-border bg-background/70 px-4 py-3">
+            <p className="font-body text-[12px] font-semibold text-foreground">
+              Atendimento avulso
+            </p>
+            <p className="mt-1 font-body text-[12px] text-muted-foreground">
+              Esta sessao ficara sem plano vinculado.
+            </p>
+          </div>
+        )}
 
         <div className="rounded-[18px] border border-border bg-background/70 p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
