@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { CalendarCheck2, ExternalLink, Loader2, RefreshCw, Unplug } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ThemedSelect } from '@/components/ui/themed-select'
 
 interface CalendarConnectionSafe {
   connected: boolean
@@ -231,22 +232,21 @@ export function GoogleCalendarSettingsCard({
               <label className="font-body text-[12px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
                 Agenda padrão
               </label>
-              <select
-                className={inputClass}
+              <ThemedSelect
                 value={calendarId}
-                onChange={(event) => setCalendarId(event.target.value)}
-                disabled={loadingCalendars}
-              >
-                <option value="">
-                  {loadingCalendars ? 'Carregando agendas...' : 'Selecione uma agenda'}
-                </option>
-                {calendars.map((calendar) => (
-                  <option key={calendar.id} value={calendar.id}>
-                    {calendar.summary}
-                    {calendar.primary ? ' (principal)' : ''}
-                  </option>
-                ))}
-              </select>
+                onChange={setCalendarId}
+                options={[
+                  {
+                    value: '',
+                    label: loadingCalendars ? 'Carregando agendas...' : 'Selecione uma agenda',
+                  },
+                  ...calendars.map((calendar) => ({
+                    value: calendar.id,
+                    label: `${calendar.summary}${calendar.primary ? ' (principal)' : ''}`,
+                  })),
+                ]}
+                ariaLabel="Agenda padrão do Google Calendar"
+              />
             </div>
 
             <button

@@ -4,6 +4,7 @@ import { useTransition } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { Search, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ThemedSelect } from '@/components/ui/themed-select'
 
 const AREAS = [
   { value: '', label: 'Todas as Áreas' },
@@ -67,39 +68,21 @@ export function PatientFilters() {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:w-auto">
-          <select
+          <ThemedSelect
             value={area}
-            onChange={(e) => updateParam('area', e.target.value)}
-            className={cn(
-              'w-full rounded-xl border border-border bg-input px-3 py-2.5',
-              'font-body text-[13px] text-foreground',
-              'focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring',
-              'transition-colors duration-[180ms] xl:min-w-[170px]'
-            )}
-          >
-            {AREAS.map((a) => (
-              <option key={a.value} value={a.value}>
-                {a.label}
-              </option>
-            ))}
-          </select>
+            onChange={(next) => updateParam('area', next)}
+            options={AREAS}
+            ariaLabel="Filtrar por área"
+            className="xl:min-w-[180px]"
+          />
 
-          <select
+          <ThemedSelect
             value={classification}
-            onChange={(e) => updateParam('classification', e.target.value)}
-            className={cn(
-              'w-full rounded-xl border border-border bg-input px-3 py-2.5',
-              'font-body text-[13px] text-foreground',
-              'focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring',
-              'transition-colors duration-[180ms] xl:min-w-[160px]'
-            )}
-          >
-            {CLASSIFICATIONS.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
+            onChange={(next) => updateParam('classification', next)}
+            options={CLASSIFICATIONS}
+            ariaLabel="Filtrar por classificação"
+            className="xl:min-w-[170px]"
+          />
         </div>
 
         {hasFilters && (

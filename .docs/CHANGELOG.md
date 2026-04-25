@@ -9,6 +9,30 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 13 — Polimento de UI e Componentes**
+  - Componente `ThemedSelect` (`src/components/ui/themed-select.tsx`): select customizado
+    com botão trigger, lista flutuante, checkmark no item ativo, hover/focus na paleta
+    sálvia; fecha em clique fora / `Esc`
+  - Componente `DateTimePicker` (`src/components/ui/datetime-picker.tsx`): picker de
+    data/hora temático com grid mensal, navegação de mês, highlight do dia selecionado
+    (`bg-primary`) e hoje (`border-primary/40`), seletores de hora/minuto em passo de 5 min,
+    botão "Pronto", links "Hoje" e "Limpar"; modos `datetime` e `date`
+  - `SessionCard` refatorado: botão primário "Confirmar" exposto + botão `...` circular
+    que abre menu flutuante com Cancelar, Enviar aviso, Sincronizar agenda, Remover do Google,
+    Editar SOAP e Abrir paciente; lógica absorvida inline eliminando dependência de
+    `SendSessionReminderButton` e `SyncSessionCalendarButton` como botões visíveis
+
+### Fixed
+
+  - Sidebar mobile: `useEffect` corrigido com `useRef` de pathname — o menu não fecha mais
+    imediatamente ao ser aberto; fecha apenas após navegação bem-sucedida
+  - Selects nativos substituídos por `ThemedSelect` em: `PatientFilters`, `DocumentFilters`,
+    `SessionForm` (Tipo, Status), `PatientForm` (Área, Classificação, Prioridade),
+    `NovoDocumentoModal` (Paciente, Tipo), `GoogleCalendarSettingsCard` (Agenda padrão)
+  - Input `datetime-local` e `date` substituídos por `DateTimePicker` em `SessionForm` e
+    `PatientForm`
+  - Emoji 👋 removido da saudação do dashboard
+
 - **Phase 10 — Edição SOAP e Agenda em Calendário**
   - `SessionForm` refatorado para suportar `mode="create" | "edit"` com `initialValues`,
     incluindo opção de status `CANCELADO` em edição

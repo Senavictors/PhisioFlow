@@ -32,7 +32,7 @@ export default async function DashboardPage() {
       <div>
         <p className="font-body text-[13px] text-muted-foreground">{capitalizedDate}</p>
         <h1 className="mt-1 font-display text-[38px] font-bold leading-tight text-foreground">
-          Olá, {firstName} 👋
+          Olá, {firstName}
         </h1>
       </div>
 

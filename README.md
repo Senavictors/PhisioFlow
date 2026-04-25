@@ -167,6 +167,8 @@ Após o seed:
   Senha de App criptografada, envio de documento por e-mail e aviso de atendimento)
 - Phase 12 — Integração com Google Calendar (OAuth, agenda padrão e sync unidirecional
   PhysioFlow → Google Calendar)
+- Phase 13 — Polimento de UI e Componentes (`ThemedSelect`, `DateTimePicker`, refatoração
+  do `SessionCard` com menu flutuante, correção do sidebar mobile, remoção de emoji no dashboard)
 
 ### 🗺️ Planejado
 

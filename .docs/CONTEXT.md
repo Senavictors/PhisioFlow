@@ -4,6 +4,11 @@
 
 ## Fase Atual
 
+**Phase 13 — Polimento de UI e Componentes concluída**
+`ThemedSelect` e `DateTimePicker` temáticos substituem todos os controles nativos do navegador.
+`SessionCard` refatorado com menu flutuante `...` (Confirmar exposto, demais ações no menu).
+Bug de sidebar mobile corrigido via `useRef` de pathname. Emoji 👋 removido do dashboard.
+
 **Phase 12 — Integração com Google Calendar implementada**
 OAuth Google Calendar, armazenamento criptografado de tokens, página
 `/configuracoes/integracoes`, seleção de agenda padrão, sync manual por sessão, checkbox

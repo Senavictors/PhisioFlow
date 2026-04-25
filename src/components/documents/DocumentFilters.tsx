@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useCallback } from 'react'
+import { ThemedSelect } from '@/components/ui/themed-select'
 
 const TYPE_OPTIONS = [
   { value: '', label: 'Todos os tipos' },
@@ -32,17 +33,13 @@ export function DocumentFilters() {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <select
+      <ThemedSelect
         value={currentType}
-        onChange={(e) => updateFilter('type', e.target.value)}
-        className="h-9 rounded-xl border border-border bg-card px-3 font-body text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-      >
-        {TYPE_OPTIONS.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        onChange={(next) => updateFilter('type', next)}
+        options={TYPE_OPTIONS}
+        ariaLabel="Filtrar por tipo de documento"
+        className="sm:w-[260px]"
+      />
     </div>
   )
 }

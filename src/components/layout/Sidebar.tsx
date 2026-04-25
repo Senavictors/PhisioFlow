@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { Activity, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -91,11 +91,13 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
 export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname()
 
+  const previousPathname = useRef(pathname)
   useEffect(() => {
-    if (mobileOpen) {
-      onClose?.()
+    if (previousPathname.current !== pathname) {
+      previousPathname.current = pathname
+      if (mobileOpen) onClose?.()
     }
-  }, [mobileOpen, onClose, pathname])
+  }, [pathname, mobileOpen, onClose])
 
   return (
     <>

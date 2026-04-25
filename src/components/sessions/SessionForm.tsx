@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import { CalendarCheck2, Mail } from 'lucide-react'
 import { formatDateTimeLocalInputValue } from '@/lib/date'
 import { cn } from '@/lib/utils'
+import { DateTimePicker } from '@/components/ui/datetime-picker'
+import { ThemedSelect } from '@/components/ui/themed-select'
 
 type SessionStatus = 'AGENDADO' | 'REALIZADO' | 'CANCELADO'
 type SessionType = 'PRESENTIAL' | 'HOME_CARE'
@@ -320,12 +322,7 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Field label="Data e hora *" error={errors.date}>
-            <input
-              type="datetime-local"
-              className={inputClass}
-              value={form.date}
-              onChange={(event) => set('date', event.target.value)}
-            />
+            <DateTimePicker value={form.date} onChange={(next) => set('date', next)} />
           </Field>
 
           <Field label="Duração (min) *" error={errors.duration}>
@@ -340,31 +337,21 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
           </Field>
 
           <Field label="Tipo *" error={errors.type}>
-            <select
-              className={inputClass}
+            <ThemedSelect
               value={form.type}
-              onChange={(event) => set('type', event.target.value as SessionType)}
-            >
-              {sessionTypeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              onChange={(next) => set('type', next as SessionType)}
+              options={sessionTypeOptions}
+              ariaLabel="Tipo de atendimento"
+            />
           </Field>
 
           <Field label="Status *" error={errors.status}>
-            <select
-              className={inputClass}
+            <ThemedSelect
               value={form.status}
-              onChange={(event) => set('status', event.target.value as SessionStatus)}
-            >
-              {statusOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              onChange={(next) => set('status', next as SessionStatus)}
+              options={statusOptions}
+              ariaLabel="Status do atendimento"
+            />
           </Field>
         </div>
 

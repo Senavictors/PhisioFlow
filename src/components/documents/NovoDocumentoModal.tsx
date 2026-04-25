@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { X, FilePlus, Loader2, Mail } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PeriodInfoTooltip } from '@/components/documents/PeriodInfoTooltip'
+import { ThemedSelect } from '@/components/ui/themed-select'
 
 const TYPE_OPTIONS = [
   { value: 'RELATORIO_PROGRESSO', label: 'Relatório de evolução' },
@@ -152,18 +153,15 @@ export function NovoDocumentoModal({
                 <span className="font-body text-[13px]">Carregando…</span>
               </div>
             ) : (
-              <select
+              <ThemedSelect
                 value={patientId}
-                onChange={(e) => setPatientId(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-3 py-2 font-body text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-              >
-                <option value="">Selecione um paciente</option>
-                {patients.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
+                onChange={setPatientId}
+                options={[
+                  { value: '', label: 'Selecione um paciente' },
+                  ...patients.map((p) => ({ value: p.id, label: p.name })),
+                ]}
+                ariaLabel="Paciente"
+              />
             )}
           </div>
 
@@ -171,17 +169,12 @@ export function NovoDocumentoModal({
             <label className="font-body text-[13px] font-semibold text-foreground">
               Tipo de documento
             </label>
-            <select
+            <ThemedSelect
               value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-3 py-2 font-body text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-            >
-              {TYPE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              onChange={setType}
+              options={TYPE_OPTIONS}
+              ariaLabel="Tipo de documento"
+            />
           </div>
 
           <div className="space-y-1.5">

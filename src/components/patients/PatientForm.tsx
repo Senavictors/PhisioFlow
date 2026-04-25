@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArchivePatientButton } from '@/components/patients/ArchivePatientButton'
 import { cn } from '@/lib/utils'
+import { DateTimePicker } from '@/components/ui/datetime-picker'
+import { ThemedSelect } from '@/components/ui/themed-select'
 
 interface PatientFormData {
   name: string
@@ -170,11 +172,10 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
           </div>
 
           <Field label="Data de nascimento" error={errors.birthDate}>
-            <input
-              type="date"
-              className={inputClass}
+            <DateTimePicker
+              mode="date"
               value={form.birthDate}
-              onChange={(e) => set('birthDate', e.target.value)}
+              onChange={(next) => set('birthDate', next)}
             />
           </Field>
 
@@ -208,32 +209,21 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Field label="Área terapêutica *" error={errors.area}>
-            <select
-              className={inputClass}
+            <ThemedSelect
               value={form.area}
-              onChange={(e) => set('area', e.target.value)}
-            >
-              <option value="">Selecionar área</option>
-              {AREAS.map((a) => (
-                <option key={a.value} value={a.value}>
-                  {a.label}
-                </option>
-              ))}
-            </select>
+              onChange={(next) => set('area', next)}
+              options={[{ value: '', label: 'Selecionar área' }, ...AREAS]}
+              ariaLabel="Área terapêutica"
+            />
           </Field>
 
           <Field label="Classificação" error={errors.classification}>
-            <select
-              className={inputClass}
+            <ThemedSelect
               value={form.classification}
-              onChange={(e) => set('classification', e.target.value)}
-            >
-              {CLASSIFICATIONS.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
+              onChange={(next) => set('classification', next)}
+              options={CLASSIFICATIONS}
+              ariaLabel="Classificação clínica"
+            />
           </Field>
         </div>
 
@@ -342,17 +332,12 @@ export function PatientForm({ initialData, patientId }: PatientFormProps) {
         </Field>
 
         <Field label="Prioridade" error={errors.homeCarePriority}>
-          <select
-            className={inputClass}
+          <ThemedSelect
             value={form.homeCarePriority}
-            onChange={(e) => set('homeCarePriority', e.target.value)}
-          >
-            {HOME_CARE_PRIORITIES.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </select>
+            onChange={(next) => set('homeCarePriority', next)}
+            options={HOME_CARE_PRIORITIES}
+            ariaLabel="Prioridade domiciliar"
+          />
         </Field>
       </section>
 
