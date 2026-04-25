@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTransition } from 'react'
 import { Home, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -12,10 +12,18 @@ interface DomiciliarToggleProps {
 export function DomiciliarToggle({ active }: DomiciliarToggleProps) {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
   function toggle() {
-    const next = active ? pathname : `${pathname}?domiciliar=1`
+    const params = new URLSearchParams(searchParams.toString())
+    if (active) {
+      params.delete('domiciliar')
+    } else {
+      params.set('domiciliar', '1')
+    }
+    const query = params.toString()
+    const next = query ? `${pathname}?${query}` : pathname
     startTransition(() => {
       router.push(next)
     })
