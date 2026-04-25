@@ -50,7 +50,7 @@ export function Topbar({ userName, onOpenNavigation }: TopbarProps) {
 
           <div className="min-w-0">
             <p className="hidden font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:block">
-              Portal Restaurativo
+              Experiência Clínica Fluida
             </p>
             <p className="truncate font-display text-[18px] font-bold text-foreground sm:text-[20px]">
               {title}

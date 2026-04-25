@@ -49,7 +49,7 @@ export default function LoginPage() {
               PhisioFlow
             </p>
             <p className="font-body text-[8.5px] font-bold uppercase tracking-[0.22em] text-muted-foreground mt-1 leading-tight">
-              Portal Restaurativo
+              Experiência Clínica Fluida
             </p>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function LoginPage() {
             Bem-vindo de volta
           </h1>
           <p className="font-body text-[14px] text-muted-foreground mb-7">
-            Acesse o seu portal restaurativo.
+            Acesse a sua experiência clínica fluida.
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">

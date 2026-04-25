@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { X, FilePlus, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { PeriodInfoTooltip } from '@/components/documents/PeriodInfoTooltip'
 
 const TYPE_OPTIONS = [
-  { value: 'LAUDO_FISIOTERAPEUTICO', label: 'Laudo Fisioterapêutico' },
-  { value: 'RELATORIO_PROGRESSO', label: 'Relatório de Progresso' },
-  { value: 'DECLARACAO_COMPARECIMENTO', label: 'Declaração de Comparecimento' },
+  { value: 'RELATORIO_PROGRESSO', label: 'Relatório de evolução' },
+  { value: 'LAUDO_FISIOTERAPEUTICO', label: 'Laudo fisioterapêutico' },
+  { value: 'DECLARACAO_COMPARECIMENTO', label: 'Declaração de horas' },
 ]
 
 interface Patient {
@@ -149,9 +150,10 @@ export function NovoDocumentoModal({ onClose, onCreated }: NovoDocumentoModalPro
           </div>
 
           <div className="space-y-1.5">
-            <label className="font-body text-[13px] font-semibold text-foreground">
+            <label className="flex items-center gap-1.5 font-body text-[13px] font-semibold text-foreground">
               Período{' '}
               <span className="font-normal text-muted-foreground">(opcional)</span>
+              <PeriodInfoTooltip />
             </label>
             <input
               type="text"

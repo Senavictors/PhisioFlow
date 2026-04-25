@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Calendar, UserPlus } from 'lucide-react'
+import { ArrowRight, Calendar, UserPlus } from 'lucide-react'
 
 export function QuickActions() {
   return (
@@ -9,17 +9,17 @@ export function QuickActions() {
         Comece um fluxo em segundos.
       </p>
 
-      <div className="mt-6 flex flex-col gap-2">
+      <div className="mt-6 flex flex-col gap-3">
         <Link
           href="/pacientes/new"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 font-body text-[13px] font-semibold text-primary-foreground/90 transition-colors duration-[180ms] hover:bg-white/10"
+          className="flex items-center justify-center gap-2 rounded-xl border border-primary-foreground/40 bg-primary-foreground/5 px-4 py-3 font-body text-[13px] font-semibold text-primary-foreground transition-colors duration-[180ms] hover:border-primary-foreground/70 hover:bg-primary-foreground/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/60"
         >
           <UserPlus className="h-4 w-4 shrink-0" />
           Cadastrar paciente
         </Link>
         <Link
           href="/agenda"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 font-body text-[13px] font-semibold text-primary-foreground/90 transition-colors duration-[180ms] hover:bg-white/10"
+          className="flex items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 font-body text-[13px] font-semibold text-accent-foreground shadow-sm transition-colors duration-[180ms] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-foreground/60"
         >
           <Calendar className="h-4 w-4 shrink-0" />
           Agendar sessão
@@ -29,9 +29,10 @@ export function QuickActions() {
       <div className="mt-auto pt-6">
         <Link
           href="/atendimentos"
-          className="font-body text-[13px] text-primary-foreground/80 transition-opacity duration-[180ms] hover:text-primary-foreground"
+          className="group flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-body text-[13px] font-semibold text-primary-foreground/85 transition-colors duration-[180ms] hover:bg-primary-foreground/10 hover:text-primary-foreground"
         >
-          Ver atendimentos →
+          Ver atendimentos
+          <ArrowRight className="h-4 w-4 transition-transform duration-[180ms] group-hover:translate-x-0.5" />
         </Link>
       </div>
     </div>

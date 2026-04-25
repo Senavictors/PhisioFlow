@@ -28,7 +28,7 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
             PhysioFlow
           </p>
           <p className="mt-1 font-body text-[8.5px] font-bold uppercase leading-tight tracking-[0.22em] text-muted-foreground">
-            Portal Restaurativo
+            Experiência Clínica Fluida
           </p>
         </div>
       </div>
@@ -123,7 +123,7 @@ export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
               PhysioFlow
             </p>
             <p className="mt-1 font-body text-[8.5px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
-              Portal Restaurativo
+              Experiência Clínica Fluida
             </p>
           </div>
 

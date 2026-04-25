@@ -49,7 +49,7 @@ export default function RegisterPage() {
               PhisioFlow
             </p>
             <p className="font-body text-[8.5px] font-bold uppercase tracking-[0.22em] text-muted-foreground mt-1 leading-tight">
-              Portal Restaurativo
+              Experiência Clínica Fluida
             </p>
           </div>
         </div>

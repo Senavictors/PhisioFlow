@@ -176,7 +176,7 @@ export function SessionCard({
                 type="button"
                 disabled={isPending}
                 onClick={() => handleStatusUpdate('CANCELADO')}
-                className="flex items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 font-body text-[13px] font-semibold text-muted-foreground transition-colors duration-[180ms] hover:bg-muted hover:text-foreground disabled:opacity-60"
+                className="flex items-center justify-center gap-2 rounded-xl border border-danger/30 bg-danger-soft px-4 py-2.5 font-body text-[13px] font-semibold text-danger transition-colors duration-[180ms] hover:border-danger/50 hover:bg-danger hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger/40 disabled:opacity-60"
               >
                 <X className="h-4 w-4" />
                 Cancelar

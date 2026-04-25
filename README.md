@@ -157,19 +157,20 @@ Após o seed:
 - Phase 6 — Timeline de Evolução
 - Phase 7 — Central de Documentos (geração PDF)
 - Phase 8 — Logística Domiciliar (endereço, prioridade, agenda domiciliar)
+- Phase 9 — Polimento UX e Documentos v1.1 (cards contextuais, tooltip de período,
+  QuickActions revisado, loading no filtro domiciliar, botão Cancelar terracota,
+  rebrand "Experiência Clínica Fluida")
 
 ### 🗺️ Planejado
 
-- Phase 9 — Polimento UX e Documentos v1.1
 - Phase 10 — Edição SOAP e Agenda em Calendário
 - Phase 11 — E-mails com Gmail App Password
 - Phase 12 — Integração com Google Calendar
 
 ### ➡️ Próximo Passo
 
-Executar **Phase 9 — Polimento UX e Documentos v1.1**.
+Executar **Phase 10 — Edição SOAP e Agenda em Calendário**.
 
-Tasks criadas em `.docs/tasks/phase-9-ux-polish.md`,
-`.docs/tasks/phase-10-clinical-agenda-flow.md`,
+Tasks restantes em `.docs/tasks/phase-10-clinical-agenda-flow.md`,
 `.docs/tasks/phase-11-email-notifications.md` e
 `.docs/tasks/phase-12-google-calendar.md`.

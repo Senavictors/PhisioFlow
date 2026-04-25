@@ -4,10 +4,12 @@
 
 ## Fase Atual
 
-**Planejamento do próximo ciclo concluído**
-Foram criadas as tasks das Phases 9-12 para organizar o próximo ciclo: polimentos de UX,
-edição SOAP + agenda em calendário, e-mails via Gmail App Password e integração com Google
-Calendar.
+**Phase 9 — Polimento UX e Documentos v1.1 concluída**
+Cards contextuais no topo de `/documentos`, tooltip de período no modal de geração,
+QuickActions com botões mais visíveis, `DomiciliarToggle` com loading, botão "Cancelar"
+em terracota e substituição de "Portal Restaurativo" por "Experiência Clínica Fluida"
+em sidebar/topbar/login/register. `ENCAMINHAMENTO` ficou apenas como card "em breve",
+sem alterar enum/templates.
 
 **Phase 8 — Logística Domiciliar concluída**
 Campos de endereço e prioridade no modelo `Patient`, seção de logística na ficha e no formulário de edição, badge de prioridade no `SessionCard`, e visão domiciliar na agenda (`/agenda?domiciliar=1`) com ordenação por prioridade. Migration `phase8_homecare_logistics` aplicada.
@@ -16,20 +18,15 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-Executar **Phase 9 — Polimento UX e Documentos v1.1**:
-
-- cards contextuais na aba Documentos;
-- atualização do card de ações rápidas;
-- feedback/hover/loading no filtro Domiciliar;
-- info tooltip para o campo Período no modal de documento;
-- cor terracota para o botão Cancelar em atendimentos;
-- troca de "Portal Restaurativo" para "Experiência Clínica Fluida".
-
-Depois, seguir a ordem arquitetada:
+Seguir a ordem arquitetada:
 
 - **Phase 10** — Edição SOAP e Agenda em Calendário
 - **Phase 11** — E-mails com Gmail App Password
 - **Phase 12** — Integração com Google Calendar
+
+Decisão registrada: `ENCAMINHAMENTO` segue por enquanto apenas como card "em breve" em
+`/documentos`. Caso o usuário aprove gerar PDF, criar enum, migration, DTO e template
+em uma futura iteração.
 
 ## O Que Existe
 

@@ -9,6 +9,22 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 9 — Polimento UX e Documentos v1.1**
+  - Componente `DocumentTypeCards` com faixa de cards contextuais no topo de `/documentos`
+    (Relatório de evolução, Laudo fisioterapêutico, Encaminhamento "em breve" e Declaração de horas)
+  - Componente `PeriodInfoTooltip` no modal "Gerar documento" explicando o campo Período
+    via hover/foco/clique
+  - Labels públicos atualizados no modal: "Relatório de evolução", "Laudo fisioterapêutico",
+    "Declaração de horas"
+  - `QuickActions` redesenhado: botão "Cadastrar paciente" com borda visível, "Agendar sessão"
+    em terracota com contraste alto e link "Ver atendimentos" com seta animada
+  - `DomiciliarToggle` agora exibe spinner de loading ao trocar de visão e tem hover/focus
+    visíveis também no estado ativo
+  - Botão "Cancelar" do `SessionCard` migrado para variante terracota (danger-soft) para
+    diferenciar claramente do botão "Abrir paciente"
+  - Substituição de "Portal Restaurativo" por "Experiência Clínica Fluida" na sidebar
+    desktop/mobile, topbar, login e register
+
 - Planejamento do próximo ciclo:
   - Task `phase-9-ux-polish` para polimentos de UX, cards de documentos, microinterações e troca de naming
   - Task `phase-10-clinical-agenda-flow` para edição SOAP e visualização mensal da agenda

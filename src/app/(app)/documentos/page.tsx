@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { FileText, FilePlus } from 'lucide-react'
 import { DocumentCard } from '@/components/documents/DocumentCard'
 import { DocumentFilters } from '@/components/documents/DocumentFilters'
+import { DocumentTypeCards } from '@/components/documents/DocumentTypeCards'
 import { NovoDocumentoModal } from '@/components/documents/NovoDocumentoModal'
 
 interface Document {
@@ -121,6 +122,8 @@ export default function DocumentosPage() {
           Novo documento
         </button>
       </div>
+
+      <DocumentTypeCards />
 
       <Suspense>
         <DocumentFilters />
