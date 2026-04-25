@@ -44,16 +44,33 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-Validar integrações em ambiente real e preparar deploy na Vercel. Ainda falta validação
-manual com conta Google real após configurar `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`,
-`GOOGLE_CALENDAR_REDIRECT_URI` e `INTEGRATION_ENCRYPTION_KEY`.
+**Ciclo "Multi-modalidade + Financeiro" planejado** — [ADR-005](decisions/ADR-005-multi-modalidade-financeiro.md)
+desacopla área do paciente (passa para `TreatmentPlan`), introduz locais de trabalho
+(`Workplace`) e adiciona acompanhamento financeiro (`Payment`, `expectedFee`, dashboard).
 
-`INTEGRATION_ENCRYPTION_KEY` (gerada com `openssl rand -base64 32`) precisa estar
-configurada localmente e na Vercel antes de testar/usar as integrações externas.
+Sequência:
 
-Decisão registrada: `ENCAMINHAMENTO` segue por enquanto apenas como card "em breve" em
-`/documentos`. Caso o usuário aprove gerar PDF, criar enum, migration, DTO e template
-em uma futura iteração.
+- **Phase 14** — [Locais de trabalho](tasks/phase-14-workplaces.md): modelo `Workplace`,
+  `Session.workplaceId` e `Session.attendanceType`. Backfill: 1 workplace default por
+  usuário. Mantém `Patient.area` e `Session.type` por compatibilidade.
+- **Phase 15** — [Plano de tratamento](tasks/phase-15-treatment-plans.md): modelo
+  `TreatmentPlan` (1 paciente → N planos), expansão de `TherapyArea`, novo enum
+  `Specialty`. Backfill cria plano legado por paciente. Remove `Patient.area` e
+  `Session.type`.
+- **Phase 16** — [Pagamentos](tasks/phase-16-payments.md): modelo `Payment`,
+  `Session.expectedFee` snapshot, `Session.paymentStatus` cache, modal de registrar
+  pagamento, saldo do plano (avulso ou pacote).
+- **Phase 17** — [Dashboard financeiro](tasks/phase-17-finance-dashboard.md): página
+  `/financeiro` com recebido vs previsto, série temporal, breakdowns por local e por
+  área, lista de pendências.
+
+Antes de iniciar Phase 14, ainda pendente da janela anterior:
+
+- Validar integrações em ambiente real (Phase 11/12) e preparar deploy na Vercel
+- Configurar `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALENDAR_REDIRECT_URI`
+  e `INTEGRATION_ENCRYPTION_KEY` (esta última gerada com `openssl rand -base64 32`)
+- Decisão registrada: `ENCAMINHAMENTO` segue apenas como card "em breve" em `/documentos`.
+  Caso o usuário aprove gerar PDF, criar enum, migration, DTO e template em iteração futura.
 
 ## O Que Existe
 
@@ -72,11 +89,20 @@ em uma futura iteração.
 
 ### Tasks planejadas
 
-- `.docs/tasks/phase-9-ux-polish.md` — Polimentos visuais e de microinteração, incluindo Documentos, QuickActions, Agenda, Atendimentos e troca de naming
-- `.docs/tasks/phase-10-clinical-agenda-flow.md` — Edição SOAP de atendimentos existentes e visualização mensal da agenda
-- `.docs/tasks/phase-11-email-notifications.md` — Configuração de Gmail App Password, envio de documento por e-mail e aviso de atendimento
-- `.docs/tasks/phase-12-google-calendar.md` — OAuth Google Calendar e sincronização unidirecional de sessões
-- `.docs/decisions/ADR-004-integracoes-externas.md` — Decisão proposta para SMTP Gmail, OAuth Calendar, criptografia e sync opt-in
+- `.docs/tasks/phase-14-workplaces.md` — Locais de trabalho e desacoplamento de atendimento
+- `.docs/tasks/phase-15-treatment-plans.md` — Plano de tratamento e multi-modalidade
+- `.docs/tasks/phase-16-payments.md` — Pagamentos e cobrança (avulso e pacote)
+- `.docs/tasks/phase-17-finance-dashboard.md` — Dashboard financeiro (recebido vs previsto)
+- `.docs/decisions/ADR-005-multi-modalidade-financeiro.md` — Decisão proposta para
+  multi-modalidade clínica e acompanhamento financeiro
+
+### Tasks já concluídas (referência)
+
+- `.docs/tasks/phase-9-ux-polish.md` — Polimentos visuais e de microinteração
+- `.docs/tasks/phase-10-clinical-agenda-flow.md` — Edição SOAP e visualização mensal da agenda
+- `.docs/tasks/phase-11-email-notifications.md` — Gmail App Password e envios
+- `.docs/tasks/phase-12-google-calendar.md` — OAuth Google Calendar
+- `.docs/tasks/phase-13-ui-polish.md` — `ThemedSelect`, `DateTimePicker` e refatoração do `SessionCard`
 
 ### Features implementadas
 
@@ -198,3 +224,4 @@ Módulo `calendar` segue o mesmo padrão em `src/server/modules/calendar/`
 - [ADR-002](decisions/ADR-002-soap-notes.md) — Estrutura SOAP
 - [ADR-003](decisions/ADR-003-auth-approach.md) — Estratégia de Auth
 - [ADR-004](decisions/ADR-004-integracoes-externas.md) — Integrações externas de e-mail e calendário
+- [ADR-005](decisions/ADR-005-multi-modalidade-financeiro.md) — Multi-modalidade clínica e acompanhamento financeiro

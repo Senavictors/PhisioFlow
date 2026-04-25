@@ -25,6 +25,15 @@ PhysioFlow centraliza toda a operação clínica em uma interface única — do 
 - **Central de Documentos** — Geração de laudos e relatórios em PDF com dados do prontuário
 - **Logística Domiciliar** — Gestão de atendimentos fora da clínica com tags de prioridade
 
+### Em desenvolvimento (ciclo Multi-modalidade + Financeiro)
+
+- **Locais de Trabalho** — Cadastro de clínicas, particular e online com defaults próprios
+- **Plano de Tratamento** — Cada paciente em N modalidades simultâneas (Pilates +
+  Ortopédica + Estética, etc.) com área, especialidades e tipo de atendimento por plano
+- **Pagamentos** — Registro de cobranças avulsas e pacotes com método e status
+- **Dashboard Financeiro** — Recebido vs previsto por dia/semana/mês e quebra por
+  local/área
+
 ---
 
 ## Arquitetura
@@ -105,13 +114,27 @@ src/
 
 ## Modelo de Dados (simplificado)
 
+Atual:
+
 ```
 User       → Patient (1:N)
 Patient    → ClinicalRecord (1:1)
 Patient    → Session (1:N)
 Session    → (campos SOAP)
 Patient    → Document (1:N)
-Patient    → Attachment (1:N)
+```
+
+Após o ciclo Multi-modalidade + Financeiro (phases 14–17):
+
+```
+User       → Patient (1:N)
+User       → Workplace (1:N)
+Patient    → TreatmentPlan (1:N)              ← multi-modalidade
+TreatmentPlan → Session (1:N)
+TreatmentPlan → Payment (1:N)                 ← pacote
+Session    → Payment (0:1)                    ← avulso
+Session    → expectedFee (snapshot)
+Workplace  → Session (1:N)
 ```
 
 ---
@@ -170,11 +193,24 @@ Após o seed:
 - Phase 13 — Polimento de UI e Componentes (`ThemedSelect`, `DateTimePicker`, refatoração
   do `SessionCard` com menu flutuante, correção do sidebar mobile, remoção de emoji no dashboard)
 
-### 🗺️ Planejado
+### 🗺️ Planejado — Ciclo "Multi-modalidade + Financeiro"
 
-- Validar integrações em ambiente real e preparar deploy na Vercel
+> Decisão arquitetural: [ADR-005](.docs/decisions/ADR-005-multi-modalidade-financeiro.md)
+
+- **Phase 14 — Locais de Trabalho** (`Workplace`, `Session.workplaceId`, `attendanceType`)
+- **Phase 15 — Plano de Tratamento** (multi-modalidade por paciente, remoção do
+  `Patient.area`, expansão de `TherapyArea`, novo enum `Specialty`)
+- **Phase 16 — Pagamentos** (`Payment`, `expectedFee` snapshot, avulso e pacote,
+  saldo do plano)
+- **Phase 17 — Dashboard Financeiro** (recebido vs previsto, série temporal,
+  breakdowns por local/área, lista de pendências)
 
 ### ➡️ Próximo Passo
 
-Aplicar as migrations no Neon com `npx prisma migrate deploy`, configurar as variáveis
-de e-mail/Google na Vercel e validar os fluxos reais de envio e sincronização.
+Iniciar **Phase 14**: criar modelo `Workplace`, migration `phase14_workplaces` com
+backfill (1 workplace default por usuário), página `/configuracoes/locais` e seletor de
+local + tipo de atendimento no formulário de sessão.
+
+Em paralelo, ainda pendente do ciclo anterior: aplicar as migrations atuais no Neon com
+`npx prisma migrate deploy`, configurar as variáveis de e-mail/Google na Vercel e
+validar os fluxos reais de envio e sincronização.

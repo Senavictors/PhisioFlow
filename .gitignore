@@ -32,6 +32,11 @@ prisma/generated/
 coverage/
 .nyc_output/
 
+# ─── TypeScript ──────────────────────────────────────────────────────────────
+# Cache do compilador incremental, regenerado automaticamente
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
 # ─── Certificados / chaves ───────────────────────────────────────────────────
 *.pem
 *.key
