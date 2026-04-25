@@ -16,7 +16,19 @@ async function main() {
   const demoEmail = 'demo@phisioflow.com'
   const demoPassword = 'demo1234'
 
+  await prisma.calendarEventLink.deleteMany({
+    where: { user: { email: demoEmail } },
+  })
+
+  await prisma.emailMessage.deleteMany({
+    where: { user: { email: demoEmail } },
+  })
+
   await prisma.session.deleteMany({
+    where: { user: { email: demoEmail } },
+  })
+
+  await prisma.calendarConnection.deleteMany({
     where: { user: { email: demoEmail } },
   })
 
@@ -24,11 +36,19 @@ async function main() {
     where: { patient: { user: { email: demoEmail } } },
   })
 
+  await prisma.document.deleteMany({
+    where: { user: { email: demoEmail } },
+  })
+
   await prisma.patient.deleteMany({
     where: { user: { email: demoEmail } },
   })
 
   await prisma.workplace.deleteMany({
+    where: { user: { email: demoEmail } },
+  })
+
+  await prisma.emailSettings.deleteMany({
     where: { user: { email: demoEmail } },
   })
 

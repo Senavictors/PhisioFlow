@@ -108,7 +108,7 @@ export async function listSessions(userId: string, filters: ListSessionFilters =
   const page = filters.page ?? 1
   const limit = filters.limit ?? 20
 
-  const [sessions, total] = await prisma.$transaction([
+  const [sessions, total] = await Promise.all([
     prisma.session.findMany({
       where,
       include: sessionInclude,
