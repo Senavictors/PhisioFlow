@@ -35,15 +35,18 @@ export function GmailAppPasswordGuide() {
             Como gerar uma Senha de App do Gmail
           </h2>
           <p className="mt-1 font-body text-[13px] text-muted-foreground">
-            Use uma senha dedicada — ela pode ser revogada no Google sem afetar a senha
-            principal da sua conta.
+            Use uma senha dedicada — ela pode ser revogada no Google sem afetar a senha principal da
+            sua conta.
           </p>
         </div>
       </div>
 
       <ol className="space-y-3">
         {STEPS.map((step, index) => (
-          <li key={step.title} className="flex gap-3 rounded-xl border border-border bg-background/60 p-3">
+          <li
+            key={step.title}
+            className="flex gap-3 rounded-xl border border-border bg-background/60 p-3"
+          >
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary font-display text-[13px] font-bold text-primary-foreground">
               {index + 1}
             </span>
@@ -58,9 +61,9 @@ export function GmailAppPasswordGuide() {
       </ol>
 
       <p className="rounded-xl bg-warning-soft px-3 py-2 font-body text-[12px] leading-relaxed text-warning">
-        A Senha de App dá acesso a enviar e-mails pela sua conta. Guarde-a como
-        guardaria sua senha do Gmail — você pode revogá-la a qualquer momento na
-        sua conta Google sem afetar a senha principal.
+        A Senha de App dá acesso a enviar e-mails pela sua conta. Guarde-a como guardaria sua senha
+        do Gmail — você pode revogá-la a qualquer momento na sua conta Google sem afetar a senha
+        principal.
       </p>
     </section>
   )

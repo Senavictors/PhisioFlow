@@ -26,6 +26,7 @@ interface SessionFormData {
   status: SessionStatus
   workplaceId: string
   attendanceType: AttendanceType
+  expectedFee: string
   subjective: string
   objective: string
   assessment: string
@@ -41,6 +42,7 @@ export interface SessionFormInitialValues {
   status: SessionStatus
   workplaceId?: string | null
   attendanceType?: AttendanceType | null
+  expectedFee?: number | string | null
   subjective?: string | null
   objective?: string | null
   assessment?: string | null
@@ -72,6 +74,8 @@ interface TreatmentPlanSummary {
   workplaceId: string
   workplace?: { id: string; name: string } | null
   status: string
+  pricingModel: string
+  sessionPrice?: unknown
 }
 
 const attendanceTypeOptions: Array<{ value: AttendanceType; label: string }> = [
@@ -135,6 +139,10 @@ function buildInitialFormData(initialValues?: SessionFormInitialValues): Session
       status: initialValues.status,
       workplaceId: initialValues.workplaceId ?? '',
       attendanceType: initialValues.attendanceType ?? 'CLINIC',
+      expectedFee:
+        initialValues.expectedFee != null && initialValues.expectedFee !== ''
+          ? String(initialValues.expectedFee)
+          : '',
       subjective: initialValues.subjective ?? '',
       objective: initialValues.objective ?? '',
       assessment: initialValues.assessment ?? '',
@@ -150,6 +158,7 @@ function buildInitialFormData(initialValues?: SessionFormInitialValues): Session
     status: 'AGENDADO',
     workplaceId: '',
     attendanceType: 'CLINIC',
+    expectedFee: '',
     subjective: '',
     objective: '',
     assessment: '',
@@ -304,6 +313,14 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
         status: form.status,
         workplaceId: form.workplaceId || undefined,
         attendanceType: form.attendanceType || undefined,
+        expectedFee:
+          selectedPlan?.pricingModel === 'PACKAGE'
+            ? null
+            : form.expectedFee !== ''
+              ? Number(form.expectedFee)
+              : isEdit
+                ? null
+                : undefined,
         subjective: form.subjective,
         objective: form.objective,
         assessment: form.assessment,
@@ -466,6 +483,26 @@ export function SessionForm({ patient, mode = 'create', initialValues }: Session
               ariaLabel="Modalidade de atendimento"
             />
           </Field>
+
+          {selectedPlan?.pricingModel === 'PACKAGE' ? (
+            <Field label="Valor da sessão">
+              <div className={cn(inputClass, 'flex items-center text-muted-foreground')}>
+                Coberta pelo pacote
+              </div>
+            </Field>
+          ) : (
+            <Field label="Valor da sessão (R$)" error={errors.expectedFee}>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                className={inputClass}
+                value={form.expectedFee}
+                placeholder="Opcional"
+                onChange={(event) => set('expectedFee', event.target.value)}
+              />
+            </Field>
+          )}
         </div>
 
         {selectedPlan ? (

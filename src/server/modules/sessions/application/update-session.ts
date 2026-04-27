@@ -25,6 +25,9 @@ export async function updateSessionUseCase(id: string, userId: string, dto: Upda
   let treatmentPlanId: string | null | undefined
   let workplaceId = dto.workplaceId
   let attendanceType = dto.attendanceType as AttendanceType | undefined
+  let expectedFeeUpdate: number | null | undefined
+  let paymentStatusUpdate: 'PAID' | 'PENDING' | 'PARTIAL' | 'REFUNDED' | null | undefined
+  let isPackage = false
 
   if (dto.treatmentPlanId === null || dto.treatmentPlanId === '') {
     treatmentPlanId = null
@@ -39,6 +42,15 @@ export async function updateSessionUseCase(id: string, userId: string, dto: Upda
     treatmentPlanId = plan.id
     if (!workplaceId) workplaceId = plan.workplaceId
     if (!attendanceType) attendanceType = plan.attendanceType
+    if (plan.pricingModel === 'PACKAGE') {
+      isPackage = true
+      expectedFeeUpdate = null
+      paymentStatusUpdate = null
+    }
+  }
+
+  if (!isPackage && dto.expectedFee !== undefined) {
+    expectedFeeUpdate = dto.expectedFee
   }
 
   const updatedSession = await updateSession(id, {
@@ -48,6 +60,8 @@ export async function updateSessionUseCase(id: string, userId: string, dto: Upda
     status: dto.status as SessionStatus | undefined,
     workplaceId,
     attendanceType,
+    expectedFee: expectedFeeUpdate,
+    paymentStatus: paymentStatusUpdate,
     ...normalizePartialSessionSoapInput({
       subjective: dto.subjective,
       objective: dto.objective,
@@ -55,6 +69,12 @@ export async function updateSessionUseCase(id: string, userId: string, dto: Upda
       plan: dto.plan,
     }),
   })
+
+  if (expectedFeeUpdate !== undefined && !isPackage) {
+    const { recomputeSessionPaymentStatus } =
+      await import('@/server/modules/payments/application/recompute-session-payment-status')
+    await recomputeSessionPaymentStatus(id)
+  }
 
   await syncSessionCalendarAfterMutation({
     userId,

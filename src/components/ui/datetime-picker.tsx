@@ -274,9 +274,7 @@ export function DateTimePicker({
                 parsed.month === cell.month &&
                 parsed.year === cell.year
               const isToday =
-                today.day === cell.day &&
-                today.month === cell.month &&
-                today.year === cell.year
+                today.day === cell.day && today.month === cell.month && today.year === cell.year
               return (
                 <button
                   key={`${cell.year}-${cell.month}-${cell.day}-${index}`}

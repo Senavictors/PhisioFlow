@@ -27,7 +27,7 @@ pickers de data/hora — dentro do design system do PhysioFlow (sálvia + terrac
 ### SessionCard — refatoração de ações
 
 - [x] Substituir coluna de múltiplos botões por botão primário "Confirmar" (só quando `AGENDADO`) +
-  botão `...` circular que abre menu flutuante com as demais ações:
+      botão `...` circular que abre menu flutuante com as demais ações:
   - Cancelar (vermelho)
   - Enviar aviso (com tooltip se e-mail não configurado)
   - Sincronizar / Atualizar agenda
@@ -37,13 +37,13 @@ pickers de data/hora — dentro do design system do PhysioFlow (sálvia + terrac
 - [x] Menu fecha em clique fora / `Esc`
 - [x] Spinner no botão `...` durante ação em andamento
 - [x] Lógica de `SendSessionReminderButton` e `SyncSessionCalendarButton` absorvida inline
-  no `SessionCard` (componentes passaram a ser usados apenas pelo card)
+      no `SessionCard` (componentes passaram a ser usados apenas pelo card)
 
 ### Componente ThemedSelect
 
 - [x] Criar `src/components/ui/themed-select.tsx` — select customizado com
-  botão trigger + lista flutuante, respeitando `bg-input`, `border-border`, `bg-primary-soft`,
-  hover em `bg-muted`, checkmark no item selecionado, fecha em clique fora / `Esc`
+      botão trigger + lista flutuante, respeitando `bg-input`, `border-border`, `bg-primary-soft`,
+      hover em `bg-muted`, checkmark no item selecionado, fecha em clique fora / `Esc`
 - [x] Substituir `<select>` nativo em `PatientFilters`
 - [x] Substituir `<select>` nativo em `DocumentFilters`
 - [x] Substituir `<select>` nativo em `SessionForm` (campos Tipo e Status)
@@ -67,9 +67,9 @@ pickers de data/hora — dentro do design system do PhysioFlow (sálvia + terrac
 ### Sidebar mobile
 
 - [x] Corrigir bug no `useEffect` de `Sidebar.tsx` que chamava `onClose()` imediatamente ao
-  abrir o menu (disparava toda vez que `mobileOpen` virava `true`)
+      abrir o menu (disparava toda vez que `mobileOpen` virava `true`)
 - [x] Novo comportamento: fechar só quando o `pathname` realmente muda (navegação efetuada),
-  usando `useRef` para rastrear o pathname anterior
+      usando `useRef` para rastrear o pathname anterior
 
 ### Dashboard
 
@@ -77,19 +77,19 @@ pickers de data/hora — dentro do design system do PhysioFlow (sálvia + terrac
 
 ## Arquivos Alterados
 
-| Arquivo | Tipo de alteração |
-|---|---|
-| `src/components/sessions/SessionCard.tsx` | Refatoração completa — menu flutuante |
-| `src/components/ui/themed-select.tsx` | Criado |
-| `src/components/ui/datetime-picker.tsx` | Criado |
-| `src/components/patients/PatientFilters.tsx` | ThemedSelect |
-| `src/components/documents/DocumentFilters.tsx` | ThemedSelect |
-| `src/components/sessions/SessionForm.tsx` | ThemedSelect + DateTimePicker |
-| `src/components/patients/PatientForm.tsx` | ThemedSelect + DateTimePicker |
-| `src/components/documents/NovoDocumentoModal.tsx` | ThemedSelect |
-| `src/components/calendar/GoogleCalendarSettingsCard.tsx` | ThemedSelect |
-| `src/components/layout/Sidebar.tsx` | Bug fix mobile |
-| `src/app/(app)/dashboard/page.tsx` | Remove emoji |
+| Arquivo                                                  | Tipo de alteração                     |
+| -------------------------------------------------------- | ------------------------------------- |
+| `src/components/sessions/SessionCard.tsx`                | Refatoração completa — menu flutuante |
+| `src/components/ui/themed-select.tsx`                    | Criado                                |
+| `src/components/ui/datetime-picker.tsx`                  | Criado                                |
+| `src/components/patients/PatientFilters.tsx`             | ThemedSelect                          |
+| `src/components/documents/DocumentFilters.tsx`           | ThemedSelect                          |
+| `src/components/sessions/SessionForm.tsx`                | ThemedSelect + DateTimePicker         |
+| `src/components/patients/PatientForm.tsx`                | ThemedSelect + DateTimePicker         |
+| `src/components/documents/NovoDocumentoModal.tsx`        | ThemedSelect                          |
+| `src/components/calendar/GoogleCalendarSettingsCard.tsx` | ThemedSelect                          |
+| `src/components/layout/Sidebar.tsx`                      | Bug fix mobile                        |
+| `src/app/(app)/dashboard/page.tsx`                       | Remove emoji                          |
 
 ## Resultado
 

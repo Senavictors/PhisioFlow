@@ -16,6 +16,10 @@ async function main() {
   const demoEmail = 'demo@phisioflow.com'
   const demoPassword = 'demo1234'
 
+  await prisma.payment.deleteMany({
+    where: { user: { email: demoEmail } },
+  })
+
   await prisma.calendarEventLink.deleteMany({
     where: { user: { email: demoEmail } },
   })
@@ -206,85 +210,133 @@ async function main() {
     return date
   }
 
-  await prisma.session.createMany({
-    data: [
-      {
-        userId: user.id,
-        patientId: gervasio.id,
-        treatmentPlanId: gervasioOrtopedicaPlan.id,
-        date: daysAgo(14, 9),
-        duration: 60,
-        status: 'REALIZADO',
-        workplaceId: clinica.id,
-        attendanceType: 'CLINIC',
-        subjective: 'Paciente relata melhora da dor lombar. EVA 4/10.',
-        objective:
-          'Teste de Lasègue negativo bilateralmente. Força muscular 4/5 em flexores de tronco.',
-        assessment: 'Evolução positiva. Mantendo ganho de amplitude lombar.',
-        plan: 'Progredir carga nos exercícios de estabilização e manter frequência semanal.',
-      },
-      {
-        userId: user.id,
-        patientId: gervasio.id,
-        treatmentPlanId: gervasioPilatesPlan.id,
-        date: daysAgo(7, 9),
-        duration: 60,
-        status: 'REALIZADO',
-        workplaceId: clinica.id,
-        attendanceType: 'CLINIC',
-        subjective: 'Sem queixas de dor em repouso. Dor leve ao esforço (EVA 2/10).',
-        objective: 'Mobilidade lombar em 80% do esperado para a idade. Sem sinais neurológicos.',
-        assessment: 'Alta funcional próxima. Considerar espaçamento das sessões.',
-        plan: 'Iniciar programa de manutenção domiciliar e retorno em 15 dias.',
-      },
-      {
-        userId: user.id,
-        patientId: rafael.id,
-        date: daysAgo(2, 16, 30),
-        duration: 50,
-        status: 'REALIZADO',
-        workplaceId: clinica.id,
-        attendanceType: 'CLINIC',
-        subjective: 'Paciente tolerou bem o treino e relata confiança maior para subir escadas.',
-        objective: 'ADM de joelho em 120 graus, sem edema. Controle excêntrico melhorado.',
-        assessment: 'Boa progressão pós-LCA. Liberar exercícios funcionais com cautela.',
-        plan: 'Evoluir agachamento unilateral assistido e treino proprioceptivo.',
-      },
-      {
-        userId: user.id,
-        patientId: carla.id,
-        treatmentPlanId: carlaEsteticaPlan.id,
-        date: daysFromNow(1, 8, 30),
-        duration: 45,
-        status: 'AGENDADO',
-        workplaceId: particular.id,
-        attendanceType: 'HOME_CARE',
-        subjective: 'Paciente solicita foco em analgesia e mobilidade global.',
-        plan: 'Sessão domiciliar com recursos manuais e orientação de exercícios leves.',
-      },
-      {
-        userId: user.id,
-        patientId: rafael.id,
-        date: daysFromNow(2, 15),
-        duration: 50,
-        status: 'AGENDADO',
-        workplaceId: clinica.id,
-        attendanceType: 'CLINIC',
-        plan: 'Reavaliação funcional e progressão do treino de força.',
-      },
-      {
-        userId: user.id,
-        patientId: gervasio.id,
-        treatmentPlanId: gervasioPilatesPlan.id,
-        date: daysFromNow(4, 10),
-        duration: 60,
-        status: 'CANCELADO',
-        workplaceId: clinica.id,
-        attendanceType: 'CLINIC',
-        subjective: 'Paciente em viagem, solicitou reagendamento.',
-        plan: 'Remarcar após retorno à rotina.',
-      },
-    ],
+  const gervasioOrtoSession = await prisma.session.create({
+    data: {
+      userId: user.id,
+      patientId: gervasio.id,
+      treatmentPlanId: gervasioOrtopedicaPlan.id,
+      date: daysAgo(14, 9),
+      duration: 60,
+      status: 'REALIZADO',
+      workplaceId: clinica.id,
+      attendanceType: 'CLINIC',
+      expectedFee: 180,
+      paymentStatus: 'PAID',
+      subjective: 'Paciente relata melhora da dor lombar. EVA 4/10.',
+      objective:
+        'Teste de Lasègue negativo bilateralmente. Força muscular 4/5 em flexores de tronco.',
+      assessment: 'Evolução positiva. Mantendo ganho de amplitude lombar.',
+      plan: 'Progredir carga nos exercícios de estabilização e manter frequência semanal.',
+    },
+  })
+
+  await prisma.session.create({
+    data: {
+      userId: user.id,
+      patientId: gervasio.id,
+      treatmentPlanId: gervasioPilatesPlan.id,
+      date: daysAgo(7, 9),
+      duration: 60,
+      status: 'REALIZADO',
+      workplaceId: clinica.id,
+      attendanceType: 'CLINIC',
+      subjective: 'Sem queixas de dor em repouso. Dor leve ao esforço (EVA 2/10).',
+      objective: 'Mobilidade lombar em 80% do esperado para a idade. Sem sinais neurológicos.',
+      assessment: 'Alta funcional próxima. Considerar espaçamento das sessões.',
+      plan: 'Iniciar programa de manutenção domiciliar e retorno em 15 dias.',
+    },
+  })
+
+  await prisma.session.create({
+    data: {
+      userId: user.id,
+      patientId: rafael.id,
+      date: daysAgo(2, 16, 30),
+      duration: 50,
+      status: 'REALIZADO',
+      workplaceId: clinica.id,
+      attendanceType: 'CLINIC',
+      expectedFee: 200,
+      paymentStatus: 'PENDING',
+      subjective: 'Paciente tolerou bem o treino e relata confiança maior para subir escadas.',
+      objective: 'ADM de joelho em 120 graus, sem edema. Controle excêntrico melhorado.',
+      assessment: 'Boa progressão pós-LCA. Liberar exercícios funcionais com cautela.',
+      plan: 'Evoluir agachamento unilateral assistido e treino proprioceptivo.',
+    },
+  })
+
+  await prisma.session.create({
+    data: {
+      userId: user.id,
+      patientId: carla.id,
+      treatmentPlanId: carlaEsteticaPlan.id,
+      date: daysFromNow(1, 8, 30),
+      duration: 45,
+      status: 'AGENDADO',
+      workplaceId: particular.id,
+      attendanceType: 'HOME_CARE',
+      expectedFee: 220,
+      paymentStatus: 'PENDING',
+      subjective: 'Paciente solicita foco em analgesia e mobilidade global.',
+      plan: 'Sessão domiciliar com recursos manuais e orientação de exercícios leves.',
+    },
+  })
+
+  await prisma.session.create({
+    data: {
+      userId: user.id,
+      patientId: rafael.id,
+      date: daysFromNow(2, 15),
+      duration: 50,
+      status: 'AGENDADO',
+      workplaceId: clinica.id,
+      attendanceType: 'CLINIC',
+      expectedFee: 200,
+      paymentStatus: 'PENDING',
+      plan: 'Reavaliação funcional e progressão do treino de força.',
+    },
+  })
+
+  await prisma.session.create({
+    data: {
+      userId: user.id,
+      patientId: gervasio.id,
+      treatmentPlanId: gervasioPilatesPlan.id,
+      date: daysFromNow(4, 10),
+      duration: 60,
+      status: 'CANCELADO',
+      workplaceId: clinica.id,
+      attendanceType: 'CLINIC',
+      subjective: 'Paciente em viagem, solicitou reagendamento.',
+      plan: 'Remarcar após retorno à rotina.',
+    },
+  })
+
+  // Pagamentos demo
+  // Gervasio plano ortopedico (PER_SESSION) — 1 sessão paga
+  await prisma.payment.create({
+    data: {
+      userId: user.id,
+      sessionId: gervasioOrtoSession.id,
+      amount: 180,
+      method: 'PIX',
+      status: 'PAID',
+      paidAt: daysAgo(14, 10),
+      notes: 'Pagamento à vista no dia da sessão.',
+    },
+  })
+
+  // Gervasio pacote Pilates — 600 já pago de 1500
+  await prisma.payment.create({
+    data: {
+      userId: user.id,
+      treatmentPlanId: gervasioPilatesPlan.id,
+      amount: 600,
+      method: 'CREDIT_CARD',
+      status: 'PAID',
+      paidAt: daysAgo(20, 10),
+      notes: 'Primeira parcela do pacote.',
+    },
   })
 
   console.log('Seed concluído')

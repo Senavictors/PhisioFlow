@@ -42,11 +42,7 @@ export function DomiciliarToggle({ active }: DomiciliarToggleProps) {
           : 'border border-border text-muted-foreground hover:bg-muted hover:text-foreground'
       )}
     >
-      {isPending ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Home className="h-4 w-4" />
-      )}
+      {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Home className="h-4 w-4" />}
       Domiciliar
     </button>
   )

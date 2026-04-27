@@ -3,6 +3,7 @@
 ## Problema
 
 Fisioterapeutas modernos operam com ferramentas inadequadas:
+
 - Prontuários em papel ou planilhas improvisadas
 - Laudos criados do zero a cada emissão
 - Sem visibilidade cronológica da evolução do paciente
@@ -31,12 +32,14 @@ PhysioFlow centraliza toda a operação clínica em uma única plataforma com in
 ## Personas
 
 ### Primária — Fisioterapeuta Autônomo
+
 - Atende 6-12 pacientes/dia em clínica própria ou locada
 - Usa WhatsApp para agendamento e papel para prontuário
 - Emite laudos manualmente 2-3x por semana
 - Dor: burocracia que consome 30-40% do tempo de trabalho
 
 ### Secundária — Clínica com Múltiplos Profissionais
+
 - 2-5 fisioterapeutas compartilhando espaço
 - Precisa de separação de pacientes por terapeuta (multi-tenant)
 - Dor: falta de padronização entre os profissionais
@@ -44,19 +47,21 @@ PhysioFlow centraliza toda a operação clínica em uma única plataforma com in
 ## Design System
 
 ### Tokens de Cor (OKLCH)
+
 - `Background`: oklch(0.985 0.008 85) — Off-white quente
 - `Primary`: oklch(0.52 0.05 160) — Verde Sálvia
 - `Accent`: oklch(0.72 0.09 45) — Terracota suave
 
 ### Tipografia
+
 - `Display`: Fraunces (serifada para títulos e KPIs)
 - `Sans`: Plus Jakarta Sans (interface e leitura)
 
 ## Métricas de Sucesso
 
-| Métrica | Meta |
-|---------|------|
-| Tempo médio de registro SOAP | < 3 minutos |
-| Tempo de geração de laudo | < 30 segundos |
-| Pacientes por usuário ativo | > 20 |
-| Retenção (30 dias) | > 70% |
+| Métrica                      | Meta          |
+| ---------------------------- | ------------- |
+| Tempo médio de registro SOAP | < 3 minutos   |
+| Tempo de geração de laudo    | < 30 segundos |
+| Pacientes por usuário ativo  | > 20          |
+| Retenção (30 dias)           | > 70%         |

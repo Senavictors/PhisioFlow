@@ -1,11 +1,13 @@
 # Task: Phase 7 — Central de Documentos
 
 ## Status
+
 - [x] Todo
 - [x] In Progress
 - [x] Done
 
 ## Contexto
+
 Com pacientes, sessões e evolução registrados, o fisioterapeuta precisa emitir documentos
 clínicos formais: laudos, relatórios de progresso e declarações de comparecimento.
 Hoje isso é feito manualmente, consumindo 30-40% do tempo burocrático do profissional.
@@ -25,6 +27,7 @@ pronto para download ou impressão.
 ## Escopo
 
 ### Backend
+
 - [ ] Migration: modelo `Document` no Prisma (ver abaixo)
 - [ ] `POST /api/documents` — gerar e salvar referência do documento
 - [ ] `GET /api/documents` — listar documentos do usuário (com filtro por paciente e tipo)
@@ -34,12 +37,14 @@ pronto para download ou impressão.
 - [ ] Engine de geração de PDF: `@react-pdf/renderer` (SSR-safe, sem dependência nativa)
 
 ### Frontend
+
 - [ ] Página `/documentos` — lista de documentos com filtros por tipo e paciente
 - [ ] Componente `DocumentCard` — linha com tipo, paciente, data e botão de download
 - [ ] Modal/página `NovoDocumento` — formulário de seleção (paciente, tipo, período)
 - [ ] Preview do documento antes do download (iframe ou modal PDF)
 
 ## Fora de Escopo
+
 - Assinatura digital
 - Envio por email diretamente do sistema
 - Templates customizáveis pelo usuário (v1 usa templates fixos)
@@ -106,6 +111,7 @@ Response 200: {} (soft delete)
 ## Templates de Documentos
 
 ### Laudo Fisioterapêutico
+
 ```
 Cabeçalho: logo PhysioFlow + nome/CRF do profissional
 Paciente: nome, data nascimento, área terapêutica, classificação
@@ -116,6 +122,7 @@ Assinatura: nome + CRF + data
 ```
 
 ### Relatório de Progresso
+
 ```
 Cabeçalho padrão
 Paciente: dados básicos
@@ -126,6 +133,7 @@ Conclusão: avaliação geral do período
 ```
 
 ### Declaração de Comparecimento
+
 ```
 "Declaro que [nome do paciente], [dados], compareceu para atendimento
 fisioterapêutico em [datas das sessões do período]."
@@ -175,6 +183,7 @@ Botão: "Gerar PDF"
 ---
 
 ## Checklist Final
+
 - [ ] Migration aplicada com sucesso
 - [ ] `POST /api/documents` gera PDF e salva referência
 - [ ] `GET /api/documents/:id/download` retorna PDF correto
@@ -188,6 +197,7 @@ Botão: "Gerar PDF"
 - [ ] `.docs/CHANGELOG.md` atualizado
 
 ## Notas para Próxima Sessão
+
 A geração de PDF é o diferencial percebido de maior valor para o fisioterapeuta.
 Ao concluir, o sistema fecha o ciclo: cadastrar → atender → evoluir → documentar.
 A Phase 8 (Logística Domiciliar) é incremental — melhora o fluxo de atendimentos HOME_CARE

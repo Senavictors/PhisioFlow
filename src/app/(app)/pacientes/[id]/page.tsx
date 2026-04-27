@@ -18,6 +18,7 @@ import {
   PatientNotFoundError,
 } from '@/server/modules/patients/application/get-patient'
 import { TreatmentPlanCard } from '@/components/treatment-plans/TreatmentPlanCard'
+import { PatientFinancialsSection } from '@/components/payments/PatientFinancialsSection'
 
 const CLASSIFICATION_LABELS: Record<string, string> = {
   ELDERLY: 'Idoso',
@@ -241,6 +242,8 @@ export default async function FichaClinicaPage({ params }: { params: Promise<{ i
           </div>
         )}
       </section>
+
+      <PatientFinancialsSection patientId={id} />
 
       {hasHomeCareInfo && (
         <section className="space-y-4 rounded-[18px] border border-border bg-card p-5 sm:p-6">

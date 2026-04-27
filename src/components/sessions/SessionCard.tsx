@@ -24,6 +24,9 @@ import { cn } from '@/lib/utils'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { CalendarSyncBadge } from '@/components/calendar/CalendarSyncBadge'
 import { ATTENDANCE_TYPE_LABELS, formatTreatmentPlanLabel } from '@/lib/clinical-labels'
+import { PaymentBadge } from '@/components/payments/PaymentBadge'
+import { RegisterPaymentModal } from '@/components/payments/RegisterPaymentModal'
+import { Wallet } from 'lucide-react'
 
 interface SessionCardProps {
   session: {
@@ -37,6 +40,8 @@ interface SessionCardProps {
     assessment?: string | null
     plan?: string | null
     workplace?: { id: string; name: string } | null
+    expectedFee?: unknown
+    paymentStatus?: string | null
     treatmentPlan?: {
       id: string
       area: string
@@ -116,6 +121,7 @@ export function SessionCard({
   const [emailSettings, setEmailSettings] = useState<EmailSettingsSummary | null>(
     cachedEmailSettings
   )
+  const [paymentOpen, setPaymentOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   const summary = getSessionSummary(session)
@@ -279,6 +285,7 @@ export function SessionCard({
               </span>
               <StatusBadge status={session.status} />
               <CalendarSyncBadge status={calendarLink?.status} />
+              <PaymentBadge status={session.paymentStatus} />
             </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-body text-[12px] text-muted-foreground">
@@ -430,6 +437,22 @@ export function SessionCard({
                   </button>
                 ) : null}
 
+                {session.treatmentPlan?.pricingModel !== 'PACKAGE' &&
+                session.paymentStatus !== 'PAID' ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuOpen(false)
+                      setPaymentOpen(true)
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left font-body text-[13px] font-medium text-foreground transition-colors hover:bg-primary-soft"
+                  >
+                    <Wallet className="h-4 w-4" />
+                    Registrar pagamento
+                  </button>
+                ) : null}
+
                 <Link
                   role="menuitem"
                   href={`/atendimentos/${session.id}/editar`}
@@ -454,6 +477,17 @@ export function SessionCard({
           </div>
         </div>
       </div>
+
+      <RegisterPaymentModal
+        open={paymentOpen}
+        onClose={() => setPaymentOpen(false)}
+        target={{ kind: 'session', sessionId: session.id }}
+        defaultAmount={
+          session.expectedFee != null && session.expectedFee !== ''
+            ? Number(session.expectedFee)
+            : undefined
+        }
+      />
     </article>
   )
 }

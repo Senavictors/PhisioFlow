@@ -15,6 +15,7 @@ const requiredDelegates = [
   'calendarEventLink',
   'workplace',
   'treatmentPlan',
+  'payment',
 ] as const
 
 function createPrismaClient() {

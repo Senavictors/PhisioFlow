@@ -25,7 +25,6 @@ interface GoogleCalendarSettingsCardProps {
   status?: string
 }
 
-
 export function GoogleCalendarSettingsCard({
   initialConnection,
   status,

@@ -1,14 +1,8 @@
-import {
-  EmailDeliveryError,
-  EmailSettingsNotConfiguredError,
-} from '../domain/errors'
+import { EmailDeliveryError, EmailSettingsNotConfiguredError } from '../domain/errors'
 import { createEmailMessageLog, findEmailSettings } from '../infra/email.repository'
 import { sendEmailWithSettings } from '../infra/transporter'
 
-export async function sendTestEmailUseCase(
-  userId: string,
-  options: { to?: string } = {}
-) {
+export async function sendTestEmailUseCase(userId: string, options: { to?: string } = {}) {
   const settings = await findEmailSettings(userId)
   if (!settings) {
     throw new EmailSettingsNotConfiguredError()

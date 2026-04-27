@@ -4,6 +4,25 @@
 
 ## Fase Atual
 
+**Phase 16 — Pagamentos concluída**
+Modelo `Payment` criado com vínculo XOR a `Session` ou `TreatmentPlan` (constraint SQL),
+enums `PaymentMethod` e `PaymentStatus`, e snapshot `Session.expectedFee` + cache
+`Session.paymentStatus`. Migration `phase16_payments` faz backfill: PER_SESSION usa
+`plan.sessionPrice`, avulso usa `workplace.defaultSessionPrice` e `paymentStatus` inicia
+como `PENDING` quando há valor a cobrar. Módulo `payments` completo (domain, dto, infra,
+application) com use cases `registerPaymentUseCase`, `updatePaymentUseCase`,
+`voidPaymentUseCase`, `listPaymentsUseCase`, `getTreatmentPlanFinancialsUseCase`,
+`getPatientFinancialsUseCase` e `recomputeSessionPaymentStatus`. Endpoints REST em
+`/api/treatment-plans/:id/payments`, `/api/sessions/:id/payments`, `/api/payments`,
+`/api/payments/:id`, `/api/treatment-plans/:id/financials` e `/api/patients/:id/financials`.
+`createSessionUseCase` e `updateSessionUseCase` snapshotam `expectedFee` (do plano
+PER_SESSION, default do workplace ou input direto) e marcam `paymentStatus` inicial.
+UI ganhou `PaymentBadge` (SessionCard), `PlanBalanceBadge` + ação "Registrar pagamento"
+no `TreatmentPlanCard`, modal `RegisterPaymentModal`, seção "Financeiro" na ficha do
+paciente e campo `expectedFee` (ou texto "Coberta pelo pacote") no `SessionForm`. Soft
+delete via `status=REFUNDED`. Seed demo com pacote Pilates 600/1500 pago, sessão
+ortopédica avulsa paga e sessões pendentes.
+
 **Phase 15 — Plano de Tratamento concluída**
 Modelo `TreatmentPlan` criado com `TherapyArea` expandido, enums `Specialty`,
 `PricingModel` e `PlanStatus`, vínculo opcional de `Session.treatmentPlanId` e backfill
@@ -66,13 +85,9 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-**Phase 16 — Pagamentos** — [task file](tasks/phase-16-payments.md)
-Introduzir o financeiro real (`Payment`), snapshot `expectedFee` por sessão, cobranças
-avulsas e pacotes vinculados a `TreatmentPlan`.
-
-Sequência restante do ciclo "Multi-modalidade + Financeiro":
-
-- **Phase 17** — [Dashboard financeiro](tasks/phase-17-finance-dashboard.md)
+**Phase 17 — Dashboard Financeiro** — [task file](tasks/phase-17-finance-dashboard.md)
+Consumir `Payment` e `Session.expectedFee` para agregar recebido vs previsto, série
+temporal, quebras por local/área e lista de pendências.
 
 Pendências operacionais:
 
@@ -97,7 +112,6 @@ Pendências operacionais:
 
 ### Tasks planejadas
 
-- `.docs/tasks/phase-16-payments.md` — Pagamentos e cobrança (avulso e pacote)
 - `.docs/tasks/phase-17-finance-dashboard.md` — Dashboard financeiro (recebido vs previsto)
 - `.docs/decisions/ADR-005-multi-modalidade-financeiro.md` — Decisão proposta para
   multi-modalidade clínica e acompanhamento financeiro
@@ -106,6 +120,7 @@ Pendências operacionais:
 
 - `.docs/tasks/phase-14-workplaces.md` — Locais de trabalho (`Workplace`, `AttendanceType`, CRUD + UI)
 - `.docs/tasks/phase-15-treatment-plans.md` — Plano de tratamento e multi-modalidade
+- `.docs/tasks/phase-16-payments.md` — Pagamentos e cobrança (avulso e pacote)
 - `.docs/tasks/phase-9-ux-polish.md` — Polimentos visuais e de microinteração
 - `.docs/tasks/phase-10-clinical-agenda-flow.md` — Edição SOAP e visualização mensal da agenda
 - `.docs/tasks/phase-11-email-notifications.md` — Gmail App Password e envios
@@ -217,6 +232,8 @@ Pendências operacionais:
 - `CalendarConnection` — conexão Google Calendar por usuário, com tokens criptografados e agenda padrão
 - `CalendarEventLink` — vínculo entre uma sessão e um evento externo Google Calendar
 - `Workplace` — local de trabalho do fisioterapeuta (OWN_CLINIC, PARTNER_CLINIC, PARTICULAR, ONLINE)
+- `Payment` — pagamento (avulso vinculado a `Session` ou de pacote vinculado a `TreatmentPlan`),
+  com `amount`, `method`, `status`, `paidAt`, `dueAt` e XOR via constraint SQL
 
 ## Realidade Arquitetural Atual
 
@@ -231,6 +248,7 @@ Módulo `documents` segue o mesmo padrão em `src/server/modules/documents/`
 Módulo `calendar` segue o mesmo padrão em `src/server/modules/calendar/`
 Módulo `workplaces` segue o mesmo padrão em `src/server/modules/workplaces/`
 Módulo `treatment-plans` segue o mesmo padrão em `src/server/modules/treatment-plans/`
+Módulo `payments` segue o mesmo padrão em `src/server/modules/payments/`
 
 ## Pendências Conhecidas
 

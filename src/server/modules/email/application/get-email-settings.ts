@@ -10,9 +10,7 @@ export interface SafeEmailSettings {
   hasAppPassword: boolean
 }
 
-export async function getEmailSettingsUseCase(
-  userId: string
-): Promise<SafeEmailSettings | null> {
+export async function getEmailSettingsUseCase(userId: string): Promise<SafeEmailSettings | null> {
   const settings = await findEmailSettings(userId)
   if (!settings) return null
 

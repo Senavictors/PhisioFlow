@@ -108,6 +108,23 @@ enum AttendanceType {
   ONLINE
 }
 
+enum PaymentMethod {
+  PIX
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  INSURANCE
+  OTHER
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  PARTIAL
+  REFUNDED
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -125,6 +142,7 @@ model User {
   calendarEventLinks  CalendarEventLink[]
   workplaces          Workplace[]
   treatmentPlans      TreatmentPlan[]
+  payments            Payment[]
 }
 
 model Patient {
@@ -195,6 +213,7 @@ model TreatmentPlan {
   patient   Patient   @relation(fields: [patientId], references: [id])
   workplace Workplace @relation(fields: [workplaceId], references: [id])
   sessions  Session[]
+  payments  Payment[]
 
   @@index([userId])
   @@index([userId, patientId])
@@ -212,6 +231,8 @@ model Session {
   status          SessionStatus  @default(AGENDADO)
   workplaceId     String
   attendanceType  AttendanceType
+  expectedFee     Decimal?       @db.Decimal(10, 2)
+  paymentStatus   PaymentStatus?
   isActive        Boolean        @default(true)
   subjective      String?
   objective       String?
@@ -226,6 +247,7 @@ model Session {
   treatmentPlan      TreatmentPlan?      @relation(fields: [treatmentPlanId], references: [id])
   emailMessages      EmailMessage[]
   calendarEventLinks CalendarEventLink[]
+  payments           Payment[]
 
   @@index([userId])
   @@index([userId, patientId])
@@ -361,4 +383,31 @@ model CalendarEventLink {
   @@unique([sessionId, provider])
   @@index([userId])
   @@index([userId, sessionId])
+}
+
+model Payment {
+  id              String  @id @default(cuid())
+  userId          String
+  treatmentPlanId String?
+  sessionId       String?
+
+  amount Decimal       @db.Decimal(10, 2)
+  method PaymentMethod
+  status PaymentStatus @default(PAID)
+  paidAt DateTime
+  dueAt  DateTime?
+
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id])
+  treatmentPlan TreatmentPlan? @relation(fields: [treatmentPlanId], references: [id])
+  session       Session?       @relation(fields: [sessionId], references: [id])
+
+  @@index([userId])
+  @@index([userId, paidAt])
+  @@index([userId, treatmentPlanId])
+  @@index([userId, sessionId])
+  @@index([userId, status, dueAt])
 }

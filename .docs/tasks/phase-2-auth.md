@@ -1,19 +1,23 @@
 # Task: Phase 2 — Auth
 
 ## Status
+
 - [x] Todo
 - [x] In Progress
 - [x] Done
 
 ## Contexto
+
 Com a fundação pronta (Phase 1), precisamos de autenticação antes de qualquer feature clínica.
 
 ADR relacionado: [ADR-003](../decisions/ADR-003-auth-approach.md)
 
 ## Objetivo
+
 Sistema de login/logout funcional com sessões server-side. Rotas `(app)/*` protegidas.
 
 ## Escopo
+
 - [ ] Instalar `bcrypt` e `iron-session` (ou cookie assinado manual)
 - [ ] Endpoint `POST /api/auth/register`
 - [ ] Endpoint `POST /api/auth/login`
@@ -26,6 +30,7 @@ Sistema de login/logout funcional com sessões server-side. Rotas `(app)/*` prot
 - [ ] Redirect automático: não autenticado → `/login`, autenticado → `/dashboard`
 
 ## Fora de Escopo
+
 - OAuth social
 - Recuperação de senha
 - Perfil/configurações do usuário
@@ -50,13 +55,16 @@ Side effect: limpa cookie de sessão
 ```
 
 ## Migration
+
 Sem migration nova — modelo `User` já existe da Phase 1.
 
 ## UI
+
 - [ ] `/login` — Formulário email + senha, link para registro
 - [ ] `/register` — Formulário nome + email + senha, link para login
 
 ## Checklist Final
+
 - [ ] Register e login funcionam no browser
 - [ ] Cookie HTTP-only é setado no login (verificar DevTools)
 - [ ] Middleware bloqueia `/dashboard` sem sessão → redirect `/login`
@@ -66,4 +74,5 @@ Sem migration nova — modelo `User` já existe da Phase 1.
 - [ ] `CHANGELOG.md` atualizado
 
 ## Notas para Próxima Sessão
+
 Ao concluir, a Phase 3 (CRM de Pacientes) pode começar. O helper `getSession()` será usado em todos os Route Handlers subsequentes para pegar o `userId` autenticado.

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
-import { createWorkplaceDTO, listWorkplacesDTO } from '@/server/modules/workplaces/http/workplace.dto'
+import {
+  createWorkplaceDTO,
+  listWorkplacesDTO,
+} from '@/server/modules/workplaces/http/workplace.dto'
 import { createWorkplaceUseCase } from '@/server/modules/workplaces/application/create-workplace'
 import { listWorkplacesUseCase } from '@/server/modules/workplaces/application/list-workplaces'
 

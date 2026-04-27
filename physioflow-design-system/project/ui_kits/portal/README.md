@@ -3,6 +3,7 @@
 High-fidelity recreation of the **PhisioFlow Portal Restaurativo** web app, based on 5 screenshots in `uploads/`.
 
 ## Screens included
+
 - **Dashboard (Visão Geral)** — greeting, KPIs, weekly evolution chart, quick actions, recent sessions, attention card
 - **Pacientes** — directory with filters (tipo de atendimento chips, classificação, ordenação), search, table, Progresso Restaurativo hero + Pendentes hoje tile
 - **Atendimentos** — empty state
@@ -12,7 +13,9 @@ High-fidelity recreation of the **PhisioFlow Portal Restaurativo** web app, base
 Open `index.html` for the interactive click-thru. Use the left sidebar to switch between screens.
 
 ## Components
+
 All components are defined inline in `index.html` (single-file hi-fi recreation). Key components:
+
 - `Sidebar` — fixed w-64 left rail, sage-green active pill
 - `Topbar` — page title, search, notification bell, help, avatar
 - `KpiCard` — tinted-icon + giant Fraunces numeral + label + muted subtext
@@ -27,5 +30,6 @@ All components are defined inline in `index.html` (single-file hi-fi recreation)
 - `AttentionCard` — terracotta-soft alert surface
 
 ## Caveats
+
 - Reconstructed from screenshots only. Actual spacing / shadows are approximations.
 - Logo reconstructed; real SVG welcome.

@@ -49,3 +49,4 @@ README.md — Roadmap público, próximo passo e fases concluídas
 .docs/tasks/ — Arquivos de task por fase
 .docs/CHANGELOG.md — Changelog curado
 ---
+```

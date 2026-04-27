@@ -10,16 +10,16 @@ Tipos de atendimento
 Esses três níveis são importantes para modelagem de sistema (ex: CRM, agenda, filtros, relatórios).
 
 1. Áreas de atuação (macro)
-1.1 Fisioterapia Ortopédica / Traumatológica
-Pós-operatório (joelho, ombro, coluna)
-Lesões musculares
-Tendinites
-Hérnia de disco
-1.2 Fisioterapia Neurológica
-AVC
-Parkinson
-Paralisia cerebral
-Lesão medular
+   1.1 Fisioterapia Ortopédica / Traumatológica
+   Pós-operatório (joelho, ombro, coluna)
+   Lesões musculares
+   Tendinites
+   Hérnia de disco
+   1.2 Fisioterapia Neurológica
+   AVC
+   Parkinson
+   Paralisia cerebral
+   Lesão medular
 
 Foco: reabilitação de funções motoras e neurológicas.
 
@@ -64,85 +64,85 @@ Correção de hábitos
 Muito usada em empresas (fisioterapia corporativa).
 
 2. Especialidades e técnicas
-2.1 Pilates
-Reabilitação
-Fortalecimento
-Postura
-Controle corporal
-2.2 RPG (Reeducação Postural Global)
-Correção postural profunda
-Tratamento de desvios da coluna
-2.3 Acupuntura
-Controle da dor
-Relaxamento muscular
-Equilíbrio energético
-2.4 Liberação Miofascial
-Redução de tensão muscular
-Melhora da mobilidade
-2.5 Ventosaterapia
-Estímulo circulatório
-Relaxamento muscular
-2.6 Dry Needling
-Tratamento de pontos gatilho
-Dor muscular
-2.7 Terapias Manuais
-Mobilização articular
-Manipulação
-Técnicas de alongamento
+   2.1 Pilates
+   Reabilitação
+   Fortalecimento
+   Postura
+   Controle corporal
+   2.2 RPG (Reeducação Postural Global)
+   Correção postural profunda
+   Tratamento de desvios da coluna
+   2.3 Acupuntura
+   Controle da dor
+   Relaxamento muscular
+   Equilíbrio energético
+   2.4 Liberação Miofascial
+   Redução de tensão muscular
+   Melhora da mobilidade
+   2.5 Ventosaterapia
+   Estímulo circulatório
+   Relaxamento muscular
+   2.6 Dry Needling
+   Tratamento de pontos gatilho
+   Dor muscular
+   2.7 Terapias Manuais
+   Mobilização articular
+   Manipulação
+   Técnicas de alongamento
 3. Tipos de atendimento (formato)
-3.1 Clínica
-Atendimento em consultório ou clínica
-Estrutura física equipada
-3.2 Domiciliar (Home Care)
-Atendimento na casa do paciente
-Comum para:
-Idosos
-Acamados
-Pós-operatório
-3.3 Hospitalar
-Internação
-UTI
-Pós-cirúrgico imediato
-3.4 Corporativo
-Empresas
-Ergonomia
-Prevenção de lesões ocupacionais
-3.5 Online / Teleatendimento
-Orientações
-Exercícios guiados
-Acompanhamento remoto
+   3.1 Clínica
+   Atendimento em consultório ou clínica
+   Estrutura física equipada
+   3.2 Domiciliar (Home Care)
+   Atendimento na casa do paciente
+   Comum para:
+   Idosos
+   Acamados
+   Pós-operatório
+   3.3 Hospitalar
+   Internação
+   UTI
+   Pós-cirúrgico imediato
+   3.4 Corporativo
+   Empresas
+   Ergonomia
+   Prevenção de lesões ocupacionais
+   3.5 Online / Teleatendimento
+   Orientações
+   Exercícios guiados
+   Acompanhamento remoto
 4. Estrutura conceitual (mapa geral)
-Fisioterapia
-│
-├── Áreas de atuação
-│   ├── Ortopédica
-│   ├── Neurológica
-│   ├── Cardiorrespiratória
-│   ├── Dermatofuncional
-│   ├── Esportiva
-│   ├── Pélvica
-│   ├── Pediátrica
-│   ├── Geriátrica
-│   └── Preventiva
-│
-├── Especialidades / Técnicas
-│   ├── Pilates
-│   ├── RPG
-│   ├── Acupuntura
-│   ├── Liberação Miofascial
-│   ├── Ventosaterapia
-│   ├── Dry Needling
-│   └── Terapias Manuais
-│
-└── Tipos de atendimento
-    ├── Clínica
-    ├── Domiciliar
-    ├── Hospitalar
-    ├── Corporativo
-    └── Online
+   Fisioterapia
+   │
+   ├── Áreas de atuação
+   │ ├── Ortopédica
+   │ ├── Neurológica
+   │ ├── Cardiorrespiratória
+   │ ├── Dermatofuncional
+   │ ├── Esportiva
+   │ ├── Pélvica
+   │ ├── Pediátrica
+   │ ├── Geriátrica
+   │ └── Preventiva
+   │
+   ├── Especialidades / Técnicas
+   │ ├── Pilates
+   │ ├── RPG
+   │ ├── Acupuntura
+   │ ├── Liberação Miofascial
+   │ ├── Ventosaterapia
+   │ ├── Dry Needling
+   │ └── Terapias Manuais
+   │
+   └── Tipos de atendimento
+   ├── Clínica
+   ├── Domiciliar
+   ├── Hospitalar
+   ├── Corporativo
+   └── Online
 5. Sugestão de modelagem para sistema
-5.1 Área (obrigatório)
-area: enum
+   5.1 Área (obrigatório)
+   area: enum
 
 Exemplo:
 

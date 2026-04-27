@@ -1,11 +1,13 @@
 # Task: Phase 6 — Timeline de Evolução
 
 ## Status
+
 - [x] Todo
 - [x] In Progress
 - [x] Done
 
 ## Contexto
+
 Com pacientes e sessões registradas (Phases 3 e 4), o fisioterapeuta precisa visualizar
 a progressão clínica de um paciente ao longo do tempo. A timeline centraliza esse histórico
 de forma visual e legível — cada sessão SOAP vira uma entrada cronológica na ficha do paciente.
@@ -24,10 +26,12 @@ Link de acesso a partir da ficha do paciente (`/pacientes/:id`).
 ## Escopo
 
 ### Backend
+
 - [ ] `GET /api/patients/:id/sessions` — lista sessões do paciente com paginação (reusa `listSessions` com filtro `patientId`)
 - [ ] Sem use case novo — reutilizar `listSessionsUseCase` com `{ patientId, order: 'desc' }`
 
 ### Frontend
+
 - [ ] Página `/pacientes/:id/evolucao` — timeline de sessões
 - [ ] Componente `TimelineEntry` — entrada individual da timeline
 - [ ] Componente `SoapAccordion` — campos SOAP colapsáveis por entrada
@@ -35,6 +39,7 @@ Link de acesso a partir da ficha do paciente (`/pacientes/:id`).
 - [ ] Estado vazio: "Nenhuma sessão registrada ainda."
 
 ## Fora de Escopo
+
 - Edição de sessões a partir da timeline (usar `/pacientes/:id/sessoes/nova`)
 - Gráficos de métricas numéricas (EVA, ADM) — fase futura
 - Comparativo entre sessões
@@ -118,6 +123,7 @@ Layout: grid 2×2 ou lista vertical
 ---
 
 ## Checklist Final
+
 - [ ] `GET /api/patients/:id/sessions` retorna sessões corretas do paciente autenticado
 - [ ] Rota bloqueia acesso a paciente de outro `userId`
 - [ ] Página `/pacientes/:id/evolucao` renderiza a timeline em ordem cronológica reversa
@@ -131,6 +137,7 @@ Layout: grid 2×2 ou lista vertical
 - [ ] `.docs/CHANGELOG.md` atualizado
 
 ## Notas para Próxima Sessão
+
 Ao concluir, o ciclo clínico básico estará completo: cadastrar → atender → visualizar evolução.
 A Phase 7 (Central de Documentos) adiciona geração de PDF a partir desses dados — laudo, relatório
 de progresso e declaração de atendimento.

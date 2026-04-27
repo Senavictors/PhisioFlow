@@ -101,11 +101,12 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 rounded-[20px] border border-border bg-card p-5 shadow-sm sm:p-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-5 rounded-[20px] border border-border bg-card p-5 shadow-sm sm:p-6"
+    >
       <div>
-        <h2 className="font-display text-[18px] font-bold text-foreground">
-          Conexão Gmail SMTP
-        </h2>
+        <h2 className="font-display text-[18px] font-bold text-foreground">Conexão Gmail SMTP</h2>
         <p className="mt-1 font-body text-[13px] text-muted-foreground">
           Os envios saem da sua conta. A Senha de App é criptografada antes de ser salva no banco.
         </p>
@@ -142,14 +143,19 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
 
       <label className="flex flex-col gap-1.5">
         <span className="font-body text-[12px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-          Senha de App {hasAppPassword ? <span className="text-primary">(já cadastrada)</span> : '*'}
+          Senha de App{' '}
+          {hasAppPassword ? <span className="text-primary">(já cadastrada)</span> : '*'}
         </span>
         <input
           type="password"
           value={appPassword}
           onChange={(e) => setAppPassword(e.target.value)}
           className={inputClass}
-          placeholder={hasAppPassword ? '••••• Deixe em branco para manter' : 'Cole os 16 caracteres gerados no Google'}
+          placeholder={
+            hasAppPassword
+              ? '••••• Deixe em branco para manter'
+              : 'Cole os 16 caracteres gerados no Google'
+          }
           autoComplete="new-password"
         />
         <span className="font-body text-[11.5px] text-muted-foreground">

@@ -1,11 +1,13 @@
 # Task: Phase 8 — Logística Domiciliar
 
 ## Status
+
 - [ ] Todo
 - [ ] In Progress
 - [ ] Done
 
 ## Contexto
+
 Sessões do tipo `HOME_CARE` já existem desde a Phase 4, mas carecem de um fluxo dedicado.
 O fisioterapeuta que atende em domicílio precisa gerenciar endereços, rotas e prioridades —
 informações que hoje não cabem no modelo de Sessão genérico.
@@ -25,6 +27,7 @@ Badge visual de prioridade nos cards de sessão domiciliar.
 ## Escopo
 
 ### Backend — Migration
+
 - [ ] Campos novos no modelo `Patient` (migration `phase8_homecare_logistics`):
   - `address`: `String?` — logradouro + número
   - `neighborhood`: `String?` — bairro
@@ -33,11 +36,13 @@ Badge visual de prioridade nos cards de sessão domiciliar.
   - `homeCarePriority`: `HomeCarepriority` enum — `NORMAL | HIGH | URGENT`
 
 ### Backend — API
+
 - [ ] `PUT /api/patients/:id` aceita os novos campos (atualizar DTO Zod)
 - [ ] `GET /api/sessions?type=HOME_CARE` já funciona — confirmar filtro existente
 - [ ] `GET /api/sessions?type=HOME_CARE&order=priority` — ordenação por prioridade
 
 ### Frontend
+
 - [ ] Campos de logística no formulário de edição do paciente (`/pacientes/:id/editar`)
   - Endereço, bairro, cidade, instruções de acesso, prioridade
 - [ ] Badge de prioridade no `SessionCard` e na agenda (URGENTE → terracota / HIGH → amarelo)
@@ -45,6 +50,7 @@ Badge visual de prioridade nos cards de sessão domiciliar.
 - [ ] Seção "Logística" na ficha do paciente (`/pacientes/:id`) quando `area = HOME_CARE`
 
 ## Fora de Escopo
+
 - Integração com Google Maps / cálculo de rota real
 - Otimização automática de rota entre múltiplos endereços
 - Notificações push de lembrete de visita
@@ -145,6 +151,7 @@ Seção "Logística Domiciliar" (visível para todos os pacientes, destacada par
 ---
 
 ## Checklist Final
+
 - [ ] Migration `phase8_homecare_logistics` aplicada sem erros
 - [ ] Edição de paciente aceita e persiste os novos campos
 - [ ] Seção "Logística" aparece na ficha de pacientes HOME_CARE
@@ -157,6 +164,7 @@ Seção "Logística Domiciliar" (visível para todos os pacientes, destacada par
 - [ ] `.docs/CHANGELOG.md` atualizado
 
 ## Notas para Próxima Sessão
+
 Ao concluir a Phase 8, o produto PhysioFlow v1 está completo:
 Cadastro → Atendimento SOAP → Evolução → Documentação → Logística Domiciliar.
 Próximo ciclo: melhorias de UX, notificações, multi-usuário por clínica (multi-tenant expandido)

@@ -1,27 +1,82 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8">
-<link rel="stylesheet" href="../colors_and_type.css">
-<style>
-  html,body{margin:0;padding:0;background:var(--background);}
-  .card{padding:24px 32px;box-sizing:border-box;min-height:100vh;display:flex;align-items:center;gap:36px;}
-  .kpi{flex:1;background:var(--card);padding:22px 24px;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);}
-  .n{font-family:var(--font-display);font-weight:700;font-size:68px;line-height:1;letter-spacing:-0.02em;color:var(--foreground);}
-  .sub{font-family:var(--font-body);font-weight:600;font-size:14px;margin-top:8px;color:var(--foreground);}
-  .muted{font-family:var(--font-body);font-size:12.5px;color:var(--muted-foreground);margin-top:2px;}
-  .ico{width:40px;height:40px;border-radius:12px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary-soft-fg);margin-bottom:16px;}
-  .ico.t{background:var(--accent-soft);color:var(--accent-soft-fg);}
-</style></head>
-<body><div class="card">
-  <div class="kpi">
-    <div class="ico">👥</div>
-    <div class="n">1</div>
-    <div class="sub">Pacientes ativos</div>
-    <div class="muted">cadastrados no portal</div>
-  </div>
-  <div class="kpi">
-    <div class="ico t">⚠</div>
-    <div class="n">1</div>
-    <div class="sub">Sem retorno</div>
-    <div class="muted">há mais de 30 dias</div>
-  </div>
-</div></body></html>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../colors_and_type.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--background);
+      }
+      .card {
+        padding: 24px 32px;
+        box-sizing: border-box;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+      .kpi {
+        flex: 1;
+        background: var(--card);
+        padding: 22px 24px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+      }
+      .n {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 68px;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: var(--foreground);
+      }
+      .sub {
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 14px;
+        margin-top: 8px;
+        color: var(--foreground);
+      }
+      .muted {
+        font-family: var(--font-body);
+        font-size: 12.5px;
+        color: var(--muted-foreground);
+        margin-top: 2px;
+      }
+      .ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--primary-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-soft-fg);
+        margin-bottom: 16px;
+      }
+      .ico.t {
+        background: var(--accent-soft);
+        color: var(--accent-soft-fg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="kpi">
+        <div class="ico">👥</div>
+        <div class="n">1</div>
+        <div class="sub">Pacientes ativos</div>
+        <div class="muted">cadastrados no portal</div>
+      </div>
+      <div class="kpi">
+        <div class="ico t">⚠</div>
+        <div class="n">1</div>
+        <div class="sub">Sem retorno</div>
+        <div class="muted">há mais de 30 dias</div>
+      </div>
+    </div>
+  </body>
+</html>

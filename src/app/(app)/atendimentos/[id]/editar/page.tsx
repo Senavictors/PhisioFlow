@@ -80,6 +80,7 @@ export default async function EditarAtendimentoPage({
           status: clinicalSession.status,
           workplaceId: clinicalSession.workplaceId,
           attendanceType: clinicalSession.attendanceType,
+          expectedFee: clinicalSession.expectedFee?.toString() ?? null,
           subjective: clinicalSession.subjective,
           objective: clinicalSession.objective,
           assessment: clinicalSession.assessment,

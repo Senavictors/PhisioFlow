@@ -27,10 +27,11 @@ PhysioFlow centraliza toda a operação clínica em uma interface única — do 
 - **Locais de Trabalho** — Cadastro de clínicas, particular e online com defaults próprios
 - **Planos de Tratamento** — Multi-modalidade por paciente, com área, especialidades,
   modalidade, local e pacote/avulso preparatório para o financeiro
+- **Pagamentos** — Registro de cobranças avulsas e pacotes com método, status e snapshot
+  `expectedFee` por sessão; saldo do plano e do paciente, modal de registro
 
 ### Em desenvolvimento (ciclo Multi-modalidade + Financeiro)
 
-- **Pagamentos** — Registro de cobranças avulsas e pacotes com método e status
 - **Dashboard Financeiro** — Recebido vs previsto por dia/semana/mês e quebra por
   local/área
 
@@ -198,20 +199,21 @@ Após o seed:
 - Phase 15 — Plano de Tratamento (modelo `TreatmentPlan`, multi-modalidade por paciente,
   remoção de `Patient.area` e `Session.type`, CRUD/status de planos, seed multi-modalidade
   e seletor de plano/avulso no `SessionForm`)
+- Phase 16 — Pagamentos (modelo `Payment` com vínculo XOR sessão/plano, snapshot
+  `Session.expectedFee`, cache `paymentStatus`, CRUD REST de pagamentos, saldo do plano,
+  saldo do paciente, badges/modal e seção financeira na ficha)
 
 ### 🗺️ Planejado — Ciclo "Multi-modalidade + Financeiro"
 
 > Decisão arquitetural: [ADR-005](.docs/decisions/ADR-005-multi-modalidade-financeiro.md)
 
-- **Phase 16 — Pagamentos** (`Payment`, `expectedFee` snapshot, avulso e pacote,
-  saldo do plano)
 - **Phase 17 — Dashboard Financeiro** (recebido vs previsto, série temporal,
   breakdowns por local/área, lista de pendências)
 
 ### ➡️ Próximo Passo
 
-Iniciar **Phase 16**: pagamentos reais com `Payment`, snapshot `expectedFee` por sessão,
-cobranças avulsas e pacotes vinculados a `TreatmentPlan`.
+Iniciar **Phase 17**: dashboard financeiro consumindo `Payment` e `Session.expectedFee`
+com agregações por período, local e área.
 
 Ainda pendente do ciclo anterior: configurar as variáveis de e-mail/Google na Vercel e
 validar os fluxos reais de envio e sincronização.

@@ -27,6 +27,8 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
   let workplaceId = dto.workplaceId ?? null
   let attendanceType = (dto.attendanceType as AttendanceType | undefined) ?? null
   let treatmentPlanId: string | null = null
+  let expectedFee: number | null = null
+  let isPackage = false
 
   if (dto.treatmentPlanId) {
     const plan = await findTreatmentPlanById(dto.treatmentPlanId, userId)
@@ -39,6 +41,11 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
     treatmentPlanId = plan.id
     if (!workplaceId) workplaceId = plan.workplaceId
     if (!attendanceType) attendanceType = plan.attendanceType
+    if (plan.pricingModel === 'PACKAGE') {
+      isPackage = true
+    } else if (plan.sessionPrice != null) {
+      expectedFee = Number(plan.sessionPrice)
+    }
   }
 
   if (!workplaceId) {
@@ -46,6 +53,9 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
     if (defaultWorkplace) {
       workplaceId = defaultWorkplace.id
       if (!attendanceType) attendanceType = defaultWorkplace.defaultAttendanceType
+      if (!treatmentPlanId && expectedFee == null && defaultWorkplace.defaultSessionPrice != null) {
+        expectedFee = Number(defaultWorkplace.defaultSessionPrice)
+      }
     }
   }
 
@@ -57,6 +67,13 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
     attendanceType = 'CLINIC'
   }
 
+  if (!isPackage && dto.expectedFee !== undefined) {
+    expectedFee = dto.expectedFee
+  }
+  if (isPackage) expectedFee = null
+
+  const paymentStatus = isPackage ? null : expectedFee && expectedFee > 0 ? 'PENDING' : null
+
   const createdSession = await createSession({
     userId,
     patientId: dto.patientId,
@@ -66,6 +83,8 @@ export async function createSessionUseCase(userId: string, dto: CreateSessionDTO
     status,
     workplaceId,
     attendanceType,
+    expectedFee,
+    paymentStatus,
     ...normalizeSessionSoapInput({
       subjective: dto.subjective,
       objective: dto.objective,

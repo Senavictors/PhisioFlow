@@ -2,11 +2,7 @@ import { z } from 'zod'
 
 export const createDocumentDTO = z.object({
   patientId: z.string().trim().min(1, 'Paciente é obrigatório'),
-  type: z.enum([
-    'LAUDO_FISIOTERAPEUTICO',
-    'RELATORIO_PROGRESSO',
-    'DECLARACAO_COMPARECIMENTO',
-  ]),
+  type: z.enum(['LAUDO_FISIOTERAPEUTICO', 'RELATORIO_PROGRESSO', 'DECLARACAO_COMPARECIMENTO']),
   period: z.string().trim().optional(),
 })
 

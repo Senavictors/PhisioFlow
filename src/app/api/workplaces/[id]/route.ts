@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
 import { updateWorkplaceDTO } from '@/server/modules/workplaces/http/workplace.dto'
-import { WorkplaceNotFoundError, getWorkplaceUseCase } from '@/server/modules/workplaces/application/get-workplace'
+import {
+  WorkplaceNotFoundError,
+  getWorkplaceUseCase,
+} from '@/server/modules/workplaces/application/get-workplace'
 import { updateWorkplaceUseCase } from '@/server/modules/workplaces/application/update-workplace'
 import { archiveWorkplaceUseCase } from '@/server/modules/workplaces/application/archive-workplace'
 

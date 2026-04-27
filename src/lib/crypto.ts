@@ -11,9 +11,7 @@ function getKey(): Buffer {
 
   const raw = process.env.INTEGRATION_ENCRYPTION_KEY
   if (!raw) {
-    throw new Error(
-      'INTEGRATION_ENCRYPTION_KEY ausente. Defina-a no .env (32 bytes em base64).'
-    )
+    throw new Error('INTEGRATION_ENCRYPTION_KEY ausente. Defina-a no .env (32 bytes em base64).')
   }
 
   let key: Buffer

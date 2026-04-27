@@ -10,7 +10,14 @@ interface KpiCardProps {
   urgent?: boolean
 }
 
-export function KpiCard({ icon: Icon, value, label, sub, variant = 'default', urgent = false }: KpiCardProps) {
+export function KpiCard({
+  icon: Icon,
+  value,
+  label,
+  sub,
+  variant = 'default',
+  urgent = false,
+}: KpiCardProps) {
   return (
     <div className="relative rounded-2xl bg-card p-6 shadow-sm">
       {urgent ? (
@@ -34,9 +41,7 @@ export function KpiCard({ icon: Icon, value, label, sub, variant = 'default', ur
         {value}
       </p>
       <p className="mt-1 font-body text-[15px] font-semibold text-foreground">{label}</p>
-      {sub ? (
-        <p className="mt-0.5 font-body text-[13px] text-muted-foreground">{sub}</p>
-      ) : null}
+      {sub ? <p className="mt-0.5 font-body text-[13px] text-muted-foreground">{sub}</p> : null}
     </div>
   )
 }

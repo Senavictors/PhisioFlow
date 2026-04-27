@@ -58,15 +58,15 @@ src/server/modules/
 
 ## Stack
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Framework | Next.js 15 App Router |
-| Linguagem | TypeScript 5 |
+| Camada      | Tecnologia                  |
+| ----------- | --------------------------- |
+| Framework   | Next.js 15 App Router       |
+| Linguagem   | TypeScript 5                |
 | Estilização | Tailwind CSS v4 + shadcn/ui |
-| ORM | Prisma |
-| Banco | PostgreSQL via Neon |
-| Validação | Zod |
-| Deploy | Vercel |
+| ORM         | Prisma                      |
+| Banco       | PostgreSQL via Neon         |
+| Validação   | Zod                         |
+| Deploy      | Vercel                      |
 
 ## Camadas de Documentação
 

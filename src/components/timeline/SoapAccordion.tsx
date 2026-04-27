@@ -29,17 +29,18 @@ export function SoapAccordion({
   const [open, setOpen] = useState(defaultOpen)
 
   const values = { subjective, objective, assessment, plan }
-  const hasContent = Object.values(values).some(v => v && v.trim().length > 0)
+  const hasContent = Object.values(values).some((v) => v && v.trim().length > 0)
 
   return (
     <div className="mt-4 border-t border-border pt-3">
       <button
         type="button"
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className="flex w-full items-center justify-between gap-2 text-left"
       >
         <span className="font-body text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Notas SOAP {!hasContent && <span className="ml-1 normal-case italic">— sem conteúdo</span>}
+          Notas SOAP{' '}
+          {!hasContent && <span className="ml-1 normal-case italic">— sem conteúdo</span>}
         </span>
         <ChevronDown
           className={cn(

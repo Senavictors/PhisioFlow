@@ -1,9 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import type {
-  EmailMessageStatus,
-  EmailMessageType,
-  EmailProvider,
-} from '@/generated/prisma/client'
+import type { EmailMessageStatus, EmailMessageType, EmailProvider } from '@/generated/prisma/client'
 
 export interface EmailSettingsUpsertInput {
   userId: string

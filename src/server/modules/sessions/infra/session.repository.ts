@@ -52,6 +52,8 @@ export interface SessionCreateInput {
   status: SessionStatus
   workplaceId: string
   attendanceType: AttendanceType
+  expectedFee?: number | null
+  paymentStatus?: 'PAID' | 'PENDING' | 'PARTIAL' | 'REFUNDED' | null
   subjective?: string | null
   objective?: string | null
   assessment?: string | null
@@ -65,6 +67,8 @@ export interface SessionUpdateInput {
   status?: SessionStatus
   workplaceId?: string
   attendanceType?: AttendanceType
+  expectedFee?: number | null
+  paymentStatus?: 'PAID' | 'PENDING' | 'PARTIAL' | 'REFUNDED' | null
   subjective?: string | null
   objective?: string | null
   assessment?: string | null
