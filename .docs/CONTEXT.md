@@ -4,6 +4,20 @@
 
 ## Fase Atual
 
+**Phase 17 — Dashboard Financeiro concluída**
+Módulo `finance` com `getFinanceSummaryUseCase` que agrega recebido (Payment PAID/PARTIAL),
+previsto (Session AGENDADO com `expectedFee` + Payment PENDING com `dueAt`), série temporal
+por dia/semana/mês, breakdowns por workplace e por área e top 50 pendências ordenadas por
+`dueAt`. Endpoint `GET /api/finance/summary?from&to&granularity&workplaceIds&areas`.
+Página `/financeiro` com `FinancePeriodPicker` (presets hoje/7d/30d/mês/mês anterior),
+3 cards de KPI (recebido, previsto, período anterior), `FinanceTimelineChart` SVG (linha
+recebido vs previsto), `FinanceBreakdownPanel` por local e por área e `PendingPaymentsTable`
+com ação "Marcar pago" abrindo `RegisterPaymentModal` da Phase 16. Mini-cards "Caixa do
+mês" e "A receber este mês" no `/dashboard` linkando para `/financeiro?preset=month`.
+Sidebar com link "Financeiro" (ícone `CircleDollarSign`). Multi-tenant em todas as queries.
+Cálculo on-demand sem persistir agregados; serialização Decimal → string para evitar erro
+de Server→Client Component. PhysioFlow v2 (multi-modalidade + financeiro) entregue.
+
 **Phase 16 — Pagamentos concluída**
 Modelo `Payment` criado com vínculo XOR a `Session` ou `TreatmentPlan` (constraint SQL),
 enums `PaymentMethod` e `PaymentStatus`, e snapshot `Session.expectedFee` + cache
@@ -85,9 +99,9 @@ Campos de endereço e prioridade no modelo `Patient`, seção de logística na f
 
 ## Próximo Passo Planejado
 
-**Phase 17 — Dashboard Financeiro** — [task file](tasks/phase-17-finance-dashboard.md)
-Consumir `Payment` e `Session.expectedFee` para agregar recebido vs previsto, série
-temporal, quebras por local/área e lista de pendências.
+Ciclo "Multi-modalidade + Financeiro" concluído (phases 14–17). Próximas extensões
+opcionais: comissão líquida, exportação CSV/PDF, lembrete automático de parcela,
+templates de plano e especialidades cadastráveis. Validar com usuários quais doem mais.
 
 Pendências operacionais:
 
@@ -112,7 +126,6 @@ Pendências operacionais:
 
 ### Tasks planejadas
 
-- `.docs/tasks/phase-17-finance-dashboard.md` — Dashboard financeiro (recebido vs previsto)
 - `.docs/decisions/ADR-005-multi-modalidade-financeiro.md` — Decisão proposta para
   multi-modalidade clínica e acompanhamento financeiro
 
@@ -121,6 +134,7 @@ Pendências operacionais:
 - `.docs/tasks/phase-14-workplaces.md` — Locais de trabalho (`Workplace`, `AttendanceType`, CRUD + UI)
 - `.docs/tasks/phase-15-treatment-plans.md` — Plano de tratamento e multi-modalidade
 - `.docs/tasks/phase-16-payments.md` — Pagamentos e cobrança (avulso e pacote)
+- `.docs/tasks/phase-17-finance-dashboard.md` — Dashboard financeiro (recebido vs previsto)
 - `.docs/tasks/phase-9-ux-polish.md` — Polimentos visuais e de microinteração
 - `.docs/tasks/phase-10-clinical-agenda-flow.md` — Edição SOAP e visualização mensal da agenda
 - `.docs/tasks/phase-11-email-notifications.md` — Gmail App Password e envios
@@ -250,6 +264,7 @@ Módulo `calendar` segue o mesmo padrão em `src/server/modules/calendar/`
 Módulo `workplaces` segue o mesmo padrão em `src/server/modules/workplaces/`
 Módulo `treatment-plans` segue o mesmo padrão em `src/server/modules/treatment-plans/`
 Módulo `payments` segue o mesmo padrão em `src/server/modules/payments/`
+Módulo `finance` em `src/server/modules/finance/` (apenas leitura — agrega Payment + Session)
 
 ## Pendências Conhecidas
 

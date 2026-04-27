@@ -19,6 +19,7 @@ const APP_PATHS = [
   '/atendimentos',
   '/agenda',
   '/documentos',
+  '/financeiro',
   '/configuracoes',
 ]
 
@@ -51,6 +52,7 @@ export const config = {
     '/atendimentos/:path*',
     '/agenda/:path*',
     '/documentos/:path*',
+    '/financeiro/:path*',
     '/configuracoes/:path*',
     '/login',
     '/register',

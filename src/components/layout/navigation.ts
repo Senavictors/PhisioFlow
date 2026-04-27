@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   Calendar,
+  CircleDollarSign,
   ClipboardList,
   FileText,
   HelpCircle,
@@ -22,6 +23,7 @@ export const primaryNavigation: NavigationItem[] = [
   { label: 'Atendimentos', href: '/atendimentos', icon: ClipboardList },
   { label: 'Agenda', href: '/agenda', icon: Calendar },
   { label: 'Documentos', href: '/documentos', icon: FileText },
+  { label: 'Financeiro', href: '/financeiro', icon: CircleDollarSign },
 ]
 
 export const secondaryNavigation: NavigationItem[] = [
@@ -36,6 +38,7 @@ export const pageTitles: Record<string, string> = {
   '/atendimentos': 'Atendimentos',
   '/agenda': 'Agenda',
   '/documentos': 'Documentos',
+  '/financeiro': 'Financeiro',
   '/configuracoes': 'Configurações',
 }
 

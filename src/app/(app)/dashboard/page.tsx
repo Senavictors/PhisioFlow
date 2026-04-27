@@ -1,6 +1,8 @@
-import { Users, CalendarCheck, TrendingUp } from 'lucide-react'
+import Link from 'next/link'
+import { Users, CalendarCheck, TrendingUp, CircleDollarSign, Clock3 } from 'lucide-react'
 import { getSession } from '@/lib/session'
 import { getDashboardMetrics } from '@/server/modules/dashboard/application/get-metrics'
+import { getFinanceSummaryUseCase } from '@/server/modules/finance/application/get-finance-summary'
 import { KpiCard } from '@/components/dashboard/KpiCard'
 import { WeeklyChart } from '@/components/dashboard/WeeklyChart'
 import { QuickActions } from '@/components/dashboard/QuickActions'
@@ -18,9 +20,27 @@ function formatGreetingDate(date: Date): string {
   }).format(date)
 }
 
+function moneyShort(value: string) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    maximumFractionDigits: 0,
+  }).format(Number(value))
+}
+
 export default async function DashboardPage() {
   const session = await getSession()
   const metrics = await getDashboardMetrics(session.userId!)
+
+  const today = new Date()
+  const monthFrom = new Date(today.getFullYear(), today.getMonth(), 1)
+  const monthTo = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
+  const finance = await getFinanceSummaryUseCase({
+    userId: session.userId!,
+    from: monthFrom,
+    to: monthTo,
+    granularity: 'day',
+  })
 
   const firstName = session.name?.split(' ')[0] ?? 'bem-vindo'
   const dateLabel = formatGreetingDate(new Date())
@@ -58,6 +78,44 @@ export default async function DashboardPage() {
           variant="accent"
           urgent={metrics.patientsWithoutReturn > 0}
         />
+      </div>
+
+      {/* Mini-cards financeiros */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <Link
+          href="/financeiro?preset=month"
+          className="group rounded-[18px] border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary-soft/40"
+        >
+          <div className="flex items-center justify-between">
+            <p className="font-body text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              Caixa do mês
+            </p>
+            <CircleDollarSign className="h-4 w-4 text-primary" />
+          </div>
+          <p className="mt-2 font-display text-[24px] font-bold text-foreground">
+            {moneyShort(finance.totalReceived)}
+          </p>
+          <p className="mt-1 font-body text-[12px] text-muted-foreground group-hover:text-primary-soft-fg">
+            recebido até hoje
+          </p>
+        </Link>
+        <Link
+          href="/financeiro?preset=month"
+          className="group rounded-[18px] border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary-soft/40"
+        >
+          <div className="flex items-center justify-between">
+            <p className="font-body text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              A receber este mês
+            </p>
+            <Clock3 className="h-4 w-4 text-primary" />
+          </div>
+          <p className="mt-2 font-display text-[24px] font-bold text-foreground">
+            {moneyShort(finance.totalForecast)}
+          </p>
+          <p className="mt-1 font-body text-[12px] text-muted-foreground group-hover:text-primary-soft-fg">
+            previsto em sessões e parcelas
+          </p>
+        </Link>
       </div>
 
       {/* Gráfico + Ações rápidas */}

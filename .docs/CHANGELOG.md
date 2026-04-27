@@ -9,6 +9,29 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 17 — Dashboard Financeiro**
+  - Módulo `finance` com `getFinanceSummaryUseCase` (apenas leitura): agrega
+    recebido (`Payment.status` PAID/PARTIAL no período), previsto por sessões
+    (`Session.AGENDADO` com `expectedFee` e `paymentStatus` PENDING/PARTIAL) e por
+    parcelas de pacote (`Payment.PENDING` com `dueAt` no período); calcula delta
+    contra o período anterior, série temporal por dia/semana/mês, breakdowns por
+    `Workplace` e por `TherapyArea`, e top 50 pendências ordenadas por `dueAt`
+  - Endpoint `GET /api/finance/summary?from&to&granularity&workplaceIds&areas`
+    (Decimal serializado como string para precisão)
+  - Página `/financeiro` (server component) com `FinancePeriodPicker` (presets
+    hoje / 7d / 30d / mês atual / mês anterior + granularidade dia/semana/mês),
+    três `FinanceSummaryCard` (recebido, previsto com quebra sessão+pacote,
+    período anterior), `FinanceTimelineChart` SVG nativo (linha recebido vs
+    previsto), `FinanceBreakdownPanel` por local e por área, e
+    `PendingPaymentsTable` com ação "Marcar pago" abrindo `RegisterPaymentModal`
+  - Mini-cards "Caixa do mês" e "A receber este mês" no `/dashboard` linkando
+    para `/financeiro?preset=month`
+  - Sidebar com novo link "Financeiro" (ícone `CircleDollarSign`)
+  - Proxy autenticado cobrindo `/financeiro/**`
+  - Testes unitários do `getFinanceSummaryUseCase` (cenário com dados e cenário
+    vazio)
+  - **PhysioFlow v2** (multi-modalidade + financeiro) entregue ao final desta fase
+
 - **Phase 16 — Pagamentos**
   - Enums `PaymentMethod` (`PIX`, `CASH`, `CREDIT_CARD`, `DEBIT_CARD`, `BANK_TRANSFER`,
     `INSURANCE`, `OTHER`) e `PaymentStatus` (`PAID`, `PENDING`, `PARTIAL`, `REFUNDED`)

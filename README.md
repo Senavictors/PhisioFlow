@@ -29,11 +29,9 @@ PhysioFlow centraliza toda a operação clínica em uma interface única — do 
   modalidade, local e pacote/avulso preparatório para o financeiro
 - **Pagamentos** — Registro de cobranças avulsas e pacotes com método, status e snapshot
   `expectedFee` por sessão; saldo do plano e do paciente, modal de registro
-
-### Em desenvolvimento (ciclo Multi-modalidade + Financeiro)
-
-- **Dashboard Financeiro** — Recebido vs previsto por dia/semana/mês e quebra por
-  local/área
+- **Dashboard Financeiro** — Página `/financeiro` com cards de recebido/previsto, gráfico
+  série temporal, quebras por local e área, tabela de pendências com "marcar pago" em
+  um clique e mini-cards no dashboard principal
 
 ---
 
@@ -202,18 +200,19 @@ Após o seed:
 - Phase 16 — Pagamentos (modelo `Payment` com vínculo XOR sessão/plano, snapshot
   `Session.expectedFee`, cache `paymentStatus`, CRUD REST de pagamentos, saldo do plano,
   saldo do paciente, badges/modal e seção financeira na ficha)
+- Phase 17 — Dashboard Financeiro (`/financeiro` com cards de recebido/previsto,
+  gráfico série temporal, breakdowns por local/área e tabela de pendências; mini-cards
+  no `/dashboard`; **PhysioFlow v2** entregue)
 
-### 🗺️ Planejado — Ciclo "Multi-modalidade + Financeiro"
+### 🗺️ Próximas extensões (opcionais)
 
-> Decisão arquitetural: [ADR-005](.docs/decisions/ADR-005-multi-modalidade-financeiro.md)
-
-- **Phase 17 — Dashboard Financeiro** (recebido vs previsto, série temporal,
-  breakdowns por local/área, lista de pendências)
+- Phase 18 — Comissão líquida usando `Workplace.defaultCommissionPct`
+- Phase 19 — Exportação CSV/PDF do dashboard financeiro
+- Phase 20 — Lembrete automático de parcela a vencer (e-mail / WhatsApp)
+- Phase 21 — Templates de plano de tratamento
+- Phase 22 — Especialidades cadastráveis pelo usuário (migrar enum → tabela)
 
 ### ➡️ Próximo Passo
 
-Iniciar **Phase 17**: dashboard financeiro consumindo `Payment` e `Session.expectedFee`
-com agregações por período, local e área.
-
-Ainda pendente do ciclo anterior: configurar as variáveis de e-mail/Google na Vercel e
-validar os fluxos reais de envio e sincronização.
+Validar com usuários reais quais extensões priorizar. Pendências operacionais: configurar
+as variáveis de e-mail/Google na Vercel e validar os fluxos reais de envio e sincronização.
