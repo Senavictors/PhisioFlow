@@ -336,4 +336,6 @@ Validar com usuários reais quais extensões priorizar. Pendências operacionais
 
 ## Licença
 
-Projeto pessoal de Victor Sena. Sem licença pública por enquanto.
+© 2026 Victor Sena. Todos os direitos reservados. Este código é público apenas
+para fins de portfólio. Uso comercial, redistribuição ou criação de obras
+derivadas requer autorização por escrito.
