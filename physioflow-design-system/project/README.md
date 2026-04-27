@@ -1,6 +1,6 @@
 # PhisioFlow Design System
 
-A design system for **PhisioFlow** — *o ecossistema completo para o fisioterapeuta moderno*. The first surface is the **Portal Restaurativo**, a practice-management web app for physiotherapists: patient tracking, session logging (atendimentos), agenda, and clinical document generation.
+A design system for **PhisioFlow** — _o ecossistema completo para o fisioterapeuta moderno_. The first surface is the **Portal Restaurativo**, a practice-management web app for physiotherapists: patient tracking, session logging (atendimentos), agenda, and clinical document generation.
 
 The interface language is **Brazilian Portuguese**, the tone is **warm, editorial, and restorative**, and the visual identity leans on a sage-green + terracotta palette over a bege (warm off-white) canvas. The internal tagline is **"Portal Restaurativo"** — the whole experience is meant to feel calm, unhurried, and humane, in contrast to typical clinical SaaS.
 
@@ -8,13 +8,13 @@ The interface language is **Brazilian Portuguese**, the tone is **warm, editoria
 
 There is one product represented in this project: the **PhisioFlow Portal Restaurativo** web app. Core screens observed:
 
-| Screen | Route | Purpose |
-|---|---|---|
-| Dashboard (Visão Geral) | `/` | KPIs, weekly evolution chart, quick actions, recent sessions |
-| Pacientes | `/pacientes` | Patient directory, filters, classification, restorative progress |
-| Atendimentos | `/atendimentos` | Chronological history of sessions |
-| Agenda | `/agenda` | Scheduled and completed appointments, with domiciliar flag |
-| Documentos | `/documentos` | Clinical document generation (PDF) |
+| Screen                  | Route           | Purpose                                                          |
+| ----------------------- | --------------- | ---------------------------------------------------------------- |
+| Dashboard (Visão Geral) | `/`             | KPIs, weekly evolution chart, quick actions, recent sessions     |
+| Pacientes               | `/pacientes`    | Patient directory, filters, classification, restorative progress |
+| Atendimentos            | `/atendimentos` | Chronological history of sessions                                |
+| Agenda                  | `/agenda`       | Scheduled and completed appointments, with domiciliar flag       |
+| Documentos              | `/documentos`   | Clinical document generation (PDF)                               |
 
 ## Sources
 
@@ -30,21 +30,22 @@ Built from **five screenshots** provided by the user (originally under `uploads/
 
 **Voice.** Warm, professional, restorative. The product refers to itself as a **"Portal Restaurativo"** — restoration, evolution, progress.
 
-**Addressing the user.** Informal second person (*você*), never *tu*, never *senhor/senhora*. The dashboard greets with *"Olá, bem-vindo de volta 👋"*.
+**Addressing the user.** Informal second person (_você_), never _tu_, never _senhor/senhora_. The dashboard greets with _"Olá, bem-vindo de volta 👋"_.
 
 **Casing.** Page titles use **sentence case** with acentuação preserved. Nav items and section eyebrows use **UPPERCASE** with wide letter-spacing — the editorial label treatment. Body, buttons, table cells: sentence case.
 
 **Numbers and KPIs.** Numbers are heroes. The dashboard leads with giant Fraunces-serif numerals. Never hide a KPI behind a word when the number itself can lead.
 
-**Clinical terminology preserved:** *atendimento*, *paciente debilitado*, *domiciliar*, *laudo fisioterapêutico*, *encaminhamento*, *declaração de horas*, *evolução*.
+**Clinical terminology preserved:** _atendimento_, _paciente debilitado_, _domiciliar_, _laudo fisioterapêutico_, _encaminhamento_, _declaração de horas_, _evolução_.
 
 **Tone examples** (from product):
-- *"Olá, bem-vindo de volta 👋"*
-- *"Acompanhe seus pacientes e a documentação clínica."*
-- *"Você acompanha 1 pacientes ativos. Mantenha os atendimentos em dia para sustentar a evolução clínica."*
-- *"Comece um fluxo em segundos."*
-- *"Em breve você poderá emitir documentos personalizados..."*
-- *"Nenhum atendimento registrado ainda. Vá até um paciente para registrar."*
+
+- _"Olá, bem-vindo de volta 👋"_
+- _"Acompanhe seus pacientes e a documentação clínica."_
+- _"Você acompanha 1 pacientes ativos. Mantenha os atendimentos em dia para sustentar a evolução clínica."_
+- _"Comece um fluxo em segundos."_
+- _"Em breve você poderá emitir documentos personalizados..."_
+- _"Nenhum atendimento registrado ainda. Vá até um paciente para registrar."_
 
 **Emoji.** Used **once, sparingly**, as warm punctuation — 👋 on the greeting. Not as iconography.
 
@@ -109,13 +110,13 @@ Green and terracotta never meet as equals — green is the voice, terracotta is 
 
 ### Corner radii
 
-| Element | Radius |
-|---|---|
-| Card | `rounded-2xl` (18px) |
-| Button | `rounded-xl` (12px) |
-| Chip / pill | fully rounded |
-| Input | `rounded-xl` |
-| Avatar | fully rounded |
+| Element     | Radius               |
+| ----------- | -------------------- |
+| Card        | `rounded-2xl` (18px) |
+| Button      | `rounded-xl` (12px)  |
+| Chip / pill | fully rounded        |
+| Input       | `rounded-xl`         |
+| Avatar      | fully rounded        |
 
 ---
 
@@ -132,7 +133,7 @@ Line icons with ~1.75px stroke, rounded joins — consistent with the **Lucide**
 **Emoji**: only the 👋 on the greeting.
 **Unicode marks**: `•`, `→` ("Ver atendimentos →").
 
-**Logo**: sage-green rounded-square badge with white heartbeat glyph + *PhisioFlow* wordmark in Fraunces bold. Reconstructed at `assets/logo.svg` — approximate; please replace.
+**Logo**: sage-green rounded-square badge with white heartbeat glyph + _PhisioFlow_ wordmark in Fraunces bold. Reconstructed at `assets/logo.svg` — approximate; please replace.
 
 ---
 

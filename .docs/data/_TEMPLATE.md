@@ -1,6 +1,7 @@
 # Dados — [Nome do Modelo]
 
 ## Modelos Afetados
+
 - `ModelName`
 
 ## Schema Prisma
@@ -21,8 +22,8 @@ model ModelName {
 
 ## Relacionamentos
 
-| De | Para | Cardinalidade |
-|----|------|--------------|
+| De  | Para | Cardinalidade |
+| --- | ---- | ------------- |
 
 ## Enums
 
@@ -34,7 +35,9 @@ enum EnumName {
 ```
 
 ## Constraints
+
 - [Constraint 1]
 
 ## ADR Relacionado
+
 - [ADR-NNN](../decisions/ADR-NNN-nome.md)

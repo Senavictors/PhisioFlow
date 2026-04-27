@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
-import { getPatientUseCase, PatientNotFoundError } from '@/server/modules/patients/application/get-patient'
+import {
+  getPatientUseCase,
+  PatientNotFoundError,
+} from '@/server/modules/patients/application/get-patient'
 import { listSessionsUseCase } from '@/server/modules/sessions/application/list-sessions'
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {

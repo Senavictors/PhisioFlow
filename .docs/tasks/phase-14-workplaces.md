@@ -46,7 +46,7 @@ um local. Manter operação atual sem regressão.
     - `PRESENTIAL` → `CLINIC`
     - `HOME_CARE` → `HOME_CARE`
 - [ ] Backfill executado dentro da própria migration (raw SQL em
-  `prisma/migrations/.../migration.sql`) ou em script separado idempotente
+      `prisma/migrations/.../migration.sql`) ou em script separado idempotente
 
 ### Backend — Use Cases
 
@@ -234,7 +234,7 @@ model Workplace {
 
 - [ ] Migration `phase14_workplaces` criada e aplicada
 - [ ] Backfill executado (todo usuário tem ao menos 1 workplace, toda sessão tem
-  `workplaceId` e `attendanceType` preenchidos)
+      `workplaceId` e `attendanceType` preenchidos)
 - [ ] CRUD de workplace funciona (criar, listar, editar, arquivar)
 - [ ] `SessionForm` permite escolher workplace e attendance type
 - [ ] `SessionCard` mostra workplace

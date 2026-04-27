@@ -28,9 +28,7 @@ export function WorkplacesManager({ initialWorkplaces }: WorkplacesManagerProps)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
 
-  const editingWorkplace = editingId
-    ? initialWorkplaces.find((w) => w.id === editingId)
-    : undefined
+  const editingWorkplace = editingId ? initialWorkplaces.find((w) => w.id === editingId) : undefined
 
   function handleEdit(id: string) {
     setEditingId(id)

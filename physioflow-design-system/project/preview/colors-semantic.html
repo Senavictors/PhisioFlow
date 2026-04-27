@@ -1,18 +1,88 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8">
-<link rel="stylesheet" href="../colors_and_type.css">
-<style>
-  html,body{margin:0;padding:0;background:var(--background);}
-  .card{padding:24px 28px;box-sizing:border-box;min-height:100vh;display:flex;align-items:center;}
-  .row{display:flex;gap:16px;flex-wrap:wrap;width:100%;}
-  .sw{display:flex;flex-direction:column;gap:8px;flex:1;min-width:140px;}
-  .chip{height:68px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-body);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;}
-  .lbl{font-family:var(--font-body);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--muted-foreground);}
-  .name{font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--foreground);}
-</style></head>
-<body><div class="card"><div class="row">
-  <div class="sw"><div class="chip" style="background:var(--success)">Realizado</div><div class="name">Success</div><div class="lbl">--success</div></div>
-  <div class="sw"><div class="chip" style="background:var(--warning)">Urgente</div><div class="name">Warning</div><div class="lbl">--warning</div></div>
-  <div class="sw"><div class="chip" style="background:var(--danger)">Cancelar</div><div class="name">Danger</div><div class="lbl">--danger</div></div>
-  <div class="sw"><div class="chip" style="background:var(--foreground)">Texto</div><div class="name">Foreground</div><div class="lbl">--foreground</div></div>
-</div></div></body></html>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../colors_and_type.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--background);
+      }
+      .card {
+        padding: 24px 28px;
+        box-sizing: border-box;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      .sw {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        min-width: 140px;
+      }
+      .chip {
+        height: 68px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .lbl {
+        font-family: var(--font-body);
+        font-size: 10.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--muted-foreground);
+      }
+      .name {
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--foreground);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="row">
+        <div class="sw">
+          <div class="chip" style="background: var(--success)">Realizado</div>
+          <div class="name">Success</div>
+          <div class="lbl">--success</div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background: var(--warning)">Urgente</div>
+          <div class="name">Warning</div>
+          <div class="lbl">--warning</div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background: var(--danger)">Cancelar</div>
+          <div class="name">Danger</div>
+          <div class="lbl">--danger</div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background: var(--foreground)">Texto</div>
+          <div class="name">Foreground</div>
+          <div class="lbl">--foreground</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

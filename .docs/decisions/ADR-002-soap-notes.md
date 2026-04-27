@@ -1,10 +1,13 @@
 # ADR-002: Estrutura SOAP para Evolução Clínica
 
 ## Status
+
 Aceito
 
 ## Contexto
+
 O padrão de evolução clínica mais adotado em fisioterapia é o método SOAP:
+
 - **S**ubjetivo: queixa principal, como o paciente se sente
 - **O**bjetivo: achados clínicos mensuráveis
 - **A**valiação: análise clínica do fisioterapeuta
@@ -28,10 +31,12 @@ Campos opcionais para permitir registro parcial durante o atendimento.
 ## Consequências
 
 **Positivo:**
+
 - Padrão reconhecido e aceito pela comunidade fisioterapêutica
 - Texto livre dá liberdade clínica ao profissional
 - Simples de implementar, fácil de exportar para PDF
 
 **Negativo:**
+
 - Sem campos estruturados, buscas por achados específicos são difíceis
 - Futuro: considerar templates semiestruturados (ADR futuro)

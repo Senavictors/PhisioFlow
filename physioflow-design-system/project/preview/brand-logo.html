@@ -1,27 +1,120 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8">
-<link rel="stylesheet" href="../colors_and_type.css">
-<style>
-  html,body{margin:0;padding:0;background:var(--background);}
-  .card{padding:24px 28px;box-sizing:border-box;min-height:100vh;display:flex;align-items:center;gap:24px;}
-  .logo{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;flex:1;display:flex;flex-direction:column;gap:12px;align-items:center;}
-  .mark{display:flex;align-items:center;gap:10px;}
-  .bg{width:36px;height:36px;border-radius:12px;background:var(--primary);display:flex;align-items:center;justify-content:center;}
-  .wm{font-family:var(--font-display);font-weight:700;font-size:22px;color:var(--foreground);line-height:1;}
-  .sub{font-family:var(--font-body);font-size:8.5px;font-weight:700;letter-spacing:.22em;color:var(--muted-foreground);text-transform:uppercase;margin-top:4px;}
-  .only{width:56px;height:56px;border-radius:16px;background:var(--primary);display:flex;align-items:center;justify-content:center;}
-  .cap{font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground);}
-</style></head>
-<body><div class="card">
-  <div class="logo">
-    <div class="mark">
-      <div class="bg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></div>
-      <div><div class="wm">PhisioFlow</div><div class="sub">Portal Restaurativo</div></div>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../colors_and_type.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--background);
+      }
+      .card {
+        padding: 24px 28px;
+        box-sizing: border-box;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .logo {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 22px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+      }
+      .mark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .bg {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .wm {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 22px;
+        color: var(--foreground);
+        line-height: 1;
+      }
+      .sub {
+        font-family: var(--font-body);
+        font-size: 8.5px;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        color: var(--muted-foreground);
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+      .only {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cap {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--muted-foreground);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="logo">
+        <div class="mark">
+          <div class="bg">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              stroke-width="2.2"
+              stroke-linecap="round"
+            >
+              <path d="M3 12h4l2-5 4 10 2-5h6" />
+            </svg>
+          </div>
+          <div>
+            <div class="wm">PhisioFlow</div>
+            <div class="sub">Portal Restaurativo</div>
+          </div>
+        </div>
+        <div class="cap">Full lockup</div>
+      </div>
+      <div class="logo">
+        <div class="only">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          >
+            <path d="M3 12h4l2-5 4 10 2-5h6" />
+          </svg>
+        </div>
+        <div class="cap">Mark only</div>
+      </div>
     </div>
-    <div class="cap">Full lockup</div>
-  </div>
-  <div class="logo">
-    <div class="only"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></div>
-    <div class="cap">Mark only</div>
-  </div>
-</div></body></html>
+  </body>
+</html>

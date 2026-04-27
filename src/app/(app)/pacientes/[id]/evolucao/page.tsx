@@ -2,7 +2,10 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft, FilePlus2 } from 'lucide-react'
 import { getSession } from '@/lib/session'
-import { getPatientUseCase, PatientNotFoundError } from '@/server/modules/patients/application/get-patient'
+import {
+  getPatientUseCase,
+  PatientNotFoundError,
+} from '@/server/modules/patients/application/get-patient'
 import { listSessionsUseCase } from '@/server/modules/sessions/application/list-sessions'
 import { TimelineEntry } from '@/components/timeline/TimelineEntry'
 

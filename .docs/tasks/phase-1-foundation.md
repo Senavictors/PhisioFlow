@@ -1,11 +1,13 @@
 # Task: Phase 1 — Foundation
 
 ## Status
+
 - [x] Todo
 - [x] In Progress
 - [x] Done
 
 ## Contexto
+
 Ponto de partida absoluto. Nenhum código existe ainda.
 O design system já está documentado em `physioflow-design-system/project/` — todos os tokens,
 componentes e telas de referência estão disponíveis ali. A implementação deve seguir exatamente
@@ -14,10 +16,12 @@ aquele design.
 ADR relacionado: [ADR-001](../decisions/ADR-001-tech-stack.md)
 
 ## Objetivo
+
 Repositório Next.js 15 funcional com dev server rodando, design tokens aplicados, fontes carregadas,
 layout base com sidebar e área de conteúdo, e Prisma configurado. Nenhuma feature clínica.
 
 ## Escopo
+
 - [ ] Inicializar projeto: `npx create-next-app@latest physioflow --typescript --tailwind --app --src-dir --import-alias "@/*"`
 - [ ] Configurar Tailwind v4 com o `@theme` completo do design system (ver abaixo)
 - [ ] Configurar fontes via `next/font/google` (Fraunces + Plus Jakarta Sans)
@@ -37,6 +41,7 @@ layout base com sidebar e área de conteúdo, e Prisma configurado. Nenhuma feat
 - [ ] Estrutura de pastas conforme arquitetura (ver abaixo)
 
 ## Fora de Escopo
+
 - Lógica de auth (Phase 2)
 - Qualquer feature clínica (Phase 3+)
 - Deploy em produção
@@ -44,7 +49,9 @@ layout base com sidebar e área de conteúdo, e Prisma configurado. Nenhuma feat
 ---
 
 ## Referência de Design
+
 Design system completo em: `physioflow-design-system/project/`
+
 - Tokens: `colors_and_type.css`
 - Componentes: `ui_kits/portal/kit.css`
 - Telas: `ui_kits/portal/index.html` (abrir no browser para referência visual)
@@ -55,82 +62,84 @@ Design system completo em: `physioflow-design-system/project/`
 ## `src/app/globals.css` — Bloco `@theme` Completo
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* Paleta principal */
-  --color-background:             oklch(0.985 0.008 85);
-  --color-foreground:             oklch(0.27 0.02 160);
-  --color-primary:                oklch(0.52 0.05 160);
-  --color-primary-hover:          oklch(0.46 0.05 160);
-  --color-primary-foreground:     oklch(0.985 0.008 85);
-  --color-accent:                 oklch(0.72 0.09 45);
-  --color-accent-hover:           oklch(0.66 0.1 45);
-  --color-accent-foreground:      oklch(0.99 0.005 85);
-  --color-card:                   oklch(1 0 0);
-  --color-card-foreground:        oklch(0.27 0.02 160);
-  --color-border:                 oklch(0.9 0.012 85);
-  --color-input:                  oklch(0.94 0.01 85);
-  --color-muted:                  oklch(0.95 0.01 85);
-  --color-muted-foreground:       oklch(0.5 0.015 160);
-  --color-ring:                   oklch(0.52 0.05 160 / 0.35);
+  --color-background: oklch(0.985 0.008 85);
+  --color-foreground: oklch(0.27 0.02 160);
+  --color-primary: oklch(0.52 0.05 160);
+  --color-primary-hover: oklch(0.46 0.05 160);
+  --color-primary-foreground: oklch(0.985 0.008 85);
+  --color-accent: oklch(0.72 0.09 45);
+  --color-accent-hover: oklch(0.66 0.1 45);
+  --color-accent-foreground: oklch(0.99 0.005 85);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.27 0.02 160);
+  --color-border: oklch(0.9 0.012 85);
+  --color-input: oklch(0.94 0.01 85);
+  --color-muted: oklch(0.95 0.01 85);
+  --color-muted-foreground: oklch(0.5 0.015 160);
+  --color-ring: oklch(0.52 0.05 160 / 0.35);
 
   /* Superfícies tintadas */
-  --color-primary-soft:           oklch(0.92 0.028 160);
-  --color-primary-soft-fg:        oklch(0.42 0.05 160);
-  --color-accent-soft:            oklch(0.93 0.035 45);
-  --color-accent-soft-fg:         oklch(0.55 0.09 45);
+  --color-primary-soft: oklch(0.92 0.028 160);
+  --color-primary-soft-fg: oklch(0.42 0.05 160);
+  --color-accent-soft: oklch(0.93 0.035 45);
+  --color-accent-soft-fg: oklch(0.55 0.09 45);
 
   /* Semânticos */
-  --color-success:                oklch(0.62 0.09 160);
-  --color-success-soft:           oklch(0.93 0.03 160);
-  --color-warning:                oklch(0.72 0.09 45);
-  --color-warning-soft:           oklch(0.94 0.035 45);
-  --color-danger:                 oklch(0.58 0.16 25);
-  --color-danger-soft:            oklch(0.94 0.04 25);
+  --color-success: oklch(0.62 0.09 160);
+  --color-success-soft: oklch(0.93 0.03 160);
+  --color-warning: oklch(0.72 0.09 45);
+  --color-warning-soft: oklch(0.94 0.035 45);
+  --color-danger: oklch(0.58 0.16 25);
+  --color-danger-soft: oklch(0.94 0.04 25);
 
   /* Compatibilidade shadcn/ui */
-  --color-secondary:              oklch(0.92 0.015 160);
-  --color-secondary-foreground:   oklch(0.27 0.02 160);
-  --color-popover:                oklch(1 0 0);
-  --color-popover-foreground:     oklch(0.27 0.02 160);
-  --color-destructive:            oklch(0.58 0.16 25);
+  --color-secondary: oklch(0.92 0.015 160);
+  --color-secondary-foreground: oklch(0.27 0.02 160);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.27 0.02 160);
+  --color-destructive: oklch(0.58 0.16 25);
   --color-destructive-foreground: oklch(0.99 0.005 85);
 
   /* Tipografia — variáveis injetadas via next/font em layout.tsx */
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-body:    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  --font-body: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
 
   /* Escala tipográfica */
   --text-label: 10.5px;
-  --text-kpi:   68px;
+  --text-kpi: 68px;
 
   /* Raios */
-  --radius-sm:   8px;
-  --radius-md:   12px;
-  --radius-lg:   18px;
-  --radius-xl:   24px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
-  --radius:      12px;
+  --radius: 12px;
 
   /* Sombras */
-  --shadow-xs:          0 1px 1px oklch(0 0 0 / 0.03);
-  --shadow-sm:          0 1px 2px oklch(0 0 0 / 0.03), 0 1px 3px oklch(0 0 0 / 0.04);
-  --shadow-md:          0 4px 10px -4px oklch(0 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.04);
-  --shadow-lg:          0 12px 28px -12px oklch(0 0 0 / 0.10);
-  --shadow-glow:        0 10px 24px -10px oklch(0.52 0.05 160 / 0.45), 0 2px 6px oklch(0.52 0.05 160 / 0.15);
+  --shadow-xs: 0 1px 1px oklch(0 0 0 / 0.03);
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.03), 0 1px 3px oklch(0 0 0 / 0.04);
+  --shadow-md: 0 4px 10px -4px oklch(0 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.04);
+  --shadow-lg: 0 12px 28px -12px oklch(0 0 0 / 0.1);
+  --shadow-glow:
+    0 10px 24px -10px oklch(0.52 0.05 160 / 0.45), 0 2px 6px oklch(0.52 0.05 160 / 0.15);
   --shadow-accent-glow: 0 10px 24px -10px oklch(0.72 0.09 45 / 0.45);
 
   /* Motion */
-  --ease-out:      cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   --duration-fast: 120ms;
-  --duration:      180ms;
+  --duration: 180ms;
   --duration-slow: 280ms;
 }
 
 @layer base {
-  html, body {
+  html,
+  body {
     background-color: theme(--color-background);
     color: theme(--color-foreground);
     -webkit-font-smoothing: antialiased;
@@ -138,31 +147,31 @@ Design system completo em: `physioflow-design-system/project/`
   }
 
   .dark {
-    --color-background:             oklch(0.14 0.012 160);
-    --color-foreground:             oklch(0.93 0.01 85);
-    --color-primary:                oklch(0.62 0.05 160);
-    --color-primary-hover:          oklch(0.68 0.05 160);
-    --color-primary-foreground:     oklch(0.14 0.012 160);
-    --color-card:                   oklch(0.18 0.012 160);
-    --color-card-foreground:        oklch(0.93 0.01 85);
-    --color-border:                 oklch(0.25 0.01 160);
-    --color-input:                  oklch(0.22 0.01 160);
-    --color-muted:                  oklch(0.22 0.01 160);
-    --color-muted-foreground:       oklch(0.62 0.015 160);
-    --color-ring:                   oklch(0.62 0.05 160 / 0.4);
-    --color-primary-soft:           oklch(0.22 0.025 160);
-    --color-primary-soft-fg:        oklch(0.72 0.04 160);
-    --color-accent-soft:            oklch(0.22 0.025 45);
-    --color-accent-soft-fg:         oklch(0.78 0.08 45);
-    --color-success:                oklch(0.68 0.09 160);
-    --color-success-soft:           oklch(0.22 0.025 160);
-    --color-danger:                 oklch(0.65 0.16 25);
-    --color-danger-soft:            oklch(0.22 0.025 25);
-    --color-secondary:              oklch(0.22 0.015 160);
-    --color-secondary-foreground:   oklch(0.93 0.01 85);
-    --color-popover:                oklch(0.18 0.012 160);
-    --color-popover-foreground:     oklch(0.93 0.01 85);
-    --color-destructive:            oklch(0.65 0.16 25);
+    --color-background: oklch(0.14 0.012 160);
+    --color-foreground: oklch(0.93 0.01 85);
+    --color-primary: oklch(0.62 0.05 160);
+    --color-primary-hover: oklch(0.68 0.05 160);
+    --color-primary-foreground: oklch(0.14 0.012 160);
+    --color-card: oklch(0.18 0.012 160);
+    --color-card-foreground: oklch(0.93 0.01 85);
+    --color-border: oklch(0.25 0.01 160);
+    --color-input: oklch(0.22 0.01 160);
+    --color-muted: oklch(0.22 0.01 160);
+    --color-muted-foreground: oklch(0.62 0.015 160);
+    --color-ring: oklch(0.62 0.05 160 / 0.4);
+    --color-primary-soft: oklch(0.22 0.025 160);
+    --color-primary-soft-fg: oklch(0.72 0.04 160);
+    --color-accent-soft: oklch(0.22 0.025 45);
+    --color-accent-soft-fg: oklch(0.78 0.08 45);
+    --color-success: oklch(0.68 0.09 160);
+    --color-success-soft: oklch(0.22 0.025 160);
+    --color-danger: oklch(0.65 0.16 25);
+    --color-danger-soft: oklch(0.22 0.025 25);
+    --color-secondary: oklch(0.22 0.015 160);
+    --color-secondary-foreground: oklch(0.93 0.01 85);
+    --color-popover: oklch(0.18 0.012 160);
+    --color-popover-foreground: oklch(0.93 0.01 85);
+    --color-destructive: oklch(0.65 0.16 25);
     --color-destructive-foreground: oklch(0.99 0.005 85);
   }
 }
@@ -309,15 +318,16 @@ model User {
 
 ### Estratégia
 
-| Camada | Testar | Ferramenta |
-|---|---|---|
-| Use Cases (`application/`) | **Sempre** — regra clínica não pode quebrar silenciosamente | Vitest |
-| Domain entities/rules | **Sempre** — regras puras, alto retorno | Vitest |
-| Route Handlers | Não — adaptadores finos sem lógica | — |
-| Repositories (Prisma) | Não — confiar no Prisma + migrations | — |
-| Componentes UI | Não por enquanto — custo alto, valor baixo em early-stage | — |
+| Camada                     | Testar                                                      | Ferramenta |
+| -------------------------- | ----------------------------------------------------------- | ---------- |
+| Use Cases (`application/`) | **Sempre** — regra clínica não pode quebrar silenciosamente | Vitest     |
+| Domain entities/rules      | **Sempre** — regras puras, alto retorno                     | Vitest     |
+| Route Handlers             | Não — adaptadores finos sem lógica                          | —          |
+| Repositories (Prisma)      | Não — confiar no Prisma + migrations                        | —          |
+| Componentes UI             | Não por enquanto — custo alto, valor baixo em early-stage   | —          |
 
 Cada Use Case tem um `*.test.ts` ao lado:
+
 ```
 src/server/modules/patients/application/
   create-patient.ts
@@ -394,8 +404,7 @@ import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
-export const prisma =
-  globalForPrisma.prisma ?? new PrismaClient({ log: ['error'] })
+export const prisma = globalForPrisma.prisma ?? new PrismaClient({ log: ['error'] })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 ```
@@ -403,10 +412,12 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 ---
 
 ## Checklist de Testes
+
 - [ ] `npm test` roda sem erros (0 testes por enquanto — só verificar que o runner funciona)
 - [ ] `vitest.config.ts` criado com alias `@/*` correto
 
 ## Checklist Final
+
 - [ ] `npm run dev` roda sem erros em localhost:3000
 - [ ] `npm run build` passa sem erros
 - [ ] `npm run lint` sem warnings
@@ -420,6 +431,7 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 - [ ] `.docs/CHANGELOG.md` atualizado
 
 ## Notas para Próxima Sessão
+
 Ao concluir, o dev server roda em localhost:3000 com layout base visível e fiel ao design system.
 A Phase 2 (Auth) começa com toda infraestrutura de UI pronta — apenas conectar lógica de sessão.
 Referência para qualquer dúvida de UI: `physioflow-design-system/project/ui_kits/portal/index.html`.

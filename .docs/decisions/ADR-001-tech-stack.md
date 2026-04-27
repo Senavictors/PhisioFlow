@@ -1,10 +1,13 @@
 # ADR-001: Tech Stack
 
 ## Status
+
 Aceito
 
 ## Contexto
+
 PhysioFlow é um SaaS clínico fullstack que precisa de:
+
 - Desenvolvimento rápido (solo dev)
 - Type safety end-to-end
 - Deploy simples e barato
@@ -23,10 +26,12 @@ PhysioFlow é um SaaS clínico fullstack que precisa de:
 ## Consequências
 
 **Positivo:**
+
 - Stack coerente, sem context switching
 - Type safety do banco até o componente
 - Deploy automático a cada push em main
 
 **Negativo:**
+
 - Acoplamento ao ecossistema Vercel/Next.js
 - Neon free tier tem limitações de conexões simultâneas

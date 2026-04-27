@@ -3,13 +3,15 @@ import { CalendarDays, ClipboardList, FilePlus2 } from 'lucide-react'
 import { getSession } from '@/lib/session'
 import { SessionCard } from '@/components/sessions/SessionCard'
 import { listSessionsUseCase } from '@/server/modules/sessions/application/list-sessions'
+import { serializeSession } from '@/lib/serialize-session'
 
 export default async function AtendimentosPage() {
   const session = await getSession()
-  const { sessions, total } = await listSessionsUseCase(session.userId!, {
+  const { sessions: rawSessions, total } = await listSessionsUseCase(session.userId!, {
     limit: 100,
     order: 'desc',
   })
+  const sessions = rawSessions.map(serializeSession)
   const completedCount = sessions.filter((item) => item.status === 'REALIZADO').length
   const scheduledCount = sessions.filter((item) => item.status === 'AGENDADO').length
 

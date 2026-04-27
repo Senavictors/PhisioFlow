@@ -91,9 +91,7 @@ export function ThemedSelect({
                   className={cn(
                     'flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left',
                     'font-body text-[13px] transition-colors duration-[180ms]',
-                    isSelected
-                      ? 'bg-primary-soft text-primary'
-                      : 'text-foreground hover:bg-muted'
+                    isSelected ? 'bg-primary-soft text-primary' : 'text-foreground hover:bg-muted'
                   )}
                 >
                   <span className="truncate">{option.label}</span>

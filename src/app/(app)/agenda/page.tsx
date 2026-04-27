@@ -7,6 +7,7 @@ import { DomiciliarToggle } from '@/components/agenda/DomiciliarToggle'
 import { AgendaViewToggle } from '@/components/agenda/AgendaViewToggle'
 import { MonthCalendar } from '@/components/agenda/MonthCalendar'
 import { listSessionsUseCase } from '@/server/modules/sessions/application/list-sessions'
+import { serializeSession } from '@/lib/serialize-session'
 
 const PRIORITY_ORDER: Record<string, number> = { URGENT: 0, HIGH: 1, NORMAL: 2 }
 
@@ -57,13 +58,14 @@ export default async function AgendaPage({
 
   if (view === 'calendar') {
     const { from, to } = getMonthRange(monthKey)
-    const { sessions } = await listSessionsUseCase(session.userId!, {
+    const { sessions: rawSessions } = await listSessionsUseCase(session.userId!, {
       from: from.toISOString(),
       to: to.toISOString(),
       limit: 500,
       order: 'asc',
       ...(isHomeCareMode ? { attendanceType: 'HOME_CARE' } : {}),
     })
+    const sessions = rawSessions.map(serializeSession)
 
     const sessionsByDay = sessions.reduce<Record<string, typeof sessions>>((acc, item) => {
       const key = formatCalendarDateKey(item.date)
@@ -100,13 +102,14 @@ export default async function AgendaPage({
     )
   }
 
-  const { sessions } = await listSessionsUseCase(session.userId!, {
+  const { sessions: rawListSessions } = await listSessionsUseCase(session.userId!, {
     status: 'AGENDADO',
     from: new Date().toISOString(),
     limit: 100,
     order: 'asc',
     ...(isHomeCareMode ? { attendanceType: 'HOME_CARE' } : {}),
   })
+  const sessions = rawListSessions.map(serializeSession)
 
   const homeCareCount = sessions.filter((item) => item.attendanceType === 'HOME_CARE').length
 

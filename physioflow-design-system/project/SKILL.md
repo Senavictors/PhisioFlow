@@ -17,7 +17,7 @@ Read `README.md` first for full brand context, content fundamentals, and visual 
 ## Core brand facts
 
 - **Language:** Brazilian Portuguese throughout. Never translate UI to English.
-- **Tone:** warm, editorial, restorative. Use *você*. One 👋 on greetings, no other emoji.
+- **Tone:** warm, editorial, restorative. Use _você_. One 👋 on greetings, no other emoji.
 - **Palette:** bege canvas `oklch(0.985 0.008 85)` + sage primary `oklch(0.52 0.05 160)` + terracotta accent `oklch(0.72 0.09 45)`. White is elevation, never canvas.
 - **Type:** Fraunces (display, serif, bold) for titles and KPI numerals; Plus Jakarta Sans (body) for everything else; `10.5px uppercase tracking-widest bold` for editorial labels.
 - **Radii:** `rounded-2xl` (18px) for cards, `rounded-xl` (12px) for buttons/inputs, fully rounded for chips and pills.

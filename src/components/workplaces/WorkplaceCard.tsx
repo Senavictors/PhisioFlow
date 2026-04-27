@@ -89,7 +89,9 @@ export function WorkplaceCard({ workplace, onEdit }: WorkplaceCardProps) {
               </p>
             ) : null}
             {workplace.notes ? (
-              <p className="font-body text-[12px] italic text-muted-foreground">{workplace.notes}</p>
+              <p className="font-body text-[12px] italic text-muted-foreground">
+                {workplace.notes}
+              </p>
             ) : null}
           </div>
         </div>

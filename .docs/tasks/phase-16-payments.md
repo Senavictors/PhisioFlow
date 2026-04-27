@@ -4,7 +4,7 @@
 
 - [ ] Todo
 - [ ] In Progress
-- [ ] Done
+- [x] Done
 
 ## Contexto
 
@@ -31,14 +31,14 @@ Permitir que o usuário:
 ### Backend — Migration
 
 - [ ] Criar enum `PaymentMethod` com `PIX`, `CASH`, `CREDIT_CARD`, `DEBIT_CARD`,
-  `BANK_TRANSFER`, `INSURANCE`, `OTHER`
+      `BANK_TRANSFER`, `INSURANCE`, `OTHER`
 - [ ] Criar enum `PaymentStatus` com `PAID`, `PENDING`, `PARTIAL`, `REFUNDED`
 - [ ] Criar modelo `Payment`
 - [ ] Adicionar `expectedFee: Decimal?` em `Session`
 - [ ] Adicionar `paymentStatus: PaymentStatus?` em `Session` (cache derivado)
 - [ ] Adicionar relação reversa `payments` em `User`, `TreatmentPlan` e `Session`
 - [ ] Constraint: `Payment.treatmentPlanId` ou `Payment.sessionId` precisa ser
-  preenchido (XOR — exatamente um dos dois)
+      preenchido (XOR — exatamente um dos dois)
 
 ### Backend — Backfill / cálculo de `expectedFee`
 
@@ -59,7 +59,7 @@ Permitir que o usuário:
 - [ ] `voidPaymentUseCase` — marca `Payment` como `REFUNDED` (não deleta)
 - [ ] `listPaymentsUseCase` — filtros por período, plano, paciente, status
 - [ ] `getTreatmentPlanFinancialsUseCase` — retorna saldo do plano:
-  `{ totalDue, totalPaid, totalPending, sessionsUsed, sessionsRemaining }`
+      `{ totalDue, totalPaid, totalPending, sessionsUsed, sessionsRemaining }`
 - [ ] `recomputeSessionPaymentStatusUseCase` — chamado após criar/editar payment
 - [ ] Atualizar `createSessionUseCase`:
   - quando vinculada a plano PER_SESSION, snapshotar `expectedFee = plan.sessionPrice`

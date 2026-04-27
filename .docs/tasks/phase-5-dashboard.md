@@ -1,11 +1,13 @@
 # Task: Phase 5 — Dashboard & KPIs
 
 ## Status
+
 - [x] Todo
 - [x] In Progress
 - [x] Done
 
 ## Contexto
+
 Com pacientes (Phase 3) e sessões (Phase 4) registrados, temos dados suficientes para
 construir o Dashboard — a tela de entrada do sistema e o principal ponto de visibilidade
 clínica para o fisioterapeuta.
@@ -15,17 +17,20 @@ Tela de referência exata: `physioflow-design-system/project/ui_kits/portal/inde
 Nenhuma migration nova é necessária — todos os dados vêm de `Patient` e `Session`.
 
 ## Objetivo
+
 Dashboard `/dashboard` com KPIs em tempo real, gráfico de evolução semanal, ações rápidas
 e lista de atendimentos recentes. Redirecionar a rota `/` para `/dashboard`.
 
 ## Escopo
 
 ### Backend — Endpoint de métricas
+
 - [ ] `GET /api/dashboard/metrics` — retorna todos os KPIs em uma única requisição
 - [ ] Módulo `server/modules/dashboard/` (application + http)
 - [ ] Sem infra própria — chama repositories de `patients` e `sessions`
 
 ### Frontend
+
 - [ ] Página `/dashboard` fiel ao design system (ver spec abaixo)
 - [ ] Redirect `/` → `/dashboard`
 - [ ] Componente `KpiCard`
@@ -73,7 +78,7 @@ prisma.patient.count({ where: { userId, isActive: true } })
 // sessionsToday
 const today = startOfDay(new Date())
 prisma.session.count({
-  where: { userId, status: 'REALIZADO', date: { gte: today, lt: endOfDay(today) } }
+  where: { userId, status: 'REALIZADO', date: { gte: today, lt: endOfDay(today) } },
 })
 
 // patientsWithoutReturn (atenção clínica — 30+ dias sem atendimento)
@@ -185,6 +190,7 @@ Ocultar componente se patientsWithoutReturn === 0
 ---
 
 ## Checklist Final
+
 - [ ] `/` redireciona para `/dashboard`
 - [ ] `GET /api/dashboard/metrics` retorna dados corretos
 - [ ] KPI cards mostram valores reais do banco
@@ -198,6 +204,7 @@ Ocultar componente se patientsWithoutReturn === 0
 - [ ] `.docs/CHANGELOG.md` atualizado
 
 ## Notas para Próxima Sessão
+
 O dashboard é a tela de maior impacto visual. Ao concluir, o sistema já tem um produto
 usável: cadastrar paciente → registrar atendimento → ver no dashboard.
 Próximas fases (6+) adicionam Timeline de Evolução, Central de Documentos e Logística Domiciliar.

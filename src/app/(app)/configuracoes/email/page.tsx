@@ -25,7 +25,8 @@ export default async function EmailSettingsPage() {
               E-mail
             </h1>
             <p className="mt-1 font-body text-[14px] text-muted-foreground">
-              Conecte seu Gmail para enviar documentos e avisos de atendimento direto pelo PhysioFlow.
+              Conecte seu Gmail para enviar documentos e avisos de atendimento direto pelo
+              PhysioFlow.
             </p>
           </div>
         </div>

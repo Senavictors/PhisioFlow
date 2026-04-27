@@ -9,6 +9,32 @@ e o projeto segue [Conventional Commits](https://www.conventionalcommits.org/) e
 
 ### Added
 
+- **Phase 16 — Pagamentos**
+  - Enums `PaymentMethod` (`PIX`, `CASH`, `CREDIT_CARD`, `DEBIT_CARD`, `BANK_TRANSFER`,
+    `INSURANCE`, `OTHER`) e `PaymentStatus` (`PAID`, `PENDING`, `PARTIAL`, `REFUNDED`)
+  - Modelo `Payment` com vínculo XOR a `Session` ou `TreatmentPlan` (constraint SQL)
+  - `Session.expectedFee` (snapshot Decimal) e `Session.paymentStatus` (cache derivado)
+  - Migration `phase16_payments` com backfill: snapshot de `expectedFee` em sessões
+    existentes (PER_SESSION → `plan.sessionPrice`, avulso → `workplace.defaultSessionPrice`)
+    e inicialização do `paymentStatus` como `PENDING` quando há valor a cobrar
+  - Módulo `payments` com use cases: `registerPaymentUseCase`, `updatePaymentUseCase`,
+    `voidPaymentUseCase`, `listPaymentsUseCase`, `getTreatmentPlanFinancialsUseCase`,
+    `getPatientFinancialsUseCase` e `recomputeSessionPaymentStatus`
+  - Endpoints REST:
+    `POST /api/treatment-plans/:id/payments`,
+    `POST /api/sessions/:id/payments`,
+    `GET /api/payments`, `PUT/DELETE /api/payments/:id`,
+    `GET /api/treatment-plans/:id/financials`,
+    `GET /api/patients/:id/financials`
+  - `createSessionUseCase` e `updateSessionUseCase` snapshotam `expectedFee` (do plano
+    PER_SESSION, default do workplace ou input do usuário) e marcam `paymentStatus` inicial
+  - UI: `PaymentBadge` no `SessionCard`, `PlanBalanceBadge` + ação "Registrar pagamento"
+    no `TreatmentPlanCard`, modal `RegisterPaymentModal`, seção "Financeiro" na ficha do
+    paciente, campo `expectedFee` (ou texto "Coberta pelo pacote") no `SessionForm`
+  - Seed demo com pacote Pilates 600/1500 pago, sessão ortopédica avulsa paga e sessões
+    avulsas/PER_SESSION pendentes
+  - Soft delete de `Payment` via `status=REFUNDED` (preserva histórico para auditoria)
+
 - **Phase 15 — Plano de Tratamento**
   - Modelo `TreatmentPlan` com `area`, `specialties`, `attendanceType`, `workplaceId`,
     `pricingModel`, status e campos preparatórios de cobrança por sessão/pacote

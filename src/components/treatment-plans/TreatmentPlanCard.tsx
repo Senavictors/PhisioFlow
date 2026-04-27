@@ -11,6 +11,7 @@ import {
   Pencil,
   Play,
   Stethoscope,
+  Wallet,
   XCircle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -21,6 +22,8 @@ import {
   formatSpecialties,
   formatTreatmentPlanLabel,
 } from '@/lib/clinical-labels'
+import { PlanBalanceBadge } from '@/components/payments/PlanBalanceBadge'
+import { RegisterPaymentModal } from '@/components/payments/RegisterPaymentModal'
 
 export interface TreatmentPlanCardData {
   id: string
@@ -65,8 +68,11 @@ export function TreatmentPlanCard({ plan, patientId, showActions = true }: Treat
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [busyAction, setBusyAction] = useState<string | null>(null)
+  const [paymentOpen, setPaymentOpen] = useState(false)
+  const [balanceKey, setBalanceKey] = useState(0)
   const specialtyText = formatSpecialties(plan.specialties)
   const sessionCount = plan._count?.sessions ?? 0
+  const canRegisterPayment = plan.status === 'ACTIVE' || plan.status === 'PAUSED'
 
   async function mutate(action: 'pause' | 'resume' | 'complete' | 'cancel') {
     setBusyAction(action)
@@ -127,6 +133,12 @@ export function TreatmentPlanCard({ plan, patientId, showActions = true }: Treat
             </span>
           </div>
 
+          <PlanBalanceBadge
+            planId={plan.id}
+            pricingModel={plan.pricingModel}
+            refreshKey={balanceKey}
+          />
+
           {plan.pricingModel === 'PACKAGE' ? (
             <p className="font-body text-[12.5px] font-semibold text-foreground">
               {sessionCount} de {plan.totalSessions ?? 0} sessoes
@@ -157,6 +169,17 @@ export function TreatmentPlanCard({ plan, patientId, showActions = true }: Treat
               <Pencil className="h-3.5 w-3.5" />
               Editar
             </Link>
+
+            {canRegisterPayment ? (
+              <button
+                type="button"
+                onClick={() => setPaymentOpen(true)}
+                className="flex h-9 items-center gap-1.5 rounded-xl border border-border px-3 font-body text-[12px] font-semibold text-foreground transition-colors hover:border-primary/40 hover:bg-primary-soft"
+              >
+                <Wallet className="h-3.5 w-3.5" />
+                Registrar pagamento
+              </button>
+            ) : null}
 
             {plan.status === 'ACTIVE' ? (
               <button
@@ -208,6 +231,22 @@ export function TreatmentPlanCard({ plan, patientId, showActions = true }: Treat
           </div>
         ) : null}
       </div>
+
+      <RegisterPaymentModal
+        open={paymentOpen}
+        onClose={() => setPaymentOpen(false)}
+        target={{ kind: 'plan', planId: plan.id }}
+        defaultAmount={
+          plan.pricingModel === 'PACKAGE'
+            ? plan.packageAmount != null
+              ? Number(plan.packageAmount)
+              : undefined
+            : plan.sessionPrice != null
+              ? Number(plan.sessionPrice)
+              : undefined
+        }
+        onSuccess={() => setBalanceKey((value) => value + 1)}
+      />
     </article>
   )
 }

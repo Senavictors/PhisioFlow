@@ -2,10 +2,7 @@ import { encryptSecret } from '@/lib/crypto'
 import type { UpdateEmailSettingsDTO } from '../http/email.dto'
 import { upsertEmailSettings } from '../infra/email.repository'
 
-export async function saveEmailSettingsUseCase(
-  userId: string,
-  input: UpdateEmailSettingsDTO
-) {
+export async function saveEmailSettingsUseCase(userId: string, input: UpdateEmailSettingsDTO) {
   const trimmedPassword = input.appPassword?.trim() ?? ''
   const cleanPassword = trimmedPassword ? trimmedPassword.replace(/\s+/g, '') : ''
   const encrypted = cleanPassword ? encryptSecret(cleanPassword) : undefined

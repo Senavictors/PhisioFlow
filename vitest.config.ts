@@ -8,10 +8,7 @@ export default defineConfig({
     passWithNoTests: true,
     coverage: {
       provider: 'v8',
-      include: [
-        'src/server/modules/**/application/**',
-        'src/server/modules/**/domain/**',
-      ],
+      include: ['src/server/modules/**/application/**', 'src/server/modules/**/domain/**'],
       exclude: ['**/*.test.ts'],
     },
   },
