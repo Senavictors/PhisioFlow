@@ -19,9 +19,11 @@ npm run lint         # ESLint
 npm run format       # Prettier (write)
 npm run format:check # Prettier (check only)
 npx prisma studio    # GUI do banco
-npx prisma migrate dev --name <name>  # Nova migration
+npx prisma migrate deploy # Aplica migrations no Neon/PostgreSQL hospedado
 npx prisma generate  # Regenera client
 ```
+
+> Banco do PhisioFlow é Neon/PostgreSQL hospedado; não usar `migrate dev` contra esse banco.
 
 ## Architecture
 

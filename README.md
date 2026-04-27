@@ -148,10 +148,10 @@ npm install
 
 # 2. Variáveis de ambiente
 cp .env.example .env
-# Preencher DATABASE_URL e SESSION_SECRET
+# Preencher DATABASE_URL (Neon/PostgreSQL hospedado) e SESSION_SECRET
 
-# 3. Migrations
-npx prisma migrate dev
+# 3. Migrations no banco remoto Neon
+npx prisma migrate deploy
 
 # 4. Seed demo
 npx prisma db seed

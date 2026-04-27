@@ -218,6 +218,7 @@ Pendências operacionais:
   `GOOGLE_CALENDAR_REDIRECT_URI` e `INTEGRATION_ENCRYPTION_KEY`
 - **Clientes Google/OAuth** são inicializados dentro de funções, nunca em module scope
 - Migrations ainda precisam ser executadas contra a `DATABASE_URL` real para validar o fluxo completo com Neon
+- O banco do PhisioFlow não é local: usar `npx prisma migrate deploy` contra o Neon/PostgreSQL hospedado; não usar `migrate dev`
 
 ## Modelos de Banco
 
@@ -253,9 +254,9 @@ Módulo `payments` segue o mesmo padrão em `src/server/modules/payments/`
 ## Pendências Conhecidas
 
 - Validar Phase 12 com conta Google real depois de configurar OAuth no Google Cloud Console
-- Executar `npx prisma migrate dev` para aplicar `phase12_google_calendar` na base real
+- Executar `npx prisma migrate deploy` para aplicar `phase12_google_calendar` na base real Neon
 - Validar decisão do `ENCAMINHAMENTO`: card "em breve" ou documento PDF gerável com enum/template próprios
-- Rodar `npx prisma migrate dev` e `npx prisma db seed` contra a base real (phases 4 e 5 dependem disso para validação completa)
+- Rodar `npx prisma migrate deploy` e `npx prisma db seed` contra a base real Neon (phases 4 e 5 dependem disso para validação completa)
 - Reiniciar o `npm run dev` local após o `prisma generate` para carregar `prisma.session`
 - Validar no browser: `/dashboard`, `/pacientes`, `/atendimentos`, `/agenda` e `/pacientes/:id/sessoes/nova`
 - Confirmar o fluxo completo com o usuário demo `demo@phisioflow.com`

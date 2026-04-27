@@ -328,7 +328,7 @@ console.log(`   Sessões: Gervasio (3), Carla (2), Rafael (1 — sem retorno há
 
 ## Checklist Final
 
-- [ ] Migration aplicada com sucesso (`npx prisma migrate dev`)
+- [ ] Migration aplicada com sucesso no Neon (`npx prisma migrate deploy`)
 - [ ] `npx prisma db seed` estendido com sessões — roda sem erros
 - [ ] Dashboard mostra Rafael no alerta de "sem retorno" após o seed
 - [ ] `npm test` passa com todos os testes de sessions

@@ -19,7 +19,7 @@ npm run lint         # ESLint
 npm run format       # Prettier (write)
 npm run format:check # Prettier (check only)
 npx prisma studio    # GUI do banco
-npx prisma migrate dev --name <name>  # Nova migration
+npx prisma migrate deploy # Aplica migrations no Neon/PostgreSQL hospedado
 npx prisma generate  # Regenera client
 Architecture
 UI → Route Handlers (API) → Use Cases → Domain → Repositories → DB
