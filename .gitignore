@@ -58,3 +58,5 @@ tsconfig.tsbuildinfo
 physioflow-design-system/project/uploads/
 
 /src/generated/prisma
+.claude/
+.agents/
