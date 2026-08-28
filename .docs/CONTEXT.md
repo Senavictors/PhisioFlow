@@ -283,3 +283,7 @@ Módulo `finance` em `src/server/modules/finance/` (apenas leitura — agrega Pa
 - [ADR-003](decisions/ADR-003-auth-approach.md) — Estratégia de Auth
 - [ADR-004](decisions/ADR-004-integracoes-externas.md) — Integrações externas de e-mail e calendário
 - [ADR-005](decisions/ADR-005-multi-modalidade-financeiro.md) — Multi-modalidade clínica e acompanhamento financeiro
+
+## Bootstrap da arquitetura de agentes
+
+Em 2026-08-27 foi criada a arquitetura versionada de agentes para Claude Code e Codex. O roteamento unificado está em `AGENTS.md`; o estado operacional fica em `.agents/`; os papéis especializados têm adaptadores em `.claude/agents/` e `.codex/agents/`; a documentação técnica complementar fica em `docs/`. Esta estrutura complementa, sem substituir, a documentação funcional existente em `.docs/`.

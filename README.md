@@ -311,6 +311,8 @@ npx prisma studio    # GUI do banco
 | Decisões    | `.docs/decisions/ADR-*.md`      | Architecture Decision Records      |
 | Tasks       | `.docs/tasks/phase-*.md`        | Escopo de execução por fase        |
 | Changelog   | `.docs/CHANGELOG.md`            | Histórico curado por release       |
+| Arquitetura técnica | `docs/README.md`         | Documentação complementar por camadas |
+| Agentes     | `.agents/` e `AGENTS.md`         | Estado, decisões, handoffs e regras dos agentes |
 
 ---
 
